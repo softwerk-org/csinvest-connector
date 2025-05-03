@@ -25,7 +25,6 @@ class SkinportConnector(BaseConnector):
                 "currency": currency,
                 "tradable": tradable,
             },
-            proxied=False,
             handler=lambda r: r.json(),
         )
         return response

@@ -109,7 +109,6 @@ class DMarketConnector(BaseConnector):
                 "platform": platform,
                 "isLoggedIn": is_logged_in,
             },
-            proxied=True,
             handler=lambda r: r.json(),
         )
         return response
@@ -136,7 +135,6 @@ class DMarketConnector(BaseConnector):
             "GET",
             "/price-aggregator/v1/aggregated-prices",
             params=params,
-            proxied=True,
             handler=lambda r: r.json(),
         )
         return response

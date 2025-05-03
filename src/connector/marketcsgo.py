@@ -17,7 +17,6 @@ class MarketCsgoConnector(BaseConnector):
         response = await self._request(
             "GET",
             f"/prices/{currency}.json",
-            proxied=True,
             handler=lambda r: r.json(),
         )
         return response

@@ -49,7 +49,6 @@ class SteamCommunityConnector(BaseConnector):
                 "sort_dir": sort_dir,
                 "currency": currency,
             },
-            proxied=True,
             handler=lambda r: r.json(),
         )
         return response
@@ -73,7 +72,6 @@ class SteamCommunityConnector(BaseConnector):
                 "market_hash_name": market_hash_name,
             },
             cookies=await self.steam_auth.get_cookies(),
-            proxied=True,
             handler=lambda r: r.json(),
         )
         return response
@@ -99,7 +97,6 @@ class SteamCommunityConnector(BaseConnector):
             "GET",
             f"/inventory/{steamid}/{appid}/{contextid}",
             params=params,
-            proxied=True,
             handler=lambda r: r.json(),
             cookies=await self.steam_auth.get_cookies(),
         )
@@ -127,7 +124,6 @@ class SteamCommunityConnector(BaseConnector):
             "GET",
             "/tradeoffer/new/partnerinventory/",
             params=params,
-            proxied=False,
             handler=lambda r: r.json(),
             cookies=await self.steam_auth.get_cookies(),
             headers={
@@ -145,7 +141,6 @@ class SteamCommunityConnector(BaseConnector):
         response = await self._request(
             "GET",
             f"/market/listings/{appid}/{market_hash_name}",
-            proxied=True,
             handler=lambda r: r.text,
         )
         return response
@@ -156,7 +151,6 @@ class SteamCommunityConnector(BaseConnector):
             "GET",
             f"/profiles/{steamid}/",
             params={"xml": 1},
-            proxied=True,
             handler=lambda r: xmltodict.parse(r.text),
         )
         return response

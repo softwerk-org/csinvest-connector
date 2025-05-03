@@ -12,7 +12,6 @@ class OpenExchangeRatesConnector(BaseConnector):
         response = await self._request(
             "GET",
             f"/latest/{base_code}",
-            proxied=True,
             handler=lambda r: r.json(),
         )
         return response

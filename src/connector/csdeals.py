@@ -13,7 +13,6 @@ class CsDealsConnector(BaseConnector):
             "GET",
             "/IPricing/GetLowestPrices/v1",
             params={"appid": app_id},
-            proxied=True,
             handler=lambda r: r.json(),
         )
         return response
