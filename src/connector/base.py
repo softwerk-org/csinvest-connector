@@ -39,6 +39,7 @@ class BaseConnector:
         *,
         cookies: dict | None = None,
         headers: dict | None = None,
+        body: dict | None = None,
         proxied: bool = False,
         handler: Callable[[httpx.Response], T] = lambda r: r,
     ) -> T:
@@ -53,6 +54,7 @@ class BaseConnector:
                 url=self.base + path,
                 params=params,
                 headers=headers,
+                json=body,
                 follow_redirects=True,
             )
             response.raise_for_status()
