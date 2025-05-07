@@ -1,6 +1,6 @@
 from connector.base import BaseConnector
 
-class SkinbaronConnector(BaseConnector):
+class SkinBaronConnector(BaseConnector):
     base = "https://api.skinbaron.de"
     __docs__ = "https://skinbaron.de/misc/apidoc/"
     
