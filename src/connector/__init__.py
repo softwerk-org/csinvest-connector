@@ -6,6 +6,7 @@ from .marketcsgo import MarketCsgoConnector
 from .openerapi import OpenExchangeRatesConnector
 from .skinport import SkinportConnector
 from .steam import SteamConnector
+from .skinbaron import SkinBaronConnector
 
 __all__ = [
     "BaseConnector",
@@ -16,4 +17,5 @@ __all__ = [
     "OpenExchangeRatesConnector",
     "SkinportConnector",
     "SteamConnector",
+    "SkinBaronConnector"
 ]
