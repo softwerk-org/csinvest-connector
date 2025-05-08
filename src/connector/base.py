@@ -1,12 +1,11 @@
 import logging
-from collections.abc import Callable
 from typing import TypeVar
 
 import httpx
 from tenacity import (
     before_sleep_log,
     retry,
-    retry_if_exception_type,
+    retry_if_exception,
     stop_after_attempt,
     wait_fixed,
 )
@@ -24,12 +23,24 @@ class BaseConnector:
         self.proxy_url = proxy_url
         self.timeout = timeout
 
+    def retry_if_http_error(e: Exception) -> bool:
+        return isinstance(e, httpx.HTTPStatusError) and e.response.status_code in [
+            408,  # If Request timed out
+            429,  # If Too Many Requests
+            500,  # If Internal Server Error
+            503,  # If Service Unavailable
+            504,  # If Gateway Timeout
+            520,  # If Unknown Error
+            522,  # If Connection Timed Out
+            524,  # If A Timeout Occurred
+            599,  # If Network Connect Timeout Error
+        ]
+
     @retry(
         stop=stop_after_attempt(3),
         wait=wait_fixed(1),
-        retry=retry_if_exception_type(BaseException),
+        retry=retry_if_exception(retry_if_http_error),
         before_sleep=before_sleep_log(logger, logging.DEBUG),
-        retry_error_callback=lambda _: None,
     )
     async def _request(
         self,
@@ -41,8 +52,8 @@ class BaseConnector:
         headers: dict | None = None,
         body: dict | None = None,
         proxied: bool = False,
-        handler: Callable[[httpx.Response], T] = lambda r: r,
     ) -> T:
+
         async with httpx.AsyncClient(
             headers=headers,
             proxy=self.proxy_url if proxied else None,
@@ -58,4 +69,4 @@ class BaseConnector:
                 follow_redirects=True,
             )
             response.raise_for_status()
-            return handler(response)
+            return response

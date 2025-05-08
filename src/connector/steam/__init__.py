@@ -1,4 +1,4 @@
-from connector.steam.community import SteamCommunityConnector
+from connector.steam.community.community import SteamCommunityConnector
 from connector.steam.powered import SteamPoweredConnector
 
 

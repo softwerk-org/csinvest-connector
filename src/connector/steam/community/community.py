@@ -5,6 +5,8 @@ import xmltodict
 from connector.base import BaseConnector
 from connector.steam.auth import SteamAuthenticator
 
+from connector.steam.community.models import PriceHistory
+
 
 class SteamCommunityConnector(BaseConnector):
     base = "https://steamcommunity.com"
@@ -72,9 +74,9 @@ class SteamCommunityConnector(BaseConnector):
                 "market_hash_name": market_hash_name,
             },
             cookies=await self.steam_auth.get_cookies(),
-            handler=lambda r: r.json(),
         )
-        return response
+
+        return PriceHistory(**response.json())
 
     async def get_inventory(
         self,
