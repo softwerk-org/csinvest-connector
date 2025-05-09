@@ -1,20 +1,21 @@
-from .base import BaseConnector
+from connector.base import ConnectorBase
+from connector.response import ConnectorResponse
+from .models.get_items import GetItems
 
 
-class SkinportConnector(BaseConnector):
-    base = "https://api.skinport.com/v1"
+class SkinportConnector:
     __docs__ = "https://docs.skinport.com/"
 
     def __init__(self, proxy_url: str | None = None):
-        super().__init__(proxy_url=proxy_url)
+        self.connector = ConnectorBase(base_url="https://api.skinport.com/v1", proxy_url=proxy_url)
 
     async def get_items(
         self,
         appid: int = 730,
         currency: str = "USD",
         tradable: int = 0,
-    ):
-        response = await self._request(
+    ) -> ConnectorResponse[GetItems]:
+        text = await self.connector.request(
             "GET",
             "/items",
             headers={
@@ -25,6 +26,5 @@ class SkinportConnector(BaseConnector):
                 "currency": currency,
                 "tradable": tradable,
             },
-            handler=lambda r: r.json(),
         )
-        return response
+        return ConnectorResponse[GetItems](text)

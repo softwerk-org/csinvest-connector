@@ -1,0 +1,24 @@
+import pytest
+import os
+
+from connector.skinbaron.connector import SkinbaronConnector
+
+@pytest.mark.asyncio
+async def test_get_price_list_integration():
+    api_key = os.getenv("SKINBARON_API_KEY")
+    if not api_key:
+        pytest.skip("SKINBARON_API_KEY required for integration tests")
+    connector = SkinbaronConnector(api_key=api_key)
+    resp = await connector.get_price_list()
+    model = resp.model()
+    assert model.map is not None
+
+@pytest.mark.asyncio
+async def test_get_best_deals_integration():
+    api_key = os.getenv("SKINBARON_API_KEY")
+    if not api_key:
+        pytest.skip("SKINBARON_API_KEY required for integration tests")
+    connector = SkinbaronConnector(api_key=api_key)
+    resp = await connector.get_best_deals()
+    model = resp.model()
+    assert model.best_deals is not None 

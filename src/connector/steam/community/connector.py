@@ -1,13 +1,15 @@
-from typing import Any
+from connector.base import ConnectorBase
+from connector.response import ConnectorResponse
+from .auth import SteamAuth
+from .models.get_market_listings import GetMarketListings
+from .models.get_pricehistory import GetPricehistory
+from .models.get_inventory import GetInventory
+from .models.get_partner_inventory import GetPartnerInventory
+from .models.get_profile import GetProfile
+import json
+from httpx import HTTPStatusError
 
-import xmltodict
-
-from connector.base import BaseConnector
-from connector.steam.auth import SteamAuthenticator
-
-
-class SteamCommunityConnector(BaseConnector):
-    base = "https://steamcommunity.com"
+class SteamCommunityConnector:
     __docs__ = "https://github.com/Revadike/InternalSteamWebAPI/wiki"
 
     def __init__(
@@ -17,11 +19,13 @@ class SteamCommunityConnector(BaseConnector):
         api_key: str,
         proxy_url: str | None = None,
     ):
-        super().__init__(proxy_url=proxy_url)
-        self.username = username
-        self.password = password
-        self.steam_auth = SteamAuthenticator(
-            username=self.username, password=self.password, api_key=api_key
+        self.connector = ConnectorBase(
+            base_url="https://steamcommunity.com", proxy_url=proxy_url
+        )
+        self.auth = SteamAuth(
+            username=username,
+            password=password,
+            api_key=api_key,
         )
 
     async def get_market_listings(
@@ -34,9 +38,9 @@ class SteamCommunityConnector(BaseConnector):
         search_descriptions: str = "0",
         sort_dir: str = "asc",
         currency: int = 0,
-    ) -> dict[str, Any]:
+    ) -> ConnectorResponse[GetMarketListings]:
         """Get market listings."""
-        response = await self._request(
+        text = await self.connector.request(
             "GET",
             "/market/search/render/",
             params={
@@ -49,9 +53,8 @@ class SteamCommunityConnector(BaseConnector):
                 "sort_dir": sort_dir,
                 "currency": currency,
             },
-            handler=lambda r: r.json(),
         )
-        return response
+        return ConnectorResponse[GetMarketListings](text)
 
     async def get_pricehistory(
         self,
@@ -59,22 +62,23 @@ class SteamCommunityConnector(BaseConnector):
         country: str = "DE",
         currency: int = 0,
         appid: int = 730,
-    ) -> dict[str, Any]:
+    ) -> ConnectorResponse[GetPricehistory]:
         """Get price history for an item."""
-
-        response = await self._request(
-            "GET",
-            "/market/pricehistory/",
-            params={
-                "country": country,
-                "currency": currency,
-                "appid": appid,
-                "market_hash_name": market_hash_name,
-            },
-            cookies=await self.steam_auth.get_cookies(),
-            handler=lambda r: r.json(),
-        )
-        return response
+        try:
+            text = await self.connector.request(
+                "GET",
+                "/market/pricehistory/",
+                params={
+                    "country": country,
+                    "currency": currency,
+                    "appid": appid,
+                    "market_hash_name": market_hash_name,
+                },
+                cookies=await self.auth.cookies(),
+            )
+        except HTTPStatusError:
+            text = json.dumps({"prices": []})
+        return ConnectorResponse[GetPricehistory](text)
 
     async def get_inventory(
         self,
@@ -84,7 +88,7 @@ class SteamCommunityConnector(BaseConnector):
         language: str = "english",
         count: int = 5000,
         start_assetid: str | None = None,
-    ) -> dict[str, Any]:
+    ) -> ConnectorResponse[GetInventory]:
         """Get inventory of a user identified by steamid."""
         params = {
             "l": language,
@@ -93,14 +97,16 @@ class SteamCommunityConnector(BaseConnector):
         if start_assetid:
             params["start_assetid"] = start_assetid
 
-        response = await self._request(
-            "GET",
-            f"/inventory/{steamid}/{appid}/{contextid}",
-            params=params,
-            handler=lambda r: r.json(),
-            cookies=await self.steam_auth.get_cookies(),
-        )
-        return response
+        try:
+            text = await self.connector.request(
+                "GET",
+                f"/inventory/{steamid}/{appid}/{contextid}",
+                params=params,
+                cookies=await self.auth.cookies(),
+            )
+        except HTTPStatusError:
+            text = json.dumps({"assets": []})
+        return ConnectorResponse[GetInventory](text)
 
     async def get_partner_inventory(
         self,
@@ -108,7 +114,7 @@ class SteamCommunityConnector(BaseConnector):
         appid: int = 730,
         contextid: int = 2,
         language: str = "english",
-    ):
+    ) -> ConnectorResponse[GetPartnerInventory]:
         """
         Get all tradeable items of a user identified by steamid.
         This method utilizes a enpoint for trading items with other users. It only returns tradeable items.
@@ -118,39 +124,36 @@ class SteamCommunityConnector(BaseConnector):
             "partner": steamid,
             "appid": appid,
             "contextid": contextid,
-            "sessionid": (await self.steam_auth.get_cookies()).get("sessionid"),
+            "sessionid": (await self.auth.cookies()).get("sessionid"),
         }
-        response = await self._request(
+        text = await self.connector.request(
             "GET",
             "/tradeoffer/new/partnerinventory/",
             params=params,
-            handler=lambda r: r.json(),
-            cookies=await self.steam_auth.get_cookies(),
+            cookies=await self.auth.cookies(),
             headers={
                 "Referer": f"https://steamcommunity.com/tradeoffer/new/?partner={steamid}",
             },
         )
-        return response
+        return ConnectorResponse[GetPartnerInventory](text)
 
     async def get_market_page(
         self,
         market_hash_name: str,
         appid: int = 730,
-    ) -> str | None:
+    ) -> ConnectorResponse:
         """Get market page HTML for an item."""
-        response = await self._request(
+        text = await self.connector.request(
             "GET",
             f"/market/listings/{appid}/{market_hash_name}",
-            handler=lambda r: r.text,
         )
-        return response
+        return ConnectorResponse(text)
 
-    async def get_profile(self, steamid: str) -> dict[str, Any]:
+    async def get_profile(self, steamid: str) -> ConnectorResponse[GetProfile]:
         """Get the profile of an user"""
-        response = await self._request(
+        text = await self.connector.request(
             "GET",
             f"/profiles/{steamid}/",
             params={"xml": 1},
-            handler=lambda r: xmltodict.parse(r.text),
         )
-        return response
+        return ConnectorResponse[GetProfile](text, json_from_xml=True)

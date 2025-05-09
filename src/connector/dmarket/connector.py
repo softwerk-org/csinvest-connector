@@ -1,14 +1,13 @@
-from datetime import datetime
 from typing import Literal
-from urllib.parse import urlencode
+from connector.base import ConnectorBase
+from connector.dmarket.auth import DMarketAuth
+from connector.response import ConnectorResponse
+from .models.get_last_sales import GetLastSales
+from .models.get_market_items import GetMarketItems
+from .models.get_aggregated_prices import GetAggregatedPrices
 
-from nacl.bindings import crypto_sign
 
-from .base import BaseConnector
-
-
-class DMarketConnector(BaseConnector):
-    base = "https://api.dmarket.com"
+class DMarketConnector:
     __docs__ = "https://docs.dmarket.com/v1/swagger.html"
 
     def __init__(
@@ -17,29 +16,10 @@ class DMarketConnector(BaseConnector):
         public_key: str | None = None,
         private_key: str | None = None,
     ):
-        super().__init__(proxy_url=proxy_url)
-        self.public_key = public_key
-        self.private_key = private_key
-
-    async def _auth_headers(
-        self,
-        method: str,
-        path: str,
-        params: dict | None = None,
-    ) -> dict:
-        assert self.public_key and self.private_key, (
-            "Public and private key is required for authenticated requests"
+        self.connector = ConnectorBase(
+            base_url="https://api.dmarket.com", proxy_url=proxy_url
         )
-        nonce = str(round(datetime.now().timestamp()))
-        return {
-            "X-Api-Key": self.public_key,
-            "X-Sign-Date": nonce,
-            "X-Request-Sign": "dmar ed25519 "
-            + crypto_sign(
-                (method + path + "?" + urlencode(params or {}) + nonce).encode("utf-8"),
-                bytes.fromhex(self.private_key),
-            )[:64].hex(),
-        }
+        self.auth = DMarketAuth(public_key=public_key, private_key=private_key)
 
     async def get_last_sales(
         self,
@@ -49,7 +29,7 @@ class DMarketConnector(BaseConnector):
         offset: int = 0,
         filters: list[str] | None = None,
         game_id: str = "a8db",
-    ):
+    ) -> ConnectorResponse[GetLastSales]:
         """Get the item sales history. Up to 12 last months."""
         method = "GET"
         path = "/trade-aggregator/v1/last-sales"
@@ -64,14 +44,13 @@ class DMarketConnector(BaseConnector):
         if tx_operation_type:
             params["txOperationType"] = tx_operation_type
 
-        response = await self._request(
+        text = await self.connector.request(
             method,
             path,
             params=params,
-            headers=await self._auth_headers(method, path, params),
-            handler=lambda r: r.json(),
+            headers=await self.auth.headers(method, path, params),
         )
-        return response
+        return ConnectorResponse[GetLastSales](text)
 
     async def get_market_items(
         self,
@@ -88,10 +67,10 @@ class DMarketConnector(BaseConnector):
         limit: int = 100,
         platform: str = "browser",
         is_logged_in: bool = True,
-    ):
+    ) -> ConnectorResponse[GetMarketItems]:
         """Get the list of unique items with `market_hash_name` that are available for purchase on DMarket."""
 
-        response = await self._request(
+        text = await self.connector.request(
             "GET",
             "/exchange/v1/market/items",
             params={
@@ -109,16 +88,15 @@ class DMarketConnector(BaseConnector):
                 "platform": platform,
                 "isLoggedIn": is_logged_in,
             },
-            handler=lambda r: r.json(),
         )
-        return response
+        return ConnectorResponse[GetMarketItems](text)
 
     async def get_aggregated_prices(
         self,
         market_hash_names: list[str] | str | None = None,
         limit: int | None = None,  # 10000 is the maximum limit
         offset: int | None = None,
-    ):
+    ) -> ConnectorResponse[GetAggregatedPrices]:
         """Get the best market prices grouped by `market_hash_name`."""
         params = {}
 
@@ -131,10 +109,7 @@ class DMarketConnector(BaseConnector):
         if offset:
             params["Offset"] = offset
 
-        response = await self._request(
-            "GET",
-            "/price-aggregator/v1/aggregated-prices",
-            params=params,
-            handler=lambda r: r.json(),
+        text = await self.connector.request(
+            "GET", "/price-aggregator/v1/aggregated-prices", params=params
         )
-        return response
+        return ConnectorResponse[GetAggregatedPrices](text)

@@ -1,14 +1,16 @@
-from .base import BaseConnector
-from .csdeals import CsDealsConnector
-from .dmarket import DMarketConnector
-from .gamerpaygg import GamerPayGgConnector
-from .marketcsgo import MarketCsgoConnector
-from .openerapi import OpenExchangeRatesConnector
-from .skinport import SkinportConnector
+from .base import ConnectorBase
+from .response import ConnectorResponse
+from .csdeals.connector import CsDealsConnector
+from .dmarket.connector import DMarketConnector
+from .gamerpaygg.connector import GamerPayGgConnector
+from .marketcsgo.connector import MarketCsgoConnector
+from .openerapi.connector import OpenExchangeRatesConnector
+from .skinport.connector import SkinportConnector
 from .steam import SteamConnector
 
 __all__ = [
-    "BaseConnector",
+    "ConnectorBase",
+    "ConnectorResponse",
     "CsDealsConnector",
     "DMarketConnector",
     "GamerPayGgConnector",
