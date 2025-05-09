@@ -64,20 +64,17 @@ class SteamCommunityConnector:
         appid: int = 730,
     ) -> ConnectorResponse[GetPricehistory]:
         """Get price history for an item."""
-        try:
-            text = await self.connector.request(
-                "GET",
-                "/market/pricehistory/",
-                params={
+        text = await self.connector.request(
+            "GET",
+            "/market/pricehistory/",
+            params={
                     "country": country,
                     "currency": currency,
                     "appid": appid,
                     "market_hash_name": market_hash_name,
                 },
                 cookies=await self.auth.cookies(),
-            )
-        except HTTPStatusError:
-            text = json.dumps({"prices": []})
+        )
         return ConnectorResponse[GetPricehistory](text)
 
     async def get_inventory(
@@ -97,15 +94,12 @@ class SteamCommunityConnector:
         if start_assetid:
             params["start_assetid"] = start_assetid
 
-        try:
-            text = await self.connector.request(
-                "GET",
-                f"/inventory/{steamid}/{appid}/{contextid}",
-                params=params,
-                cookies=await self.auth.cookies(),
-            )
-        except HTTPStatusError:
-            text = json.dumps({"assets": []})
+        text = await self.connector.request(
+            "GET",
+            f"/inventory/{steamid}/{appid}/{contextid}",
+            params=params,
+            cookies=await self.auth.cookies(),
+        )
         return ConnectorResponse[GetInventory](text)
 
     async def get_partner_inventory(
