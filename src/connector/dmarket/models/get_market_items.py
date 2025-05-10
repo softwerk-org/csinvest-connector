@@ -5,9 +5,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, List, Optional
+from typing import List, Optional
 
-from pydantic import BaseModel, Field, RootModel
+from pydantic import BaseModel, Field
 
 class TypeModel(Enum):
     item = 'item'
@@ -102,71 +102,71 @@ class OwnerDetails(BaseModel):
 
 class Extra(BaseModel):
     ability: Optional[str] = None
-    backgroundColor: Optional[str] = None
+    background_color: Optional[str] = Field(None, alias='backgroundColor')
     category: Optional[str] = None
-    categoryPath: str
+    category_path: str = Field(None, alias='categoryPath')
     class_: Optional[List[str]] = Field(None, alias='class')
     collection: Optional[List[str]] = None
     exterior: Optional[Exterior] = None
-    floatValue: Optional[float] = None
-    gameId: str
+    float_value: Optional[float] = Field(None, alias='floatValue')
+    game_id: str = Field(None, alias='gameId')
     gems: Optional[List[Dota2Gem]] = None
     grade: Optional[str] = None
-    groupId: Optional[str] = None
+    group_id: Optional[str] = Field(None, alias='groupId')
     growth: Optional[float] = None
     hero: Optional[str] = None
-    inspectInGame: Optional[str] = None
-    isNew: bool
-    itemType: Optional[str] = None
-    linkId: Optional[str] = None
+    inspect_in_game: Optional[str] = Field(None, alias='inspectInGame')
+    is_new: bool = Field(None, alias='isNew')
+    item_type: Optional[str] = Field(None, alias='itemType')
+    link_id: Optional[str] = Field(None, alias='linkId')
     name: str
-    nameColor: Optional[str] = None
-    offerId: Optional[str] = None
+    name_color: Optional[str] = Field(None, alias='nameColor')
+    offer_id: Optional[str] = Field(None, alias='offerId')
     quality: Optional[str] = None
     rarity: Optional[str] = None
-    serialNumber: Optional[int] = None
+    serial_number: Optional[int] = Field(None, alias='serialNumber')
     stickers: Optional[List[CSSticker]] = None
     subscribers: Optional[int] = None
-    tagName: Optional[str] = None
+    tag_name: Optional[str] = Field(None, alias='tagName')
     tradable: bool
-    tradeLock: Optional[int] = None
-    tradeLockDuration: int
+    trade_lock: Optional[int] = Field(None, alias='tradeLock')
+    trade_lock_duration: int = Field(None, alias='tradeLockDuration')
     type: Optional[str] = None
     videos: Optional[int] = None
-    viewAtSteam: Optional[str] = None
+    view_at_steam: Optional[str] = Field(None, alias='viewAtSteam')
     withdrawable: Optional[bool] = None
 
 class Item(BaseModel):
     amount: int
-    classId: str
-    createdAt: int
+    class_id: str = Field(..., alias='classId')
+    created_at: int = Field(..., alias='createdAt')
     description: str
     discount: int
     extra: Extra
-    extraDoc: Optional[ExtraDoc] = None
-    gameId: str
-    gameType: GameType
+    extr_doc: Optional[ExtraDoc] = Field(None, alias='extraDoc')
+    game_id: str = Field(None, alias='gameId')
+    game_type: GameType = Field(..., alias='gameType')
     image: str
-    inMarket: bool
-    instantPrice: Optional[Prices] = None
-    instantTargetId: str
-    itemId: str
-    lockStatus: bool
+    in_market: bool = Field(..., alias='inMarket')
+    instant_price: Optional[Prices] = Field(None, alias='instantPrice')
+    instant_target_id: str = Field(..., alias='instantTargetId')
+    item_id: str = Field(..., alias='itemId')
+    lock_status: bool = Field(..., alias='lockStatus')
     owner: str
-    ownerDetails: OwnerDetails
-    ownersBlockchainId: str
+    owner_details: OwnerDetails = Field(..., alias='ownerDetails')
+    owners_blockchain_id: str = Field(..., alias='ownersBlockchainId')
     price: Optional[Prices] = None
-    recommendedPrice: Optional[Recommendations] = None
+    recommended_price: Optional[Recommendations] = Field(None, alias='recommendedPrice')
     slug: str
     status: StatusModel
-    suggestedPrice: Optional[Prices] = None
+    suggested_price: Optional[Prices] = Field(None, alias='suggestedPrice')
     title: str
     type: TypeModel
 
 class Total(BaseModel):
     offers: Optional[int]
     targets: Optional[int]
-    closedTargets: Optional[int]
+    closed_targets: Optional[int] = Field(None, alias='closedTargets')
 
 class GetMarketItems(BaseModel):
     cursor: Optional[str] = None

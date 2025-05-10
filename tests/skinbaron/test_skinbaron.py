@@ -9,8 +9,7 @@ async def test_get_price_list_integration():
     if not api_key:
         pytest.skip("SKINBARON_API_KEY required for integration tests")
     connector = SkinbaronConnector(api_key=api_key)
-    resp = await connector.get_price_list()
-    model = resp.model()
+    model = await connector.get_price_list()
     assert model.map is not None
 
 @pytest.mark.asyncio
@@ -19,6 +18,5 @@ async def test_get_best_deals_integration():
     if not api_key:
         pytest.skip("SKINBARON_API_KEY required for integration tests")
     connector = SkinbaronConnector(api_key=api_key)
-    resp = await connector.get_best_deals()
-    model = resp.model()
+    model = await connector.get_best_deals()
     assert model.best_deals is not None 

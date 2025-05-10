@@ -1,7 +1,6 @@
 from typing import Literal
 from connector.base import ConnectorBase
 from connector.dmarket.auth import DMarketAuth
-from connector.response import ConnectorResponse
 from .models.get_last_sales import GetLastSales
 from .models.get_market_items import GetMarketItems
 from .models.get_aggregated_prices import GetAggregatedPrices
@@ -29,7 +28,7 @@ class DMarketConnector:
         offset: int = 0,
         filters: list[str] | None = None,
         game_id: str = "a8db",
-    ) -> ConnectorResponse[GetLastSales]:
+    ) -> GetLastSales:
         """Get the item sales history. Up to 12 last months."""
         method = "GET"
         path = "/trade-aggregator/v1/last-sales"
@@ -50,7 +49,7 @@ class DMarketConnector:
             params=params,
             headers=await self.auth.headers(method, path, params),
         )
-        return ConnectorResponse[GetLastSales](text)
+        return GetLastSales.model_validate_json(text)
 
     async def get_market_items(
         self,
@@ -67,7 +66,7 @@ class DMarketConnector:
         limit: int = 100,
         platform: str = "browser",
         is_logged_in: bool = True,
-    ) -> ConnectorResponse[GetMarketItems]:
+    ) -> GetMarketItems:
         """Get the list of unique items with `market_hash_name` that are available for purchase on DMarket."""
 
         text = await self.connector.request(
@@ -89,14 +88,14 @@ class DMarketConnector:
                 "isLoggedIn": is_logged_in,
             },
         )
-        return ConnectorResponse[GetMarketItems](text)
+        return GetMarketItems.model_validate_json(text)
 
     async def get_aggregated_prices(
         self,
         market_hash_names: list[str] | str | None = None,
         limit: int | None = None,  # 10000 is the maximum limit
         offset: int | None = None,
-    ) -> ConnectorResponse[GetAggregatedPrices]:
+    ) -> GetAggregatedPrices:
         """Get the best market prices grouped by `market_hash_name`."""
         params = {}
 
@@ -112,4 +111,4 @@ class DMarketConnector:
         text = await self.connector.request(
             "GET", "/price-aggregator/v1/aggregated-prices", params=params
         )
-        return ConnectorResponse[GetAggregatedPrices](text)
+        return GetAggregatedPrices.model_validate_json(text)

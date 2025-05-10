@@ -1,5 +1,4 @@
 from connector.base import ConnectorBase
-from connector.response import ConnectorResponse
 from .models.get_player_summaries import GetPlayerSummaries
 from .models.get_asset_class_info import GetAssetClassInfo
 
@@ -13,7 +12,7 @@ class SteamPoweredConnector:
 
     async def get_player_summaries(
         self, steamids: list[str] | str, format: str = "json",
-    ) -> ConnectorResponse[GetPlayerSummaries]:
+    ) -> GetPlayerSummaries:
         """Get player summaries for the given steamids."""
         if isinstance(steamids, list):
             steamids = ",".join(steamids)
@@ -27,11 +26,11 @@ class SteamPoweredConnector:
                 "format": format,
             },
         )
-        return ConnectorResponse[GetPlayerSummaries](text)
+        return GetPlayerSummaries.model_validate_json(text)
 
     async def get_asset_class_info(
         self, classids: list[str] | str, appid: int = 730
-    ) -> ConnectorResponse[GetAssetClassInfo]:
+    ) -> GetAssetClassInfo:
         """Get asset class info for the given classids."""
 
         if not isinstance(classids, list):
@@ -47,4 +46,4 @@ class SteamPoweredConnector:
                 **{f"classid{ix}": classid for ix, classid in enumerate(classids)},
             },
         )
-        return ConnectorResponse[GetAssetClassInfo](text)
+        return GetAssetClassInfo.model_validate_json(text)

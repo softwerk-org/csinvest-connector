@@ -1,5 +1,4 @@
 from connector.base import ConnectorBase
-from connector.response import ConnectorResponse
 from .models.get_items import GetItems
 
 
@@ -14,7 +13,7 @@ class SkinportConnector:
         appid: int = 730,
         currency: str = "USD",
         tradable: int = 0,
-    ) -> ConnectorResponse[GetItems]:
+    ) -> GetItems:
         text = await self.connector.request(
             "GET",
             "/items",
@@ -27,4 +26,4 @@ class SkinportConnector:
                 "tradable": tradable,
             },
         )
-        return ConnectorResponse[GetItems](text)
+        return GetItems.model_validate_json(text)

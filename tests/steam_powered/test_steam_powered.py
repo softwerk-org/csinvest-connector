@@ -10,8 +10,7 @@ async def test_get_player_summaries_integration():
     if not api_key:
         pytest.skip("STEAM_WEBAPI_KEY required for integration tests")
     connector = SteamPoweredConnector(api_key=api_key)
-    resp = await connector.get_player_summaries(steamid)
-    model = resp.model()
+    model = await connector.get_player_summaries(steamid)
     assert model.response.players is not None
 
 @pytest.mark.asyncio
@@ -21,6 +20,5 @@ async def test_get_asset_class_info_integration():
     if not api_key:
         pytest.skip("STEAM_WEBAPI_KEY required for integration tests")
     connector = SteamPoweredConnector(api_key=api_key)
-    resp = await connector.get_asset_class_info(steamid)
-    model = resp.model()
+    model = await connector.get_asset_class_info(steamid)
     assert model.result is not None 

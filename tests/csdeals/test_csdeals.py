@@ -5,7 +5,6 @@ from connector.csdeals.connector import CsDealsConnector
 async def test_get_lowest_prices_integration():
     # Integration test against real API
     connector = CsDealsConnector()
-    resp = await connector.get_lowest_prices()
-    model = resp.model()
+    model = await connector.get_lowest_prices()
     # Ensure Pydantic model is parsed successfully
     assert model.success is not None 

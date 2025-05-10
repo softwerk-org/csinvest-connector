@@ -1,8 +1,6 @@
 from connector.base import ConnectorBase
-from connector.response import ConnectorResponse
 from .models.get_best_deals import GetBestDeals
 from .models.get_price_list import GetPriceList
-import json
 
 class SkinbaronConnector:
     __docs__ = "https://skinbaron.de/misc/apidoc/"
@@ -12,7 +10,7 @@ class SkinbaronConnector:
         self.api_key = api_key
     
 
-    async def get_best_deals(self, appid: int = 730, size: int = 100) -> ConnectorResponse[GetBestDeals]:
+    async def get_best_deals(self, appid: int = 730, size: int = 100) -> GetBestDeals:
         assert size <= 100, "Size must be less than or equal to 100"
         text = await self.connector.request(
             "POST",
@@ -27,12 +25,9 @@ class SkinbaronConnector:
                 "apikey": self.api_key,
             }
         )
-        data = json.loads(text)
-        if isinstance(data, list):
-            text = json.dumps({"bestDeals": data})
-        return ConnectorResponse[GetBestDeals](text)
+        return GetBestDeals.model_validate_json(text)
 
-    async def get_price_list(self, appid: int = 730) -> ConnectorResponse[GetPriceList]:
+    async def get_price_list(self, appid: int = 730) -> GetPriceList:
         text = await self.connector.request(
             "POST",
             "/GetPriceList",
@@ -45,7 +40,4 @@ class SkinbaronConnector:
                 "apikey": self.api_key,
             },
         )
-        data = json.loads(text)
-        if isinstance(data, list):
-            text = json.dumps({"map": data})
-        return ConnectorResponse[GetPriceList](text)
+        return GetPriceList.model_validate_json(text)

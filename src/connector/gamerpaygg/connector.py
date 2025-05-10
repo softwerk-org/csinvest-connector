@@ -1,5 +1,4 @@
 from connector.base import ConnectorBase
-from connector.response import ConnectorResponse
 from .models.get_prices import GetPrices
 
 class GamerPayGgConnector:
@@ -8,9 +7,9 @@ class GamerPayGgConnector:
     def __init__(self, proxy_url: str | None = None):
         self.connector = ConnectorBase(base_url="https://api.gamerpay.gg", proxy_url=proxy_url)
 
-    async def get_prices(self) -> ConnectorResponse[GetPrices]:
+    async def get_prices(self) -> GetPrices:
         text = await self.connector.request(
             "GET",
             "/prices",
         )
-        return ConnectorResponse[GetPrices](text)
+        return GetPrices.model_validate_json(text)

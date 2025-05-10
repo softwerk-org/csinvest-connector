@@ -1,7 +1,6 @@
 from typing import Literal
 
 from connector.base import ConnectorBase
-from connector.response import ConnectorResponse
 from .models.get_prices import GetPrices
 
 class MarketCsgoConnector:
@@ -12,10 +11,10 @@ class MarketCsgoConnector:
 
     async def get_prices(
         self, currency: Literal["RUB", "EUR", "USD"] = "USD"
-    ) -> ConnectorResponse[GetPrices]:
+    ) -> GetPrices:
         """Get market prices."""
         text = await self.connector.request(
             "GET",
             f"/prices/{currency}.json",
         )
-        return ConnectorResponse[GetPrices](text) 
+        return GetPrices.model_validate_json(text)
