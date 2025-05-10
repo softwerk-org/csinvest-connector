@@ -93,10 +93,13 @@ class DMarketConnector:
     async def get_aggregated_prices(
         self,
         market_hash_names: list[str] | str | None = None,
-        limit: int | None = None,  # 10000 is the maximum limit
+        limit: int | None = None,
         offset: int | None = None,
     ) -> GetAggregatedPrices:
         """Get the best market prices grouped by `market_hash_name`."""
+        if limit is not None and limit > 10000:
+            raise ValueError("Limit must be <= 10000")
+        
         params = {}
 
         if market_hash_names:
