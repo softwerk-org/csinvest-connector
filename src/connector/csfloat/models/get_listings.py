@@ -26,7 +26,7 @@ class Seller(BaseModel):
 
 
 class StickerScm(BaseModel):
-    price: Optional[int]
+    price: Optional[float]
     volume: Optional[int]
 
 
@@ -39,7 +39,7 @@ class ItemSticker(BaseModel):
 
 
 class ItemScm(BaseModel):
-    price: Optional[int]
+    price: Optional[float]
     volume: Optional[int]
 
 
@@ -72,7 +72,7 @@ class Listing(BaseModel):
     id: Optional[str]
     created_at: Optional[datetime]
     type: Optional[str]
-    price: Optional[int]
+    price: Optional[float]
     state: Optional[str]
     seller: Optional[Seller]
     item: Optional[ListingItem]

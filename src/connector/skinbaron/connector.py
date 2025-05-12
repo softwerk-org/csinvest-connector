@@ -59,7 +59,7 @@ class SkinbaronConnector:
             payload["dopplerPhase"] = doppler_phase
 
         text = await self.connector.post(
-            "/NewestSales30Days",
+            "/GetNewestSales30Days",
             headers={
                 "X-Requested-With": "XMLHttpRequest",
             },

@@ -1,3 +1,4 @@
+import os
 import pytest
 
 from connector.marketcsgo.connector import MarketCsgoConnector
@@ -12,7 +13,10 @@ async def test_marketcsgo_integration():
 
 @pytest.mark.asyncio
 async def test_marketcsgo_integration_list_items_info():
-    connector = MarketCsgoConnector()
+    key = os.getenv("MARKETCSGO_API_KEY")
+    if not key:
+        pytest.skip("MARKETCSGO_API_KEY required for integration tests")
+    connector = MarketCsgoConnector(api_key=key)
     model = await connector.get_list_items_info(["AK-47 | Redline (Minimal Wear)"])
     assert model.success is True
     assert model.data is not None

@@ -27,7 +27,7 @@ class MarketCsgoConnector:
 
     async def get_list_items_info(self, market_hash_names: list[str]) -> ListItemsInfo:
         """Get list items info."""
-        params = {"list_hash_name[]": market_hash_names}
+        params = {"key": self.api_key, "list_hash_name[]": market_hash_names}
         text = await self.connector.get(
             "/v2/get-list-items-info",
             params=params,

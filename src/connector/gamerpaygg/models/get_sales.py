@@ -4,7 +4,7 @@ from pydantic import BaseModel, RootModel
 
 class Sale(BaseModel):
     floatvalue: Optional[float] = None
-    price: Optional[int] = None
+    price: Optional[float] = None
     soldAt: Optional[int] = None
 
 
