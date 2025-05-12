@@ -1,16 +1,16 @@
-from .csdeals.connector import CsDealsConnector
-from .dmarket.connector import DMarketConnector
-from .gamerpaygg.connector import GamerPayGgConnector
-from .marketcsgo.connector import MarketCsgoConnector
-from .openerapi.connector import OpenExchangeRatesConnector
-from .skinport.connector import SkinportConnector
+from .csdeals import CSDealsConnector
+from .dmarket import DMarketConnector
+from .gamerpaygg import GamerPayGgConnector
+from .marketcsgo import MarketCsgoConnector
+from .openerapi import OpenExchangeRatesConnector
+from .skinport import SkinportConnector
 from .steam import SteamConnector
 from .skinbaron import SkinbaronConnector
-from .csfloat.connector import CsFloatConnector
-from .csmoney.connector import CsMoneyConnector
+from .csfloat import CSFloatConnector
+from .csmoney import CSMoneyConnector
 
 __all__ = [
-    "CsDealsConnector",
+    "CSDealsConnector",
     "DMarketConnector",
     "GamerPayGgConnector",
     "MarketCsgoConnector",
@@ -18,6 +18,6 @@ __all__ = [
     "SkinportConnector",
     "SteamConnector",
     "SkinbaronConnector",
-    "CsFloatConnector",
-    "CsMoneyConnector",
+    "CSFloatConnector",
+    "CSMoneyConnector",
 ]

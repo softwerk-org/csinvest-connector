@@ -20,6 +20,6 @@ class GamerPayGgConnector:
 
     async def get_sales(self) -> Sales:
         text = await self.connector.get(
-            "/v1/platform/sales",
+            "/prices",
         )
         return Sales.model_validate_json(text)

@@ -6,7 +6,7 @@ from connector.csdeals.models.get_sales_history import SalesHistory
 from connector.csdeals.models.get_sales_history_multi import SalesHistoryMulti
 
 
-class CsDealsConnector:
+class CSDealsConnector:
     __docs__ = "https://cs.deals/es/API-documentation"
 
     def __init__(self, api_key: str | None = None, proxy: str | None = None):

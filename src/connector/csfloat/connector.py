@@ -5,7 +5,7 @@ from connector.csfloat.models.get_listings import Listings
 class CSFloatConnector:
     __docs__ = "https://docs.csfloat.com/#introduction"
 
-    def __init__(self, api_key: str, proxy: str | None = None):
+    def __init__(self, api_key: str | None = None, proxy: str | None = None):
         self.connector = Connector(base_url="https://csfloat.com/api/v1", proxy=proxy)
         self.api_key = api_key
 

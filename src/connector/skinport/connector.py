@@ -1,6 +1,6 @@
 from connector.base import Connector
-from connector.csdeals.models.get_sales_history import SalesHistory
 from .models.get_items import Items
+from .models.get_sales_history import SalesStats
 
 
 class SkinportConnector:
@@ -15,16 +15,12 @@ class SkinportConnector:
         currency: str = "USD",
         tradable: int = 0,
     ) -> Items:
+        params = {"app_id": appid, "currency": currency, "tradable": tradable}
         text = await self.connector.get(
             "/v1/items",
-            headers={
-                "Accept-Encoding": "br",
-            },
-            params={
-                "app_id": appid,
-                "currency": currency,
-                "tradable": tradable,
-            },
+            headers={"Accept-Encoding": "br"},
+            params=params,
+            timeout=30,
         )
         return Items.model_validate_json(text)
 
@@ -33,20 +29,21 @@ class SkinportConnector:
         market_hash_names: list[str] | None = None,
         appid: int = 730,
         currency: str = "USD",
-    ) -> SalesHistory:
+    ) -> SalesStats:
         """
         Provides aggregated Sales.
         Will return list of sales history for each market_hash_name if no market_hash_names are provided
         """
+        params: dict[str, str | int] = {
+            "app_id": appid,
+            "currency": currency,
+        }
+        if market_hash_names is not None:
+            params["market_hash_name"] = ",".join(market_hash_names)
         text = await self.connector.get(
-            "/v1/sales-history",
-            headers={
-                "Accept-Encoding": "br",
-            },
-            params={
-                "market_hash_name": ",".join(market_hash_names),
-                "app_id": appid,
-                "currency": currency,
-            },
+            "/v1/sales/history",
+            headers={"Accept-Encoding": "br"},
+            params=params,
+            timeout=30,
         )
-        return SalesHistory.model_validate_json(text)
+        return SalesStats.model_validate_json(text)

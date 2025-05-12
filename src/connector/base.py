@@ -13,7 +13,9 @@ DEFAULT_RETRY_KWARGS = {
     "wait": tenacity.wait_fixed(1),
     "retry": tenacity.retry_if_result(
         lambda r: isinstance(r, httpx.Response) and r.is_error()
-    ),
+    )
+    | tenacity.retry_if_exception_type(httpx.ReadTimeout)
+    | tenacity.retry_if_exception_type(httpx.ConnectError),
 }
 
 

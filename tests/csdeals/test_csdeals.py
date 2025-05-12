@@ -1,11 +1,11 @@
 import pytest
-from connector.csdeals.connector import CsDealsConnector
+from connector.csdeals.connector import CSDealsConnector
 
 
 @pytest.mark.asyncio
 async def test_get_lowest_prices_integration():
     # Integration test against real API
-    connector = CsDealsConnector()
+    connector = CSDealsConnector()
     model = await connector.get_lowest_prices()
     # Ensure Pydantic model is parsed successfully
     assert model.success is not None
@@ -13,7 +13,7 @@ async def test_get_lowest_prices_integration():
 
 @pytest.mark.asyncio
 async def test_get_sales_history_integration():
-    connector = CsDealsConnector()
+    connector = CSDealsConnector()
     model = await connector.get_sales_history(
         name="Revolution Case", appid=730, phase=None
     )
@@ -23,7 +23,7 @@ async def test_get_sales_history_integration():
 
 @pytest.mark.asyncio
 async def test_get_sales_history_multi_integration_single_item():
-    connector = CsDealsConnector()
+    connector = CSDealsConnector()
     model = await connector.get_sales_history_multi(
         items=[{"name": "Revolution Case", "appid": 730, "phase": None}]
     )
@@ -33,7 +33,7 @@ async def test_get_sales_history_multi_integration_single_item():
 
 @pytest.mark.asyncio
 async def test_get_sales_history_multi_integration_multiple_items():
-    connector = CsDealsConnector()
+    connector = CSDealsConnector()
     model = await connector.get_sales_history_multi(
         items=[
             {"name": "Revolution Case", "appid": 730},

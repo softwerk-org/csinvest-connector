@@ -1,3 +1,3 @@
-from .connector import CsDealsConnector
+from .connector import CSDealsConnector
 
-__all__ = ["CsDealsConnector"]
+__all__ = ["CSDealsConnector"]
