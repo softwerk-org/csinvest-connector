@@ -69,6 +69,7 @@ class CSFloatConnector:
         text = await self.connector.get(
             "/listings",
             params=params,
+            headers={"Authorization": f"{self.api_key}"},
         )
         listings = Listings.model_validate_json(text)
         return listings.root
