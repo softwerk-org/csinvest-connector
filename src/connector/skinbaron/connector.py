@@ -65,7 +65,4 @@ class SkinbaronConnector:
             },
             json=payload,
         )
-        # If HTML page is returned (no JSON), fallback to empty result
-        if text.lstrip().startswith("<"):
-            return NewestSales(newest_sales_30days=[])
         return NewestSales.model_validate_json(text)
