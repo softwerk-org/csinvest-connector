@@ -1,22 +1,22 @@
-from connector.base import ConnectorBase
-from .models.get_items import GetItems
+from connector.base import Connector
+from connector.csdeals.models.get_sales_history import SalesHistory
+from .models.get_items import Items
 
 
 class SkinportConnector:
     __docs__ = "https://docs.skinport.com/"
 
-    def __init__(self, proxy_url: str | None = None):
-        self.connector = ConnectorBase(base_url="https://api.skinport.com/v1", proxy_url=proxy_url)
+    def __init__(self, proxy: str | None = None):
+        self.connector = Connector(base_url="https://api.skinport.com", proxy=proxy)
 
     async def get_items(
         self,
         appid: int = 730,
         currency: str = "USD",
         tradable: int = 0,
-    ) -> GetItems:
-        text = await self.connector.request(
-            "GET",
-            "/items",
+    ) -> Items:
+        text = await self.connector.get(
+            "/v1/items",
             headers={
                 "Accept-Encoding": "br",
             },
@@ -26,4 +26,27 @@ class SkinportConnector:
                 "tradable": tradable,
             },
         )
-        return GetItems.model_validate_json(text)
+        return Items.model_validate_json(text)
+
+    async def get_sales_history(
+        self,
+        market_hash_names: list[str] | None = None,
+        appid: int = 730,
+        currency: str = "USD",
+    ) -> SalesHistory:
+        """
+        Provides aggregated Sales.
+        Will return list of sales history for each market_hash_name if no market_hash_names are provided
+        """
+        text = await self.connector.get(
+            "/v1/sales-history",
+            headers={
+                "Accept-Encoding": "br",
+            },
+            params={
+                "market_hash_name": ",".join(market_hash_names),
+                "app_id": appid,
+                "currency": currency,
+            },
+        )
+        return SalesHistory.model_validate_json(text)

@@ -1,43 +1,42 @@
-from connector.base import ConnectorBase
-from .models.get_player_summaries import GetPlayerSummaries
-from .models.get_asset_class_info import GetAssetClassInfo
+from connector.base import Connector
+from .models.get_player_summaries import PlayerSummaries
+from .models.get_asset_class_info import AssetClassInfo
 
 
 class SteamPoweredConnector:
     __docs__ = "https://steamapi.xpaw.me"
 
-    def __init__(self, proxy_url: str | None = None, api_key: str | None = None):
-        self.connector = ConnectorBase(base_url="https://api.steampowered.com", proxy_url=proxy_url)
+    def __init__(self, proxy: str | None = None, api_key: str | None = None):
+        self.connector = Connector(base_url="https://api.steampowered.com", proxy=proxy)
         self.api_key = api_key
 
     async def get_player_summaries(
-        self, steamids: list[str] | str, format: str = "json",
-    ) -> GetPlayerSummaries:
+        self,
+        steamids: list[str] | str,
+    ) -> PlayerSummaries:
         """Get player summaries for the given steamids."""
         if isinstance(steamids, list):
             steamids = ",".join(steamids)
 
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             "/ISteamUser/GetPlayerSummaries/v0002/",
             params={
                 "key": self.api_key,
                 "steamids": steamids,
-                "format": format,
+                "format": "json",
             },
         )
-        return GetPlayerSummaries.model_validate_json(text)
+        return PlayerSummaries.model_validate_json(text)
 
     async def get_asset_class_info(
         self, classids: list[str] | str, appid: int = 730
-    ) -> GetAssetClassInfo:
+    ) -> AssetClassInfo:
         """Get asset class info for the given classids."""
 
         if not isinstance(classids, list):
             classids = [classids]
 
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             "/ISteamEconomy/GetAssetClassInfo/v0001/",
             params={
                 "key": self.api_key,
@@ -46,4 +45,4 @@ class SteamPoweredConnector:
                 **{f"classid{ix}": classid for ix, classid in enumerate(classids)},
             },
         )
-        return GetAssetClassInfo.model_validate_json(text)
+        return AssetClassInfo.model_validate_json(text)

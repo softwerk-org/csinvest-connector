@@ -9,17 +9,17 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class GetLowestPricesResponseItem(BaseModel):
+class LowestPricesResponseItem(BaseModel):
     marketname: Optional[str]
     lowest_price: Optional[str]
 
 
-class GetLowestPricesResponse(BaseModel):
+class LowestPricesResponse(BaseModel):
     time_updated: Optional[int]
     appid: Optional[int]
-    items: Optional[List[GetLowestPricesResponseItem]]
+    items: Optional[List[LowestPricesResponseItem]]
 
 
-class GetLowestPrices(BaseModel):
+class LowestPrices(BaseModel):
     success: Optional[bool]
-    response: Optional[GetLowestPricesResponse]
+    response: Optional[LowestPricesResponse]

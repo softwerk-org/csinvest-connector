@@ -9,7 +9,7 @@ from typing import List, Optional
 from pydantic import BaseModel, RootModel
 
 
-class GetPricesGetPrice(BaseModel):
+class PricesPrice(BaseModel):
     item: Optional[str]
     phase: Optional[str] = None
     price: Optional[float]
@@ -18,5 +18,5 @@ class GetPricesGetPrice(BaseModel):
     url: Optional[str]
 
 
-class GetPrices(RootModel[Optional[List[GetPricesGetPrice]]]):
-    root: Optional[List[GetPricesGetPrice]]
+class Prices(RootModel[Optional[List[PricesPrice]]]):
+    root: Optional[List[PricesPrice]]

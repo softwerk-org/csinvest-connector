@@ -9,17 +9,17 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 
-class GetPriceListMapItem(BaseModel):
+class PriceListMapItem(BaseModel):
     name: Optional[str] = None
     exterior: Optional[str] = None
-    stat_trak: Optional[bool] = Field(None, alias='statTrak')
+    stat_trak: Optional[bool] = Field(None, alias="statTrak")
     souvenir: Optional[bool] = None
-    lowest_price: Optional[float] = Field(None, alias='lowestPrice')
-    market_hash_name: Optional[str] = Field(None, alias='marketHashName')
+    lowest_price: Optional[float] = Field(None, alias="lowestPrice")
+    market_hash_name: Optional[str] = Field(None, alias="marketHashName")
     quantity: Optional[int] = None
     url: Optional[str] = None
-    doppler_class_name: Optional[str] = Field(None, alias='dopplerClassName')
+    doppler_class_name: Optional[str] = Field(None, alias="dopplerClassName")
 
 
-class GetPriceList(BaseModel):
-    map: Optional[List[GetPriceListMapItem]]
+class PriceList(BaseModel):
+    map: Optional[List[PriceListMapItem]]

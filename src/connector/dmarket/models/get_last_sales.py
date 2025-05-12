@@ -9,16 +9,19 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 from enum import Enum
 
-class TxOperationType(Enum):
-    Offer = 'Offer'
-    Order = 'Order'
 
-class GetLastSalesSale(BaseModel):
+class TxOperationType(Enum):
+    Offer = "Offer"
+    Order = "Order"
+
+
+class LastSalesSale(BaseModel):
     price: Optional[str]
     date: Optional[str]
-    tx_operation_type: Optional[TxOperationType] = Field(None, alias='txOperationType')
-    offer_attributes: Optional[Dict[str, Any]] = Field(None, alias='offerAttributes')
-    order_attributes: Optional[Dict[str, Any]] = Field(None, alias='orderAttributes')
+    tx_operation_type: Optional[TxOperationType] = Field(None, alias="txOperationType")
+    offer_attributes: Optional[Dict[str, Any]] = Field(None, alias="offerAttributes")
+    order_attributes: Optional[Dict[str, Any]] = Field(None, alias="orderAttributes")
 
-class GetLastSales(BaseModel):
-    sales: Optional[List[GetLastSalesSale]]
+
+class LastSales(BaseModel):
+    sales: Optional[List[LastSalesSale]]

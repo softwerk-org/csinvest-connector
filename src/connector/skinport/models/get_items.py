@@ -9,7 +9,7 @@ from typing import List, Optional
 from pydantic import BaseModel, RootModel
 
 
-class GetItemsGetItem(BaseModel):
+class ItemsItem(BaseModel):
     market_hash_name: Optional[str]
     currency: Optional[str]
     suggested_price: Optional[float] = None
@@ -24,5 +24,5 @@ class GetItemsGetItem(BaseModel):
     updated_at: Optional[int]
 
 
-class GetItems(RootModel[Optional[List[GetItemsGetItem]]]):
-    root: Optional[List[GetItemsGetItem]]
+class Items(RootModel[Optional[List[ItemsItem]]]):
+    root: Optional[List[ItemsItem]]

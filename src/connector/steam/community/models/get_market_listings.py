@@ -9,7 +9,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class GetMarketListingsSearchdata(BaseModel):
+class MarketListingsSearchdata(BaseModel):
     query: Optional[str]
     search_descriptions: Optional[bool]
     total_count: Optional[int]
@@ -18,7 +18,7 @@ class GetMarketListingsSearchdata(BaseModel):
     class_prefix: Optional[str]
 
 
-class GetMarketListingsResultAssetDescription(BaseModel):
+class MarketListingsResultAssetDescription(BaseModel):
     appid: Optional[int]
     classid: Optional[str]
     instanceid: Optional[str]
@@ -33,7 +33,7 @@ class GetMarketListingsResultAssetDescription(BaseModel):
     commodity: Optional[int]
 
 
-class GetMarketListingsResult(BaseModel):
+class MarketListingsResult(BaseModel):
     name: Optional[str]
     hash_name: Optional[str]
     sell_listings: Optional[int]
@@ -41,14 +41,14 @@ class GetMarketListingsResult(BaseModel):
     sell_price_text: Optional[str]
     app_icon: Optional[str]
     app_name: Optional[str]
-    asset_description: Optional[GetMarketListingsResultAssetDescription]
+    asset_description: Optional[MarketListingsResultAssetDescription]
     sale_price_text: Optional[str]
 
 
-class GetMarketListings(BaseModel):
+class MarketListings(BaseModel):
     success: Optional[bool]
     start: Optional[int]
     pagesize: Optional[int]
     total_count: Optional[int]
-    searchdata: Optional[GetMarketListingsSearchdata]
-    results: Optional[List[GetMarketListingsResult]]
+    searchdata: Optional[MarketListingsSearchdata]
+    results: Optional[List[MarketListingsResult]]

@@ -9,7 +9,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class GetPlayerSummariesResponsePlayer(BaseModel):
+class PlayerSummariesResponsePlayer(BaseModel):
     steamid: Optional[str]
     communityvisibilitystate: Optional[int]
     profilestate: Optional[int]
@@ -27,9 +27,9 @@ class GetPlayerSummariesResponsePlayer(BaseModel):
     locstatecode: Optional[str]
 
 
-class GetPlayerSummariesResponse(BaseModel):
-    players: Optional[List[GetPlayerSummariesResponsePlayer]]
+class PlayerSummariesResponse(BaseModel):
+    players: Optional[List[PlayerSummariesResponsePlayer]]
 
 
-class GetPlayerSummaries(BaseModel):
-    response: Optional[GetPlayerSummariesResponse]
+class PlayerSummaries(BaseModel):
+    response: Optional[PlayerSummariesResponse]

@@ -9,14 +9,14 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class GetPricesItem(BaseModel):
+class PricesItem(BaseModel):
     market_hash_name: Optional[str]
     volume: Optional[str]
     price: Optional[str]
 
 
-class GetPrices(BaseModel):
+class Prices(BaseModel):
     success: Optional[bool]
     time: Optional[int]
     currency: Optional[str]
-    items: Optional[List[GetPricesItem]]
+    items: Optional[List[PricesItem]]

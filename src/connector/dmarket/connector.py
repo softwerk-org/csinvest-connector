@@ -1,9 +1,9 @@
 from typing import Literal
-from connector.base import ConnectorBase
+from connector.base import Connector
 from connector.dmarket.auth import DMarketAuth
-from .models.get_last_sales import GetLastSales
-from .models.get_market_items import GetMarketItems
-from .models.get_aggregated_prices import GetAggregatedPrices
+from .models.get_last_sales import LastSales
+from .models.get_market_items import MarketItems
+from .models.get_aggregated_prices import AggregatedPrices
 
 
 class DMarketConnector:
@@ -11,12 +11,13 @@ class DMarketConnector:
 
     def __init__(
         self,
-        proxy_url: str | None = None,
+        proxy: str | None = None,
         public_key: str | None = None,
         private_key: str | None = None,
     ):
-        self.connector = ConnectorBase(
-            base_url="https://api.dmarket.com", proxy_url=proxy_url
+        self.connector = Connector(
+            base_url="https://api.dmarket.com",
+            proxy=proxy,
         )
         self.auth = DMarketAuth(public_key=public_key, private_key=private_key)
 
@@ -28,9 +29,8 @@ class DMarketConnector:
         offset: int = 0,
         filters: list[str] | None = None,
         game_id: str = "a8db",
-    ) -> GetLastSales:
+    ) -> LastSales:
         """Get the item sales history. Up to 12 last months."""
-        method = "GET"
         path = "/trade-aggregator/v1/last-sales"
         params = {
             "title": market_hash_name,
@@ -43,13 +43,12 @@ class DMarketConnector:
         if tx_operation_type:
             params["txOperationType"] = tx_operation_type
 
-        text = await self.connector.request(
-            method,
+        text = await self.connector.get(
             path,
             params=params,
-            headers=await self.auth.headers(method, path, params),
+            headers=await self.auth.headers("GET", path, params),
         )
-        return GetLastSales.model_validate_json(text)
+        return LastSales.model_validate_json(text)
 
     async def get_market_items(
         self,
@@ -66,11 +65,10 @@ class DMarketConnector:
         limit: int = 100,
         platform: str = "browser",
         is_logged_in: bool = True,
-    ) -> GetMarketItems:
+    ) -> MarketItems:
         """Get the list of unique items with `market_hash_name` that are available for purchase on DMarket."""
 
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             "/exchange/v1/market/items",
             params={
                 "gameId": game_id,
@@ -88,30 +86,19 @@ class DMarketConnector:
                 "isLoggedIn": is_logged_in,
             },
         )
-        return GetMarketItems.model_validate_json(text)
+        return MarketItems.model_validate_json(text)
 
     async def get_aggregated_prices(
         self,
-        market_hash_names: list[str] | str | None = None,
-        limit: int | None = None,
-        offset: int | None = None,
-    ) -> GetAggregatedPrices:
+        market_hash_names: list[str],
+        limit: int = 100,
+        offset: int = 0,
+    ) -> AggregatedPrices:
         """Get the best market prices grouped by `market_hash_name`."""
-        if limit is not None and limit > 10000:
-            raise ValueError("Limit must be <= 10000")
-        
-        params = {}
+        assert limit <= 10000, "Limit must be <= 10000"
 
-        if market_hash_names:
-            params["Titles"] = market_hash_names
-
-        if limit:
-            params["Limit"] = limit
-
-        if offset:
-            params["Offset"] = offset
-
-        text = await self.connector.request(
-            "GET", "/price-aggregator/v1/aggregated-prices", params=params
+        text = await self.connector.get(
+            "/price-aggregator/v1/aggregated-prices",
+            params={"Limit": limit, "Offset": offset, "Titles": market_hash_names},
         )
-        return GetAggregatedPrices.model_validate_json(text)
+        return AggregatedPrices.model_validate_json(text)

@@ -62,6 +62,6 @@ class AssetClassInfoError(BaseModel):
     success: Optional[bool] = None
 
 
-class GetAssetClassInfo(BaseModel):
+class AssetClassInfo(BaseModel):
     result: Optional[Union[Dict[str, AssetClassInfoItem], AssetClassInfoError]] = None
     success: Optional[bool] = None

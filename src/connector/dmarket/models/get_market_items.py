@@ -9,166 +9,180 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
+
 class TypeModel(Enum):
-    item = 'item'
-    offer = 'offer'
-    target = 'target'
-    class_ = 'class'
-    airdrop = 'airdrop'
-    sale = 'sale'
-    product = 'product'
-    
+    item = "item"
+    offer = "offer"
+    target = "target"
+    class_ = "class"
+    airdrop = "airdrop"
+    sale = "sale"
+    product = "product"
+
+
 class StatusModel(Enum):
-    default = 'default'
-    active = 'active'
-    inactive = 'inactive'
-    in_transfer = 'in_transfer'
-    sold = 'sold'
-    recalled = 'recalled'
-    unavailable = 'unavailable'
-    locked = 'locked'
+    default = "default"
+    active = "active"
+    inactive = "inactive"
+    in_transfer = "in_transfer"
+    sold = "sold"
+    recalled = "recalled"
+    unavailable = "unavailable"
+    locked = "locked"
+
 
 class GameType(Enum):
-    blockchain = 'blockchain'
-    steam = 'steam'
+    blockchain = "blockchain"
+    steam = "steam"
+
 
 class ExtraDoc(Enum):
-    viewAtSteam = 'viewAtSteam'
-    quality = 'quality'
-    exterior = 'exterior'
-    category = 'category'
-    tradeLock = 'tradeLock'
-    tradeLockDuration = 'tradeLockDuration'
-    stickers = 'stickers'
-    itemType = 'itemType'
-    floatValue = 'floatValue'
-    inspectInGame = 'inspectInGame'
-    tagName = 'tagName'
-    hero = 'hero'
-    gems = 'gems'
-    rarity = 'rarity'
-    serialNumber = 'serialNumber'
-    ability = 'ability'
-    videos = 'videos'
-    subscribers = 'subscribers'
-    growth = 'growth'
-    nameColor = 'nameColor'
-    backgroundColor = 'backgroundColor'
-    tradable = 'tradable'
-    withdrawable = 'withdrawable'
-    depositable = 'depositable'
-    offerId = 'offerId'
-    orderId = 'orderId'
-    isNew = 'isNew'
-    groupId = 'groupId'
-    gameId = 'gameId'
-    name = 'name'
-    categoryPath = 'categoryPath'
-    class_ = 'class'
-    collection = 'collection'
-    grade = 'grade'
-    type = 'type'
+    viewAtSteam = "viewAtSteam"
+    quality = "quality"
+    exterior = "exterior"
+    category = "category"
+    tradeLock = "tradeLock"
+    tradeLockDuration = "tradeLockDuration"
+    stickers = "stickers"
+    itemType = "itemType"
+    floatValue = "floatValue"
+    inspectInGame = "inspectInGame"
+    tagName = "tagName"
+    hero = "hero"
+    gems = "gems"
+    rarity = "rarity"
+    serialNumber = "serialNumber"
+    ability = "ability"
+    videos = "videos"
+    subscribers = "subscribers"
+    growth = "growth"
+    nameColor = "nameColor"
+    backgroundColor = "backgroundColor"
+    tradable = "tradable"
+    withdrawable = "withdrawable"
+    depositable = "depositable"
+    offerId = "offerId"
+    orderId = "orderId"
+    isNew = "isNew"
+    groupId = "groupId"
+    gameId = "gameId"
+    name = "name"
+    categoryPath = "categoryPath"
+    class_ = "class"
+    collection = "collection"
+    grade = "grade"
+    type = "type"
+
 
 class Exterior(Enum):
-    field_tested = 'field-tested'
-    minimal_wear = 'minimal wear'
-    battle_scarred = 'battle-scarred'
-    well_worn = 'well-worn'
-    factory_new = 'factory new'
-    not_painted = 'not painted'
+    field_tested = "field-tested"
+    minimal_wear = "minimal wear"
+    battle_scarred = "battle-scarred"
+    well_worn = "well-worn"
+    factory_new = "factory new"
+    not_painted = "not painted"
+
 
 class CSSticker(BaseModel):
     image: str
     name: str
+
 
 class Dota2Gem(BaseModel):
     image: str
     name: str
     type: str
 
+
 class Prices(BaseModel):
     DMC: str
     USD: str
+
 
 class Recommendations(BaseModel):
     d3: Prices
     d7: Prices
     d7Plus: Prices
 
+
 class OwnerDetails(BaseModel):
     avatar: str
     id: str
     wallet: str
 
+
 class Extra(BaseModel):
     ability: Optional[str] = None
-    background_color: Optional[str] = Field(None, alias='backgroundColor')
+    background_color: Optional[str] = Field(None, alias="backgroundColor")
     category: Optional[str] = None
-    category_path: str = Field(None, alias='categoryPath')
-    class_: Optional[List[str]] = Field(None, alias='class')
+    category_path: str = Field(None, alias="categoryPath")
+    class_: Optional[List[str]] = Field(None, alias="class")
     collection: Optional[List[str]] = None
     exterior: Optional[Exterior] = None
-    float_value: Optional[float] = Field(None, alias='floatValue')
-    game_id: str = Field(None, alias='gameId')
+    float_value: Optional[float] = Field(None, alias="floatValue")
+    game_id: str = Field(None, alias="gameId")
     gems: Optional[List[Dota2Gem]] = None
     grade: Optional[str] = None
-    group_id: Optional[str] = Field(None, alias='groupId')
+    group_id: Optional[str] = Field(None, alias="groupId")
     growth: Optional[float] = None
     hero: Optional[str] = None
-    inspect_in_game: Optional[str] = Field(None, alias='inspectInGame')
-    is_new: bool = Field(None, alias='isNew')
-    item_type: Optional[str] = Field(None, alias='itemType')
-    link_id: Optional[str] = Field(None, alias='linkId')
+    inspect_in_game: Optional[str] = Field(None, alias="inspectInGame")
+    is_new: bool = Field(None, alias="isNew")
+    item_type: Optional[str] = Field(None, alias="itemType")
+    link_id: Optional[str] = Field(None, alias="linkId")
     name: str
-    name_color: Optional[str] = Field(None, alias='nameColor')
-    offer_id: Optional[str] = Field(None, alias='offerId')
+    name_color: Optional[str] = Field(None, alias="nameColor")
+    offer_id: Optional[str] = Field(None, alias="offerId")
     quality: Optional[str] = None
     rarity: Optional[str] = None
-    serial_number: Optional[int] = Field(None, alias='serialNumber')
+    serial_number: Optional[int] = Field(None, alias="serialNumber")
     stickers: Optional[List[CSSticker]] = None
     subscribers: Optional[int] = None
-    tag_name: Optional[str] = Field(None, alias='tagName')
+    tag_name: Optional[str] = Field(None, alias="tagName")
     tradable: bool
-    trade_lock: Optional[int] = Field(None, alias='tradeLock')
-    trade_lock_duration: int = Field(None, alias='tradeLockDuration')
+    trade_lock: Optional[int] = Field(None, alias="tradeLock")
+    trade_lock_duration: int = Field(None, alias="tradeLockDuration")
     type: Optional[str] = None
     videos: Optional[int] = None
-    view_at_steam: Optional[str] = Field(None, alias='viewAtSteam')
+    view_at_steam: Optional[str] = Field(None, alias="viewAtSteam")
     withdrawable: Optional[bool] = None
+
 
 class Item(BaseModel):
     amount: int
-    class_id: str = Field(..., alias='classId')
-    created_at: int = Field(..., alias='createdAt')
+    class_id: str = Field(..., alias="classId")
+    created_at: int = Field(..., alias="createdAt")
     description: str
     discount: int
     extra: Extra
-    extr_doc: Optional[ExtraDoc] = Field(None, alias='extraDoc')
-    game_id: str = Field(None, alias='gameId')
-    game_type: GameType = Field(..., alias='gameType')
+    extr_doc: Optional[ExtraDoc] = Field(None, alias="extraDoc")
+    game_id: str = Field(None, alias="gameId")
+    game_type: GameType = Field(..., alias="gameType")
     image: str
-    in_market: bool = Field(..., alias='inMarket')
-    instant_price: Optional[Prices] = Field(None, alias='instantPrice')
-    instant_target_id: str = Field(..., alias='instantTargetId')
-    item_id: str = Field(..., alias='itemId')
-    lock_status: bool = Field(..., alias='lockStatus')
+    in_market: bool = Field(..., alias="inMarket")
+    instant_price: Optional[Prices] = Field(None, alias="instantPrice")
+    instant_target_id: str = Field(..., alias="instantTargetId")
+    item_id: str = Field(..., alias="itemId")
+    lock_status: bool = Field(..., alias="lockStatus")
     owner: str
-    owner_details: OwnerDetails = Field(..., alias='ownerDetails')
-    owners_blockchain_id: str = Field(..., alias='ownersBlockchainId')
+    owner_details: OwnerDetails = Field(..., alias="ownerDetails")
+    owners_blockchain_id: str = Field(..., alias="ownersBlockchainId")
     price: Optional[Prices] = None
-    recommended_price: Optional[Recommendations] = Field(None, alias='recommendedPrice')
+    recommended_price: Optional[Recommendations] = Field(None, alias="recommendedPrice")
     slug: str
     status: StatusModel
-    suggested_price: Optional[Prices] = Field(None, alias='suggestedPrice')
+    suggested_price: Optional[Prices] = Field(None, alias="suggestedPrice")
     title: str
     type: TypeModel
+
 
 class Total(BaseModel):
     offers: Optional[int]
     targets: Optional[int]
-    closed_targets: Optional[int] = Field(None, alias='closedTargets')
+    closed_targets: Optional[int] = Field(None, alias="closedTargets")
 
-class GetMarketItems(BaseModel):
+
+class MarketItems(BaseModel):
     cursor: Optional[str] = None
     objects: List[Item]
     total: Optional[Total] = None

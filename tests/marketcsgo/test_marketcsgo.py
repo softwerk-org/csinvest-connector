@@ -2,9 +2,17 @@ import pytest
 
 from connector.marketcsgo.connector import MarketCsgoConnector
 
+
 @pytest.mark.asyncio
 async def test_marketcsgo_integration():
     connector = MarketCsgoConnector()
     model = await connector.get_prices()
-    assert hasattr(model, "items")
-    assert model.items is None or isinstance(model.items, list) 
+    assert model.items is not None
+
+
+@pytest.mark.asyncio
+async def test_marketcsgo_integration_list_items_info():
+    connector = MarketCsgoConnector()
+    model = await connector.get_list_items_info(["AK-47 | Redline (Minimal Wear)"])
+    assert model.success is True
+    assert model.data is not None

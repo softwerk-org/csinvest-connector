@@ -1,20 +1,32 @@
 from typing import Literal
 
-from connector.base import ConnectorBase
-from .models.get_prices import GetPrices
+from connector.base import Connector
+from .models.get_prices import Prices
+from .models.get_list_items_info import ListItemsInfo
+
 
 class MarketCsgoConnector:
-    __docs__ = "https://market.csgo.com/docs-v2"
+    __docs__ = "https://market.csgo.com/en/api"
 
-    def __init__(self, proxy_url: str | None = None):
-        self.connector = ConnectorBase(base_url="https://market.csgo.com/api/v2", proxy_url=proxy_url)
+    def __init__(self, proxy: str | None = None):
+        self.connector = Connector(
+            base_url="https://market.csgo.com/api/v2",
+            proxy=proxy,
+        )
 
     async def get_prices(
         self, currency: Literal["RUB", "EUR", "USD"] = "USD"
-    ) -> GetPrices:
+    ) -> Prices:
         """Get market prices."""
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             f"/prices/{currency}.json",
         )
-        return GetPrices.model_validate_json(text)
+        return Prices.model_validate_json(text)
+
+    async def get_list_items_info(self, market_hash_names: list[str]) -> ListItemsInfo:
+        """Get list items info."""
+        text = await self.connector.get(
+            "/v2/get-list-items-info",
+            params={"key": self.api_key, "list_hash_name[]": market_hash_names},
+        )
+        return ListItemsInfo.model_validate_json(text)

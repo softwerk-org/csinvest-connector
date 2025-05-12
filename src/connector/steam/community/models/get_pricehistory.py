@@ -9,7 +9,7 @@ from typing import List, Optional, Union
 from pydantic import BaseModel
 
 
-class GetPricehistory(BaseModel):
+class Pricehistory(BaseModel):
     success: Optional[bool]
     price_prefix: Optional[str]
     price_suffix: Optional[str]

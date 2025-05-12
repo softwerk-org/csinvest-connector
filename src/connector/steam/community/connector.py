@@ -1,11 +1,12 @@
-from connector.base import ConnectorBase
+from connector.base import Connector
 from .auth import SteamAuth
-from .models.get_market_listings import GetMarketListings
-from .models.get_pricehistory import GetPricehistory
-from .models.get_inventory import GetInventory
-from .models.get_partner_inventory import GetPartnerInventory
-from .models.get_profile import GetProfile
+from .models.get_market_listings import MarketListings
+from .models.get_pricehistory import Pricehistory
+from .models.get_inventory import Inventory
+from .models.get_partner_inventory import PartnerInventory
+from .models.get_profile import Profile
 import xmltodict
+
 
 class SteamCommunityConnector:
     __docs__ = "https://github.com/Revadike/InternalSteamWebAPI/wiki"
@@ -15,11 +16,9 @@ class SteamCommunityConnector:
         username: str,
         password: str,
         api_key: str,
-        proxy_url: str | None = None,
+        proxy: str | None = None,
     ):
-        self.connector = ConnectorBase(
-            base_url="https://steamcommunity.com", proxy_url=proxy_url
-        )
+        self.connector = Connector(base_url="https://steamcommunity.com", proxy=proxy)
         self.auth = SteamAuth(
             username=username,
             password=password,
@@ -36,10 +35,9 @@ class SteamCommunityConnector:
         search_descriptions: str = "0",
         sort_dir: str = "asc",
         currency: int = 0,
-    ) -> GetMarketListings:
+    ) -> MarketListings:
         """Get market listings."""
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             "/market/search/render/",
             params={
                 "start": start,
@@ -52,7 +50,7 @@ class SteamCommunityConnector:
                 "currency": currency,
             },
         )
-        return GetMarketListings.model_validate_json(text)
+        return MarketListings.model_validate_json(text)
 
     async def get_pricehistory(
         self,
@@ -60,20 +58,19 @@ class SteamCommunityConnector:
         country: str = "DE",
         currency: int = 0,
         appid: int = 730,
-    ) -> GetPricehistory:
+    ) -> Pricehistory:
         """Get price history for an item."""
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             "/market/pricehistory/",
             params={
-                    "country": country,
-                    "currency": currency,
-                    "appid": appid,
-                    "market_hash_name": market_hash_name,
-                },
-                cookies=await self.auth.cookies(),
+                "country": country,
+                "currency": currency,
+                "appid": appid,
+                "market_hash_name": market_hash_name,
+            },
+            cookies=await self.auth.cookies(),
         )
-        return GetPricehistory.model_validate_json(text)
+        return Pricehistory.model_validate_json(text)
 
     async def get_inventory(
         self,
@@ -83,7 +80,7 @@ class SteamCommunityConnector:
         language: str = "english",
         count: int = 5000,
         start_assetid: str | None = None,
-    ) -> GetInventory:
+    ) -> Inventory:
         """Get inventory of a user identified by steamid."""
         params = {
             "l": language,
@@ -92,13 +89,12 @@ class SteamCommunityConnector:
         if start_assetid:
             params["start_assetid"] = start_assetid
 
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             f"/inventory/{steamid}/{appid}/{contextid}",
             params=params,
             cookies=await self.auth.cookies(),
         )
-        return GetInventory.model_validate_json(text)
+        return Inventory.model_validate_json(text)
 
     async def get_partner_inventory(
         self,
@@ -106,7 +102,7 @@ class SteamCommunityConnector:
         appid: int = 730,
         contextid: int = 2,
         language: str = "english",
-    ) -> GetPartnerInventory:
+    ) -> PartnerInventory:
         """
         Get all tradeable items of a user identified by steamid.
         This method utilizes a enpoint for trading items with other users. It only returns tradeable items.
@@ -118,8 +114,7 @@ class SteamCommunityConnector:
             "contextid": contextid,
             "sessionid": (await self.auth.cookies()).get("sessionid"),
         }
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             "/tradeoffer/new/partnerinventory/",
             params=params,
             cookies=await self.auth.cookies(),
@@ -127,7 +122,7 @@ class SteamCommunityConnector:
                 "Referer": f"https://steamcommunity.com/tradeoffer/new/?partner={steamid}",
             },
         )
-        return GetPartnerInventory.model_validate_json(text)
+        return PartnerInventory.model_validate_json(text)
 
     async def get_market_page(
         self,
@@ -135,18 +130,16 @@ class SteamCommunityConnector:
         appid: int = 730,
     ) -> str:
         """Get market page HTML for an item."""
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             f"/market/listings/{appid}/{market_hash_name}",
         )
         return text
 
-    async def get_profile(self, steamid: str) -> GetProfile:
+    async def get_profile(self, steamid: str) -> Profile:
         """Get profile information for a user."""
-        text = await self.connector.request(
-            "GET",
+        text = await self.connector.get(
             f"/profiles/{steamid}/",
             params={"xml": 1},
         )
 
-        return GetProfile.model_validate(xmltodict.parse(text))
+        return Profile.model_validate(xmltodict.parse(text))

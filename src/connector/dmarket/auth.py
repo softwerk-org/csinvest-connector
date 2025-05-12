@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 
 from nacl.bindings import crypto_sign
 
+
 class DMarketAuth:
     def __init__(self, public_key: str, private_key: str):
         self.public_key = public_key

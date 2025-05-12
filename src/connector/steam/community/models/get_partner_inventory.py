@@ -74,7 +74,7 @@ class RGDescription(BaseModel):
     tags: List[Tag]
 
 
-class GetPartnerInventory(BaseModel):
+class PartnerInventory(BaseModel):
     success: bool
     rg_inventory: List[InventoryItem] = Field(..., alias="rgInventory")
     rg_currency: Optional[List[Any]] = Field(None, alias="rgCurrency")

@@ -9,7 +9,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class GetInventoryAsset(BaseModel):
+class InventoryAsset(BaseModel):
     appid: Optional[int] = None
     contextid: Optional[str] = None
     assetid: Optional[str] = None
@@ -18,22 +18,22 @@ class GetInventoryAsset(BaseModel):
     amount: Optional[str] = None
 
 
-class GetInventoryDescriptionDescription(BaseModel):
+class InventoryDescriptionDescription(BaseModel):
     type: Optional[str] = None
     value: Optional[str] = None
     name: Optional[str] = None
     color: Optional[str] = None
 
 
-class GetInventoryDescriptionAction(BaseModel):
+class InventoryDescriptionAction(BaseModel):
     link: Optional[str] = None
     name: Optional[str] = None
 
 
-GetInventoryDescriptionMarketAction = GetInventoryDescriptionAction
+InventoryDescriptionMarketAction = InventoryDescriptionAction
 
 
-class GetInventoryDescriptionTag(BaseModel):
+class InventoryDescriptionTag(BaseModel):
     category: Optional[str] = None
     internal_name: Optional[str] = None
     localized_category_name: Optional[str] = None
@@ -41,32 +41,32 @@ class GetInventoryDescriptionTag(BaseModel):
     color: Optional[str] = None
 
 
-class GetInventoryDescription(BaseModel):
+class InventoryDescription(BaseModel):
     appid: Optional[int] = None
     classid: Optional[str] = None
     instanceid: Optional[str] = None
     currency: Optional[int] = None
     background_color: Optional[str] = None
     icon_url: Optional[str] = None
-    descriptions: Optional[List[GetInventoryDescriptionDescription]] = None
+    descriptions: Optional[List[InventoryDescriptionDescription]] = None
     tradable: Optional[int] = None
-    actions: Optional[List[GetInventoryDescriptionAction]] = None
+    actions: Optional[List[InventoryDescriptionAction]] = None
     name: Optional[str] = None
     name_color: Optional[str] = None
     type: Optional[str] = None
     market_name: Optional[str] = None
     market_hash_name: Optional[str] = None
-    market_actions: Optional[List[GetInventoryDescriptionMarketAction]] = None
+    market_actions: Optional[List[InventoryDescriptionMarketAction]] = None
     commodity: Optional[int] = None
     market_tradable_restriction: Optional[int] = None
     market_marketable_restriction: Optional[int] = None
     marketable: Optional[int] = None
-    tags: Optional[List[GetInventoryDescriptionTag]] = None
+    tags: Optional[List[InventoryDescriptionTag]] = None
 
 
-class GetInventory(BaseModel):
-    assets: Optional[List[GetInventoryAsset]] = None
-    descriptions: Optional[List[GetInventoryDescription]] = None
+class Inventory(BaseModel):
+    assets: Optional[List[InventoryAsset]] = None
+    descriptions: Optional[List[InventoryDescription]] = None
     total_inventory_count: Optional[int] = None
     success: Optional[int] = None
     rwgrsn: Optional[int] = None
