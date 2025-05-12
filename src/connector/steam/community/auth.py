@@ -15,7 +15,7 @@ class SteamAuthError(Exception):
     pass
 
 
-class SteamAuthenticator:
+class SteamAuth:
     """
     Asynchronous Steam WebAPI login cookie provider with caching.
 
@@ -132,7 +132,7 @@ class SteamAuthenticator:
         with open(self.cache_file, "w") as f:
             json.dump({"timestamp": time.time(), "cookies": cookies}, f)
 
-    async def get_cookies(self) -> dict[str, str]:
+    async def cookies(self) -> dict[str, str]:
         """Return cached or freshly generated cookies."""
         if cached := self._load_cache():
             return cached
