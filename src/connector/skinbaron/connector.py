@@ -47,17 +47,25 @@ class SkinbaronConnector:
         market_hash_name: str,
         stat_trak: bool = False,
         souvenir: bool = False,
+        doppler_phase: str | None = None,
     ) -> NewestSales:
+        payload = {
+            "apikey": self.api_key,
+            "itemName": market_hash_name,
+            "statTrak": stat_trak,
+            "souvenir": souvenir,
+        }
+        if doppler_phase:
+            payload["dopplerPhase"] = doppler_phase
+
         text = await self.connector.post(
             "/NewestSales30Days",
             headers={
                 "X-Requested-With": "XMLHttpRequest",
             },
-            json={
-                "apikey": self.api_key,
-                "itemName": market_hash_name,
-                "statTrak": stat_trak,
-                "souvenir": souvenir,
-            },
+            json=payload,
         )
+        # If HTML page is returned (no JSON), fallback to empty result
+        if text.lstrip().startswith("<"):
+            return NewestSales(newest_sales_30days=[])
         return NewestSales.model_validate_json(text)

@@ -1,6 +1,6 @@
 from connector.base import Connector
 from .models.get_items import Items
-from .models.get_sales_history import SalesStats
+from .models.get_sales_history import SalesHistory, SalesItem
 
 
 class SkinportConnector:
@@ -14,7 +14,7 @@ class SkinportConnector:
         appid: int = 730,
         currency: str = "USD",
         tradable: int = 0,
-    ) -> Items:
+    ) -> list[Items]:
         params = {"app_id": appid, "currency": currency, "tradable": tradable}
         text = await self.connector.get(
             "/v1/items",
@@ -22,14 +22,15 @@ class SkinportConnector:
             params=params,
             timeout=30,
         )
-        return Items.model_validate_json(text)
+        items = Items.model_validate_json(text)
+        return items.root
 
     async def get_sales_history(
         self,
         market_hash_names: list[str] | None = None,
         appid: int = 730,
         currency: str = "USD",
-    ) -> SalesStats:
+    ) -> list[SalesItem]:
         """
         Provides aggregated Sales.
         Will return list of sales history for each market_hash_name if no market_hash_names are provided
@@ -46,4 +47,5 @@ class SkinportConnector:
             params=params,
             timeout=30,
         )
-        return SalesStats.model_validate_json(text)
+        stats = SalesHistory.model_validate_json(text)
+        return stats.root

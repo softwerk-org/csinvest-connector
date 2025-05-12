@@ -84,4 +84,4 @@ class Listing(BaseModel):
 
 
 class Listings(RootModel[List[Listing]]):
-    pass
+    root: list[Listing]

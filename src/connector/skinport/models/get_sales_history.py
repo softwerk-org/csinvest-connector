@@ -22,5 +22,5 @@ class SalesItem(BaseModel):
     last_90_days: PeriodStats
 
 
-class SalesStats(RootModel[List[SalesItem]]):
+class SalesHistory(RootModel[List[SalesItem]]):
     pass

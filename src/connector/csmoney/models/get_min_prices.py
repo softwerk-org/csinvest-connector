@@ -32,4 +32,4 @@ class MarketPriceItem(BaseModel):
 
 
 class MinPrices(RootModel[dict[str, MarketPriceItem]]):
-    pass
+    root: dict[str, MarketPriceItem]

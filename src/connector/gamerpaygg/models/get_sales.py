@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, RootModel
 
 
@@ -8,5 +8,7 @@ class Sale(BaseModel):
     soldAt: Optional[int] = None
 
 
-class Sales(RootModel[dict[str, list[Sale]]]):
-    pass
+class Sales(RootModel[List[Sale]]):
+    """List of sales from GamerPayGG"""
+
+    root: List[Sale]

@@ -1,5 +1,5 @@
 from connector.base import Connector
-from connector.csfloat.models.get_listings import Listings
+from connector.csfloat.models.get_listings import Listings, Listing
 
 
 class CSFloatConnector:
@@ -11,6 +11,7 @@ class CSFloatConnector:
 
     async def get_listings(
         self,
+        query: str = "*",
         page: int = 0,
         limit: int = 50,
         sort_by: str = "best_deal",
@@ -28,7 +29,7 @@ class CSFloatConnector:
         market_hash_name: str | None = None,
         type: str | None = None,
         stickers: str | None = None,
-    ) -> Listings:
+    ) -> list[Listing]:
         """Get all active listings with optional filters."""
         params: dict[str, any] = {
             "page": page,
@@ -36,6 +37,8 @@ class CSFloatConnector:
             "sort_by": sort_by,
             "category": category,
         }
+        if query:
+            params["query"] = query
         if def_index is not None:
             params["def_index"] = def_index
         if min_float is not None:
@@ -67,4 +70,5 @@ class CSFloatConnector:
             "/listings",
             params=params,
         )
-        return Listings.model_validate_json(text)
+        listings = Listings.model_validate_json(text)
+        return listings.root
