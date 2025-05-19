@@ -4,69 +4,68 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
 
 from pydantic import BaseModel
 
 
 class InventoryAsset(BaseModel):
-    appid: Optional[int] = None
-    contextid: Optional[str] = None
-    assetid: Optional[str] = None
-    classid: Optional[str] = None
-    instanceid: Optional[str] = None
-    amount: Optional[str] = None
+    appid: int | None = None
+    contextid: str | None = None
+    assetid: str | None = None
+    classid: str | None = None
+    instanceid: str | None = None
+    amount: str | None = None
 
 
 class InventoryDescriptionDescription(BaseModel):
-    type: Optional[str] = None
-    value: Optional[str] = None
-    name: Optional[str] = None
-    color: Optional[str] = None
+    type: str | None = None
+    value: str | None = None
+    name: str | None = None
+    color: str | None = None
 
 
 class InventoryDescriptionAction(BaseModel):
-    link: Optional[str] = None
-    name: Optional[str] = None
+    link: str | None = None
+    name: str | None = None
 
 
 InventoryDescriptionMarketAction = InventoryDescriptionAction
 
 
 class InventoryDescriptionTag(BaseModel):
-    category: Optional[str] = None
-    internal_name: Optional[str] = None
-    localized_category_name: Optional[str] = None
-    localized_tag_name: Optional[str] = None
-    color: Optional[str] = None
+    category: str | None = None
+    internal_name: str | None = None
+    localized_category_name: str | None = None
+    localized_tag_name: str | None = None
+    color: str | None = None
 
 
 class InventoryDescription(BaseModel):
-    appid: Optional[int] = None
-    classid: Optional[str] = None
-    instanceid: Optional[str] = None
-    currency: Optional[int] = None
-    background_color: Optional[str] = None
-    icon_url: Optional[str] = None
-    descriptions: Optional[List[InventoryDescriptionDescription]] = None
-    tradable: Optional[int] = None
-    actions: Optional[List[InventoryDescriptionAction]] = None
-    name: Optional[str] = None
-    name_color: Optional[str] = None
-    type: Optional[str] = None
-    market_name: Optional[str] = None
-    market_hash_name: Optional[str] = None
-    market_actions: Optional[List[InventoryDescriptionMarketAction]] = None
-    commodity: Optional[int] = None
-    market_tradable_restriction: Optional[int] = None
-    market_marketable_restriction: Optional[int] = None
-    marketable: Optional[int] = None
-    tags: Optional[List[InventoryDescriptionTag]] = None
+    appid: int | None = None
+    classid: str | None = None
+    instanceid: str | None = None
+    currency: int | None = None
+    background_color: str | None = None
+    icon_url: str | None = None
+    descriptions: list[InventoryDescriptionDescription | None] | None = None
+    tradable: int | None = None
+    actions: list[InventoryDescriptionAction | None] | None = None
+    name: str | None = None
+    name_color: str | None = None
+    type: str | None = None
+    market_name: str | None = None
+    market_hash_name: str | None = None
+    market_actions: list[InventoryDescriptionMarketAction | None] | None = None
+    commodity: int | None = None
+    market_tradable_restriction: int | None = None
+    market_marketable_restriction: int | None = None
+    marketable: int | None = None
+    tags: list[InventoryDescriptionTag | None] | None = None
 
 
 class Inventory(BaseModel):
-    assets: Optional[List[InventoryAsset]] = None
-    descriptions: Optional[List[InventoryDescription]] = None
-    total_inventory_count: Optional[int] = None
-    success: Optional[int] = None
-    rwgrsn: Optional[int] = None
+    assets: list[InventoryAsset | None] | None = None
+    descriptions: list[InventoryDescription | None] | None = None
+    total_inventory_count: int | None = None
+    success: int | None = None
+    rwgrsn: int | None = None

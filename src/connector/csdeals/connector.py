@@ -1,3 +1,4 @@
+from typing import Any, final
 from pydantic import BaseModel, TypeAdapter, conlist
 from connector.base import Connector
 from connector.csdeals.auth import CsDealsAuth
@@ -6,16 +7,25 @@ from connector.csdeals.models.get_sales_history import SalesHistory
 from connector.csdeals.models.get_sales_history_multi import SalesHistoryMulti
 
 
-class CSDealsConnector:
-    __docs__ = "https://cs.deals/es/API-documentation"
+@final
+class CSDealsConnector(Connector):
+    """https://cs.deals/es/API-documentation"""
 
-    def __init__(self, api_key: str | None = None, proxy: str | None = None):
-        self.connector = Connector(base_url="https://cs.deals/API", proxy=proxy)
-        self.auth = CsDealsAuth(api_key=api_key)
+    def __init__(
+        self,
+        api_key: str | None = None,
+        proxy: str | None = None,
+    ):
+        super().__init__(
+            base_url="https://cs.deals/API",
+            proxy=proxy,
+        )
+        if api_key is not None:
+            self.auth = CsDealsAuth(api_key=api_key)
 
     async def get_lowest_prices(self, app_id: int = 730) -> LowestPrices:
         """Get the lowest prices for all items."""
-        text = await self.connector.post(
+        text = await self._post(
             "/IPricing/GetLowestPrices/v1",
             json={"appid": app_id},
         )
@@ -25,9 +35,13 @@ class CSDealsConnector:
         self, name: str, appid: int = 730, phase: str | None = None
     ) -> SalesHistory:
         """Get the sales history for a given item."""
-        text = await self.connector.post(
+        text = await self._post(
             "/IPricing/GetSalesHistory/v1",
-            json={"name": name, "appid": appid, **({"phase": phase} if phase else {})},
+            json={
+                "name": name,
+                "appid": appid,
+                **({"phase": phase} if phase else {}),
+            },
         )
         return SalesHistory.model_validate_json(text)
 
@@ -39,13 +53,13 @@ class CSDealsConnector:
     items = TypeAdapter(conlist(Item, max_length=50))
 
     async def get_sales_history_multi(
-        self, items: list[Item] | list[dict]
+        self, items: list[Item] | list[dict[str, Any]]
     ) -> SalesHistoryMulti:
         """Get the sales history for a list of items."""
         validated = self.items.validate_python(items)
 
-        text = await self.connector.post(
-            "/IPricing/GetSalesHistory/v1",
-            json=[item.model_dump(exclude_none=True) for item in validated],
+        text = await self._post(
+            "/IPricing/GetSalesHistoryMulti/v1",
+            json={"items": [item.model_dump(exclude_none=True) for item in validated]},
         )
         return SalesHistoryMulti.model_validate_json(text)

@@ -4,32 +4,30 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
-
 from pydantic import BaseModel
 
 
 class PlayerSummariesResponsePlayer(BaseModel):
-    steamid: Optional[str]
-    communityvisibilitystate: Optional[int]
-    profilestate: Optional[int]
-    personaname: Optional[str]
-    profileurl: Optional[str]
-    avatar: Optional[str]
-    avatarmedium: Optional[str]
-    avatarfull: Optional[str]
-    avatarhash: Optional[str]
-    personastate: Optional[int]
-    primaryclanid: Optional[str]
-    timecreated: Optional[int]
-    personastateflags: Optional[int]
-    loccountrycode: Optional[str]
-    locstatecode: Optional[str]
+    steamid: str | None
+    communityvisibilitystate: int | None
+    profilestate: int | None
+    personaname: str | None
+    profileurl: str | None
+    avatar: str | None
+    avatarmedium: str | None
+    avatarfull: str | None
+    avatarhash: str | None
+    personastate: int | None
+    primaryclanid: str | None
+    timecreated: int | None
+    personastateflags: int | None
+    loccountrycode: str | None
+    locstatecode: str | None
 
 
 class PlayerSummariesResponse(BaseModel):
-    players: Optional[List[PlayerSummariesResponsePlayer]]
+    players: list[PlayerSummariesResponsePlayer | None]
 
 
 class PlayerSummaries(BaseModel):
-    response: Optional[PlayerSummariesResponse]
+    response: PlayerSummariesResponse

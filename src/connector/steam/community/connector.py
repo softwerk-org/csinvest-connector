@@ -1,6 +1,6 @@
 from connector.base import Connector
 from .auth import SteamAuth
-from .models.get_market_listings import MarketListings
+from .models.get_market_listings import Marketlistings
 from .models.get_pricehistory import Pricehistory
 from .models.get_inventory import Inventory
 from .models.get_partner_inventory import PartnerInventory
@@ -8,8 +8,11 @@ from .models.get_profile import Profile
 import xmltodict
 
 
-class SteamCommunityConnector:
-    __docs__ = "https://github.com/Revadike/InternalSteamWebAPI/wiki"
+class SteamCommunityConnector(Connector):
+    """Connector for Steam Community API.
+
+    Documentation: https://github.com/Revadike/InternalSteamWebAPI/wiki
+    """
 
     def __init__(
         self,
@@ -18,7 +21,7 @@ class SteamCommunityConnector:
         api_key: str,
         proxy: str | None = None,
     ):
-        self.connector = Connector(base_url="https://steamcommunity.com", proxy=proxy)
+        super().__init__(base_url="https://steamcommunity.com", proxy=proxy)
         self.auth = SteamAuth(
             username=username,
             password=password,
@@ -35,9 +38,9 @@ class SteamCommunityConnector:
         search_descriptions: str = "0",
         sort_dir: str = "asc",
         currency: int = 0,
-    ) -> MarketListings:
+    ) -> Marketlistings:
         """Get market listings."""
-        text = await self.connector.get(
+        text = await self._get(
             "/market/search/render/",
             params={
                 "start": start,
@@ -50,7 +53,7 @@ class SteamCommunityConnector:
                 "currency": currency,
             },
         )
-        return MarketListings.model_validate_json(text)
+        return Marketlistings.model_validate_json(text)
 
     async def get_pricehistory(
         self,
@@ -60,7 +63,7 @@ class SteamCommunityConnector:
         appid: int = 730,
     ) -> Pricehistory:
         """Get price history for an item."""
-        text = await self.connector.get(
+        text = await self._get(
             "/market/pricehistory/",
             params={
                 "country": country,
@@ -89,7 +92,7 @@ class SteamCommunityConnector:
         if start_assetid:
             params["start_assetid"] = start_assetid
 
-        text = await self.connector.get(
+        text = await self._get(
             f"/inventory/{steamid}/{appid}/{contextid}",
             params=params,
             cookies=await self.auth.cookies(),
@@ -114,7 +117,7 @@ class SteamCommunityConnector:
             "contextid": contextid,
             "sessionid": (await self.auth.cookies()).get("sessionid"),
         }
-        text = await self.connector.get(
+        text = await self._get(
             "/tradeoffer/new/partnerinventory/",
             params=params,
             cookies=await self.auth.cookies(),
@@ -130,14 +133,14 @@ class SteamCommunityConnector:
         appid: int = 730,
     ) -> str:
         """Get market page HTML for an item."""
-        text = await self.connector.get(
+        text = await self._get(
             f"/market/listings/{appid}/{market_hash_name}",
         )
         return text
 
     async def get_profile(self, steamid: str) -> Profile:
         """Get profile information for a user."""
-        text = await self.connector.get(
+        text = await self._get(
             f"/profiles/{steamid}/",
             params={"xml": 1},
         )

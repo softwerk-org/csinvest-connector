@@ -6,6 +6,5 @@ class CsDealsAuth:
         self.api_key = api_key
         self.token = base64.b64encode(f"{self.api_key}:".encode("utf-8")).decode()
 
-    def headers(self) -> dict:
-        print(self.token)
+    def headers(self) -> dict[str, str]:
         return {"Authorization": f"Basic {self.token}"}

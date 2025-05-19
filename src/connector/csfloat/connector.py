@@ -1,12 +1,17 @@
+from typing import Any
+
 from connector.base import Connector
 from connector.csfloat.models.get_listings import Listings, Listing
 
 
-class CSFloatConnector:
-    __docs__ = "https://docs.csfloat.com/#introduction"
+class CSFloatConnector(Connector):
+    """Connector for the CSFloat REST API.
+
+    Documentation: https://docs.csfloat.com/#introduction
+    """
 
     def __init__(self, api_key: str | None = None, proxy: str | None = None):
-        self.connector = Connector(base_url="https://csfloat.com/api/v1", proxy=proxy)
+        super().__init__(base_url="https://csfloat.com/api/v1", proxy=proxy)
         self.api_key = api_key
 
     async def get_listings(
@@ -31,7 +36,7 @@ class CSFloatConnector:
         stickers: str | None = None,
     ) -> list[Listing]:
         """Get all active listings with optional filters."""
-        params: dict[str, any] = {
+        params: dict[str, Any] = {
             "page": page,
             "limit": limit,
             "sort_by": sort_by,
@@ -66,7 +71,7 @@ class CSFloatConnector:
         if stickers is not None:
             params["stickers"] = stickers
 
-        text = await self.connector.get(
+        text = await self._get(
             "/listings",
             params=params,
             headers={"Authorization": f"{self.api_key}"},

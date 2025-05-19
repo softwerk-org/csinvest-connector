@@ -4,22 +4,21 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
 
 class PriceListMapItem(BaseModel):
-    name: Optional[str] = None
-    exterior: Optional[str] = None
-    stat_trak: Optional[bool] = Field(None, alias="statTrak")
-    souvenir: Optional[bool] = None
-    lowest_price: Optional[float] = Field(None, alias="lowestPrice")
-    market_hash_name: Optional[str] = Field(None, alias="marketHashName")
-    quantity: Optional[int] = None
-    url: Optional[str] = None
-    doppler_class_name: Optional[str] = Field(None, alias="dopplerClassName")
+    name: str | None = None
+    exterior: str | None = None
+    stat_trak: bool | None = Field(None, alias="statTrak")
+    souvenir: bool | None = None
+    lowest_price: float | None = Field(None, alias="lowestPrice")
+    market_hash_name: str | None = Field(None, alias="marketHashName")
+    quantity: int | None = None
+    url: str | None = None
+    doppler_class_name: str | None = Field(None, alias="dopplerClassName")
 
 
 class PriceList(BaseModel):
-    map: Optional[List[PriceListMapItem]]
+    map: list[PriceListMapItem | None]

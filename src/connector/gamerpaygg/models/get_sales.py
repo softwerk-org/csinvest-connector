@@ -1,12 +1,11 @@
-from typing import Optional, List, Dict
 from pydantic import BaseModel, RootModel
 
 
 class Sale(BaseModel):
-    floatvalue: Optional[float] = None
-    price: Optional[float] = None
-    soldAt: Optional[int] = None
+    floatvalue: float | None = None
+    price: float | None = None
+    soldAt: int | None = None
 
 
-class Sales(RootModel[Dict[str, List[Sale]]]):
-    root: Dict[str, List[Sale]]
+class Sales(RootModel[dict[str, list[Sale]]]):
+    root: dict[str, list[Sale]]

@@ -9,7 +9,7 @@ class ItemStats(BaseModel):
     history: list[tuple[datetime, float]]  # the sales history of that item
 
 
-class ListItemsInfo(BaseModel):
+class listItemsInfo(BaseModel):
     success: bool
     currency: str
     data: dict[str, ItemStats]

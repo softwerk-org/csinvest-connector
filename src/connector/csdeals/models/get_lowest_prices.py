@@ -4,22 +4,21 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
-
+from datetime import datetime
 from pydantic import BaseModel
 
 
 class LowestPricesResponseItem(BaseModel):
-    marketname: Optional[str]
-    lowest_price: Optional[str]
+    marketname: str
+    lowest_price: float
 
 
 class LowestPricesResponse(BaseModel):
-    time_updated: Optional[int]
-    appid: Optional[int]
-    items: Optional[List[LowestPricesResponseItem]]
+    time_updated: datetime
+    appid: int
+    items: list[LowestPricesResponseItem]
 
 
 class LowestPrices(BaseModel):
-    success: Optional[bool]
-    response: Optional[LowestPricesResponse]
+    success: bool
+    response: LowestPricesResponse

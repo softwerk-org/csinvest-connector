@@ -4,11 +4,14 @@ from .models.get_best_deals import BestDeals
 from .models.get_price_list import PriceList
 
 
-class SkinbaronConnector:
-    __docs__ = "https://skinbaron.de/misc/apidoc/"
+class SkinbaronConnector(Connector):
+    """Connector for the SkinBaron API.
+
+    Documentation: https://skinbaron.de/misc/apidoc/
+    """
 
     def __init__(self, api_key: str, proxy: str | None = None):
-        self.connector = Connector(
+        super().__init__(
             base_url="https://api.skinbaron.de",
             proxy=proxy,
         )
@@ -16,7 +19,7 @@ class SkinbaronConnector:
 
     async def get_best_deals(self, appid: int = 730, size: int = 100) -> BestDeals:
         assert size <= 100, "Size must be less than or equal to 100"
-        text = await self.connector.post(
+        text = await self._post(
             "/BestDeals",
             headers={
                 "X-Requested-With": "XMLHttpRequest",
@@ -30,7 +33,7 @@ class SkinbaronConnector:
         return BestDeals.model_validate_json(text)
 
     async def get_price_list(self, appid: int = 730) -> PriceList:
-        text = await self.connector.post(
+        text = await self._post(
             "/GetPriceList",
             headers={
                 "X-Requested-With": "XMLHttpRequest",
@@ -58,7 +61,7 @@ class SkinbaronConnector:
         if doppler_phase:
             payload["dopplerPhase"] = doppler_phase
 
-        text = await self.connector.post(
+        text = await self._post(
             "/GetNewestSales30Days",
             headers={
                 "X-Requested-With": "XMLHttpRequest",

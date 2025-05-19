@@ -4,13 +4,11 @@
 
 from __future__ import annotations
 
-from typing import List, Optional, Union
-
 from pydantic import BaseModel
 
 
 class Pricehistory(BaseModel):
-    success: Optional[bool]
-    price_prefix: Optional[str]
-    price_suffix: Optional[str]
-    prices: Optional[List[List[Union[float, str]]]]
+    success: bool | None
+    price_prefix: str | None
+    price_suffix: str | None
+    prices: list[list[float | str | None]]

@@ -1,22 +1,25 @@
 from connector.base import Connector
-from .models.get_items import Items
+from .models.get_items import Items, ItemsItem
 from .models.get_sales_history import SalesHistory, SalesItem
 
 
-class SkinportConnector:
-    __docs__ = "https://docs.skinport.com/"
+class SkinportConnector(Connector):
+    """Connector for the Skinport API.
+
+    Documentation: https://docs.skinport.com/
+    """
 
     def __init__(self, proxy: str | None = None):
-        self.connector = Connector(base_url="https://api.skinport.com", proxy=proxy)
+        super().__init__(base_url="https://api.skinport.com", proxy=proxy)
 
     async def get_items(
         self,
         appid: int = 730,
         currency: str = "USD",
         tradable: int = 0,
-    ) -> list[Items]:
+    ) -> list[ItemsItem]:
         params = {"app_id": appid, "currency": currency, "tradable": tradable}
-        text = await self.connector.get(
+        text = await self._get(
             "/v1/items",
             headers={"Accept-Encoding": "br"},
             params=params,
@@ -41,7 +44,7 @@ class SkinportConnector:
         }
         if market_hash_names is not None:
             params["market_hash_name"] = ",".join(market_hash_names)
-        text = await self.connector.get(
+        text = await self._get(
             "/v1/sales/history",
             headers={"Accept-Encoding": "br"},
             params=params,

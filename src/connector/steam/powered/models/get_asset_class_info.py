@@ -4,22 +4,20 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union
-
 from pydantic import BaseModel
 
 
 class AssetClassInfoItemDescriptions(BaseModel):
-    type: Optional[str] = None
-    value: Optional[str] = None
-    color: Optional[str] = None
-    name: Optional[str] = None
+    type: str | None = None
+    value: str | None = None
+    color: str | None = None
+    name: str | None = None
 
 
 class AssetClassInfoItemActions(BaseModel):
-    type: Optional[str] = None
-    name: Optional[str] = None
-    link: Optional[str] = None
+    type: str | None = None
+    name: str | None = None
+    link: str | None = None
 
 
 class AssetClassInfoItemMarketAction(AssetClassInfoItemActions):
@@ -27,41 +25,41 @@ class AssetClassInfoItemMarketAction(AssetClassInfoItemActions):
 
 
 class AssetClassInfoItemTags(BaseModel):
-    internal_name: Optional[str] = None
-    name: Optional[str] = None
-    category: Optional[str] = None
-    category_name: Optional[str] = None
-    color: Optional[str] = None
+    internal_name: str | None = None
+    name: str | None = None
+    category: str | None = None
+    category_name: str | None = None
+    color: str | None = None
 
 
 class AssetClassInfoItem(BaseModel):
-    classid: Optional[str] = None
-    icon_url: Optional[str] = None
-    icon_url_large: Optional[str] = None
-    icon_drag_url: Optional[str] = None
-    name: Optional[str] = None
-    market_hash_name: Optional[str] = None
-    market_name: Optional[str] = None
-    name_color: Optional[str] = None
-    background_color: Optional[str] = None
-    type: Optional[str] = None
-    tradable: Optional[str] = None
-    marketable: Optional[str] = None
-    commodity: Optional[str] = None
-    market_tradable_restriction: Optional[str] = None
-    market_marketable_restriction: Optional[str] = None
-    descriptions: Optional[List[AssetClassInfoItemDescriptions]] = None
-    owner_descriptions: Optional[str] = None
-    actions: Optional[List[AssetClassInfoItemActions]] = None
-    market_actions: Optional[List[AssetClassInfoItemMarketAction]] = None
-    tags: Optional[List[AssetClassInfoItemTags]] = None
+    classid: str | None = None
+    icon_url: str | None = None
+    icon_url_large: str | None = None
+    icon_drag_url: str | None = None
+    name: str | None = None
+    market_hash_name: str | None = None
+    market_name: str | None = None
+    name_color: str | None = None
+    background_color: str | None = None
+    type: str | None = None
+    tradable: str | None = None
+    marketable: str | None = None
+    commodity: str | None = None
+    market_tradable_restriction: str | None = None
+    market_marketable_restriction: str | None = None
+    descriptions: list[AssetClassInfoItemDescriptions | None] | None = None
+    owner_descriptions: str | None = None
+    actions: list[AssetClassInfoItemActions | None] | None = None
+    market_actions: list[AssetClassInfoItemMarketAction | None] | None = None
+    tags: list[AssetClassInfoItemTags | None] | None = None
 
 
 class AssetClassInfoError(BaseModel):
-    error: Optional[str] = None
-    success: Optional[bool] = None
+    error: str | None = None
+    success: bool | None = None
 
 
 class AssetClassInfo(BaseModel):
-    result: Optional[Union[Dict[str, AssetClassInfoItem], AssetClassInfoError]] = None
-    success: Optional[bool] = None
+    result: dict[str, AssetClassInfoItem | None] | AssetClassInfoError | None = None
+    success: bool | None = None

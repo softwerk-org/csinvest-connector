@@ -1,22 +1,18 @@
-from typing import List, Optional
-
 from pydantic import BaseModel, Field
 
 
 class BestPrice(BaseModel):
-    best_price: Optional[str] = Field(None, alias="BestPrice")
-    count: Optional[float] = Field(None, alias="Count")
+    best_price: float = Field(..., alias="BestPrice")
+    count: int = Field(..., alias="Count")
 
 
 class AggregatedPrice(BaseModel):
-    market_hash_name: Optional[str] = Field(None, alias="MarketHashName")
-    offers: Optional[BestPrice] = Field(None, alias="Offers")
-    orders: Optional[BestPrice] = Field(None, alias="Orders")
+    market_hash_name: str = Field(..., alias="MarketHashName")
+    offers: BestPrice = Field(..., alias="Offers")
+    orders: BestPrice = Field(..., alias="Orders")
 
 
 class AggregatedPrices(BaseModel):
-    error: Optional[str] = Field(None, alias="Error")
-    total: Optional[float] = Field(None, alias="Total")
-    aggregated_titles: Optional[List[AggregatedPrice]] = Field(
-        None, alias="AggregatedTitles"
-    )
+    error: str | None = Field(None, alias="Error")
+    total: int = Field(..., alias="Total")
+    aggregated_titles: list[AggregatedPrice] = Field(..., alias="AggregatedTitles")

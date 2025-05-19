@@ -12,8 +12,8 @@ async def test_get_last_sales_integration():
         pytest.skip(
             "DMARKET_PUBLIC_KEY and DMARKET_PRIVATE_KEY required for integration tests"
         )
-    connector = DMarketConnector(public_key=pub, private_key=priv)
-    model = await connector.get_last_sales("Kilowatt Case", "Offer")
+    async with DMarketConnector(public_key=pub, private_key=priv) as connector:
+        model = await connector.get_last_sales("Kilowatt Case", "Offer")
     assert hasattr(model, "sales")
 
 
@@ -25,8 +25,8 @@ async def test_get_market_items_integration():
         pytest.skip(
             "DMARKET_PUBLIC_KEY and DMARKET_PRIVATE_KEY required for integration tests"
         )
-    connector = DMarketConnector(public_key=pub, private_key=priv)
-    model = await connector.get_market_items("Kilowatt Case")
+    async with DMarketConnector(public_key=pub, private_key=priv) as connector:
+        model = await connector.get_market_items("Kilowatt Case")
     assert model.total is not None
 
 
@@ -38,6 +38,6 @@ async def test_get_aggregated_prices_integration():
         pytest.skip(
             "DMARKET_PUBLIC_KEY and DMARKET_PRIVATE_KEY required for integration tests"
         )
-    connector = DMarketConnector(public_key=pub, private_key=priv)
-    model = await connector.get_aggregated_prices(["Kilowatt Case"])
+    async with DMarketConnector(public_key=pub, private_key=priv) as connector:
+        model = await connector.get_aggregated_prices(["Kilowatt Case"])
     assert model.aggregated_titles is not None
