@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 from enum import Enum
@@ -16,12 +16,16 @@ class TxOperationType(Enum):
 
 
 class LastSalesSale(BaseModel):
-    price: Optional[str]
-    date: Optional[str]
-    tx_operation_type: Optional[TxOperationType] = Field(None, alias="txOperationType")
-    offer_attributes: Optional[Dict[str, Any]] = Field(None, alias="offerAttributes")
-    order_attributes: Optional[Dict[str, Any]] = Field(None, alias="orderAttributes")
+    price: str | None
+    date: str | None
+    tx_operation_type: TxOperationType | None = Field(None, alias="txOperationType")
+    offer_attributes: dict[str, Any | None] | None = Field(
+        None, alias="offerAttributes"
+    )
+    order_attributes: dict[str, Any | None] | None = Field(
+        None, alias="orderAttributes"
+    )
 
 
 class LastSales(BaseModel):
-    sales: Optional[List[LastSalesSale]]
+    sales: list[LastSalesSale | None]

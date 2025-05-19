@@ -4,22 +4,20 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
-
 from pydantic import BaseModel
 
 
 class Sale(BaseModel):
-    time: Optional[int] = None
-    price: Optional[str] = None
+    time: int
+    price: str
 
 
 class ResponseItem(BaseModel):
-    name: Optional[str] = None
-    appid: Optional[int] = None
-    sales: Optional[List[Sale]] = None
+    name: str
+    appid: int
+    sales: list[Sale]
 
 
 class SalesHistoryMulti(BaseModel):
-    success: Optional[bool] = None
-    response: Optional[List[ResponseItem]] = None
+    success: bool
+    response: list[ResponseItem]

@@ -1,26 +1,36 @@
 import pytest
 import os
 
-from connector.steam.powered.connector import SteamPoweredConnector
+from connector.steam import SteamConnector
 
 
 @pytest.mark.asyncio
 async def test_get_player_summaries_integration():
+    username = os.getenv("STEAM_USERNAME")
+    password = os.getenv("STEAM_PASSWORD")
     api_key = os.getenv("STEAM_WEBAPI_KEY")
     steamid = os.getenv("STEAM_TEST_ID", "76561198202508143")
-    if not api_key:
-        pytest.skip("STEAM_WEBAPI_KEY required for integration tests")
-    connector = SteamPoweredConnector(api_key=api_key)
-    model = await connector.get_player_summaries(steamid)
+    if not username or not password or not api_key:
+        pytest.skip("Steam credentials required for integration tests")
+    async with SteamConnector(
+        username=username,
+        password=password,
+        api_key=api_key,
+    ) as connector:
+        model = await connector.powered.get_player_summaries(steamid)
     assert model.response.players is not None
 
 
 @pytest.mark.asyncio
 async def test_get_asset_class_info_integration():
+    username = os.getenv("STEAM_USERNAME")
+    password = os.getenv("STEAM_PASSWORD")
     api_key = os.getenv("STEAM_WEBAPI_KEY")
     steamid = os.getenv("STEAM_TEST_ID", "76561198202508143")
-    if not api_key:
-        pytest.skip("STEAM_WEBAPI_KEY required for integration tests")
-    connector = SteamPoweredConnector(api_key=api_key)
-    model = await connector.get_asset_class_info(steamid)
+    if not username or not password or not api_key:
+        pytest.skip("Steam credentials required for integration tests")
+    async with SteamConnector(
+        username=username, password=password, api_key=api_key
+    ) as connector:
+        model = await connector.powered.get_asset_class_info(steamid)
     assert model.result is not None

@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Any, List, Optional
+from typing import Any
 from pydantic import BaseModel, Field
 
 
@@ -18,16 +18,16 @@ class InventoryItem(BaseModel):
 
 
 class Description(BaseModel):
-    type: Optional[str]
-    value: Optional[str]
-    name: Optional[str]
-    color: Optional[str] = None
+    type: str | None
+    value: str | None
+    name: str | None
+    color: str | None = None
 
 
 class Action(BaseModel):
-    type: Optional[str]
-    name: Optional[str]
-    link: Optional[str]
+    type: str | None
+    name: str | None
+    link: str | None
 
 
 class MarketAction(Action):
@@ -35,18 +35,18 @@ class MarketAction(Action):
 
 
 class Tag(BaseModel):
-    internal_name: Optional[str]
-    name: Optional[str]
-    category: Optional[str]
-    category_name: Optional[str]
-    color: Optional[str] = None
+    internal_name: str | None
+    name: str | None
+    category: str | None
+    category_name: str | None
+    color: str | None = None
 
 
 class AppInfo(BaseModel):
-    appid: Optional[int]
-    name: Optional[str]
-    icon: Optional[str]
-    link: Optional[str]
+    appid: int | None
+    name: str | None
+    icon: str | None
+    link: str | None
 
 
 class RGDescription(BaseModel):
@@ -55,30 +55,30 @@ class RGDescription(BaseModel):
     instanceid: str
     contextid: str
     assetid: str
-    icon_url: Optional[str]
-    icon_drag_url: Optional[str]
-    name: Optional[str]
-    market_hash_name: Optional[str]
-    market_name: Optional[str]
-    name_color: Optional[str]
-    background_color: Optional[str]
-    type: Optional[str]
-    tradable: Optional[int]
-    marketable: Optional[int]
-    commodity: Optional[int]
-    market_tradable_restriction: Optional[str]
-    market_marketable_restriction: Optional[str]
-    descriptions: List[Description]
-    actions: List[Action]
-    market_actions: List[MarketAction]
-    tags: List[Tag]
+    icon_url: str | None
+    icon_drag_url: str | None
+    name: str | None
+    market_hash_name: str | None
+    market_name: str | None
+    name_color: str | None
+    background_color: str | None
+    type: str | None
+    tradable: int | None
+    marketable: int | None
+    commodity: int | None
+    market_tradable_restriction: str | None
+    market_marketable_restriction: str | None
+    descriptions: list[Description]
+    actions: list[Action]
+    market_actions: list[MarketAction]
+    tags: list[Tag]
 
 
 class PartnerInventory(BaseModel):
     success: bool
-    rg_inventory: List[InventoryItem] = Field(..., alias="rgInventory")
-    rg_currency: Optional[List[Any]] = Field(None, alias="rgCurrency")
-    rg_descriptions: List[RGDescription] = Field(..., alias="rgDescriptions")
-    rg_app_info: Optional[AppInfo] = Field(None, alias="rgAppInfo")
-    more: Optional[bool]
-    more_start: Optional[bool]
+    rg_inventory: list[InventoryItem] = Field(..., alias="rgInventory")
+    rg_currency: list[Any | None] | None = Field(None, alias="rgCurrency")
+    rg_descriptions: list[RGDescription] = Field(..., alias="rgDescriptions")
+    rg_app_info: AppInfo | None = Field(None, alias="rgAppInfo")
+    more: bool | None
+    more_start: bool | None

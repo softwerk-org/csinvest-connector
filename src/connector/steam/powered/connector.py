@@ -3,11 +3,14 @@ from .models.get_player_summaries import PlayerSummaries
 from .models.get_asset_class_info import AssetClassInfo
 
 
-class SteamPoweredConnector:
-    __docs__ = "https://steamapi.xpaw.me"
+class SteamPoweredConnector(Connector):
+    """Connector for the Steam WebAPI (api.steampowered.com).
+
+    Documentation: https://steamapi.xpaw.me
+    """
 
     def __init__(self, proxy: str | None = None, api_key: str | None = None):
-        self.connector = Connector(base_url="https://api.steampowered.com", proxy=proxy)
+        super().__init__(base_url="https://api.steampowered.com", proxy=proxy)
         self.api_key = api_key
 
     async def get_player_summaries(
@@ -18,7 +21,7 @@ class SteamPoweredConnector:
         if isinstance(steamids, list):
             steamids = ",".join(steamids)
 
-        text = await self.connector.get(
+        text = await self._get(
             "/ISteamUser/GetPlayerSummaries/v0002/",
             params={
                 "key": self.api_key,
@@ -36,7 +39,7 @@ class SteamPoweredConnector:
         if not isinstance(classids, list):
             classids = [classids]
 
-        text = await self.connector.get(
+        text = await self._get(
             "/ISteamEconomy/GetAssetClassInfo/v0001/",
             params={
                 "key": self.api_key,

@@ -3,20 +3,17 @@
 #   timestamp: 2025-05-09T20:58:25+00:00
 
 from __future__ import annotations
-
-from typing import List, Optional
-
 from pydantic import BaseModel
 
 
 class PricesItem(BaseModel):
-    market_hash_name: Optional[str]
-    volume: Optional[str]
-    price: Optional[str]
+    market_hash_name: str | None
+    volume: str | None
+    price: str | None
 
 
 class Prices(BaseModel):
-    success: Optional[bool]
-    time: Optional[int]
-    currency: Optional[str]
-    items: Optional[List[PricesItem]]
+    success: bool | None
+    time: int | None
+    currency: str | None
+    items: list[PricesItem | None]

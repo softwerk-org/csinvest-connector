@@ -4,16 +4,15 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
 
 from pydantic import BaseModel
 
 
 class ResponseItem(BaseModel):
-    time: Optional[int] = None
-    price: Optional[str] = None
+    time: int
+    price: str
 
 
 class SalesHistory(BaseModel):
-    success: Optional[bool] = None
-    response: Optional[List[ResponseItem]] = None
+    success: bool
+    response: list[ResponseItem]

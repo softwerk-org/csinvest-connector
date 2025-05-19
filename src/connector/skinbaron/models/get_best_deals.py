@@ -4,31 +4,30 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
 
 class BestDealsBestDealSticker(BaseModel):
-    localized_name: Optional[str] = Field(None, alias="localizedName")
-    image_url: Optional[str] = Field(None, alias="imageUrl")
+    localized_name: str | None = Field(None, alias="localizedName")
+    image_url: str | None = Field(None, alias="imageUrl")
 
 
 class BestDealsBestDeal(BaseModel):
-    sales_id: Optional[str] = Field(None, alias="salesId")
-    item_name: Optional[str] = Field(None, alias="itemName")
-    rarity_name: Optional[str] = Field(None, alias="rarityName")
-    exterior_name: Optional[str] = Field(None, alias="exteriorName")
-    variant_type_name: Optional[str] = Field(None, alias="variantTypeName")
-    is_souvenir: Optional[bool] = Field(None, alias="isSouvenir")
-    item_price: Optional[float] = Field(None, alias="itemPrice")
-    wear: Optional[float] = None
-    is_wear_precise: Optional[bool] = Field(None, alias="isWearPrecise")
-    stackable: Optional[bool] = None
-    stickers: Optional[List[BestDealsBestDealSticker]] = None
-    app_id: Optional[int] = Field(None, alias="appId")
-    trade_lock_hours_left: Optional[int] = Field(None, alias="tradeLockHoursLeft")
+    sales_id: str | None = Field(None, alias="salesId")
+    item_name: str | None = Field(None, alias="itemName")
+    rarity_name: str | None = Field(None, alias="rarityName")
+    exterior_name: str | None = Field(None, alias="exteriorName")
+    variant_type_name: str | None = Field(None, alias="variantTypeName")
+    is_souvenir: bool | None = Field(None, alias="isSouvenir")
+    item_price: float | None = Field(None, alias="itemPrice")
+    wear: float | None = None
+    is_wear_precise: bool | None = Field(None, alias="isWearPrecise")
+    stackable: bool | None = None
+    stickers: list[BestDealsBestDealSticker | None] | None = None
+    app_id: int | None = Field(None, alias="appId")
+    trade_lock_hours_left: int | None = Field(None, alias="tradeLockHoursLeft")
 
 
 class BestDeals(BaseModel):
-    best_deals: Optional[List[BestDealsBestDeal]] = Field(None, alias="bestDeals")
+    best_deals: list[BestDealsBestDeal | None] | None = Field(None, alias="bestDeals")

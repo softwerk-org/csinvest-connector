@@ -4,51 +4,50 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
 
 from pydantic import BaseModel
 
 
-class MarketListingsSearchdata(BaseModel):
-    query: Optional[str]
-    search_descriptions: Optional[bool]
-    total_count: Optional[int]
-    pagesize: Optional[int]
-    prefix: Optional[str]
-    class_prefix: Optional[str]
+class MarketlistingsSearchdata(BaseModel):
+    query: str | None
+    search_descriptions: bool | None
+    total_count: int | None
+    pagesize: int | None
+    prefix: str | None
+    class_prefix: str | None
 
 
-class MarketListingsResultAssetDescription(BaseModel):
-    appid: Optional[int]
-    classid: Optional[str]
-    instanceid: Optional[str]
-    background_color: Optional[str]
-    icon_url: Optional[str]
-    tradable: Optional[int]
-    name: Optional[str]
-    name_color: Optional[str]
-    type: Optional[str]
-    market_name: Optional[str]
-    market_hash_name: Optional[str]
-    commodity: Optional[int]
+class MarketlistingsResultAssetDescription(BaseModel):
+    appid: int | None
+    classid: str | None
+    instanceid: str | None
+    background_color: str | None
+    icon_url: str | None
+    tradable: int | None
+    name: str | None
+    name_color: str | None
+    type: str | None
+    market_name: str | None
+    market_hash_name: str | None
+    commodity: int | None
 
 
-class MarketListingsResult(BaseModel):
-    name: Optional[str]
-    hash_name: Optional[str]
-    sell_listings: Optional[int]
-    sell_price: Optional[int]
-    sell_price_text: Optional[str]
-    app_icon: Optional[str]
-    app_name: Optional[str]
-    asset_description: Optional[MarketListingsResultAssetDescription]
-    sale_price_text: Optional[str]
+class MarketlistingsResult(BaseModel):
+    name: str | None
+    hash_name: str | None
+    sell_listings: int | None
+    sell_price: int | None
+    sell_price_text: str | None
+    app_icon: str | None
+    app_name: str | None
+    asset_description: MarketlistingsResultAssetDescription | None
+    sale_price_text: str | None
 
 
-class MarketListings(BaseModel):
-    success: Optional[bool]
-    start: Optional[int]
-    pagesize: Optional[int]
-    total_count: Optional[int]
-    searchdata: Optional[MarketListingsSearchdata]
-    results: Optional[List[MarketListingsResult]]
+class Marketlistings(BaseModel):
+    success: bool | None
+    start: int | None
+    pagesize: int | None
+    total_count: int | None
+    searchdata: MarketlistingsSearchdata | None
+    results: list[MarketlistingsResult | None]

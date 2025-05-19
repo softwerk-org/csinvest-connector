@@ -4,33 +4,31 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
 class ProfileProfile(BaseModel):
-    steam_id64: Optional[str] = Field(None, alias="steamID64")
-    steam_id: Optional[str] = Field(None, alias="steamID")
-    online_state: Optional[str] = Field(None, alias="onlineState")
-    state_message: Optional[str] = Field(None, alias="stateMessage")
-    privacy_state: Optional[str] = Field(None, alias="privacyState")
-    visibility_state: Optional[str] = Field(None, alias="visibilityState")
-    avatar_icon: Optional[str] = Field(None, alias="avatarIcon")
-    avatar_medium: Optional[str] = Field(None, alias="avatarMedium")
-    avatar_full: Optional[str] = Field(None, alias="avatarFull")
-    vac_banned: Optional[str] = Field(None, alias="vacBanned")
-    trade_ban_state: Optional[str] = Field(None, alias="tradeBanState")
-    is_limited_account: Optional[str] = Field(None, alias="isLimitedAccount")
+    steam_id64: str | None = Field(None, alias="steamID64")
+    steam_id: str | None = Field(None, alias="steamID")
+    online_state: str | None = Field(None, alias="onlineState")
+    state_message: str | None = Field(None, alias="stateMessage")
+    privacy_state: str | None = Field(None, alias="privacyState")
+    visibility_state: str | None = Field(None, alias="visibilityState")
+    avatar_icon: str | None = Field(None, alias="avatarIcon")
+    avatar_medium: str | None = Field(None, alias="avatarMedium")
+    avatar_full: str | None = Field(None, alias="avatarFull")
+    vac_banned: str | None = Field(None, alias="vacBanned")
+    trade_ban_state: str | None = Field(None, alias="tradeBanState")
+    is_limited_account: str | None = Field(None, alias="isLimitedAccount")
     custom_url: None = Field(None, alias="customURL")
-    member_since: Optional[str] = Field(None, alias="memberSince")
+    member_since: str | None = Field(None, alias="memberSince")
     steam_rating: None = Field(None, alias="steamRating")
-    hours_played2_wk: Optional[str] = Field(None, alias="hoursPlayed2Wk")
+    hours_played2_wk: str | None = Field(None, alias="hoursPlayed2Wk")
     headline: None
-    location: Optional[str]
+    location: str | None
     realname: None
-    summary: Optional[str]
+    summary: str | None
 
 
 class Profile(BaseModel):
-    profile: Optional[ProfileProfile]
+    profile: ProfileProfile

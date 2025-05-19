@@ -18,5 +18,14 @@ class SteamConnector:
             proxy=proxy,
         )
 
+    async def __aenter__(self):
+        await self.powered.__aenter__()
+        await self.community.__aenter__()
+        return self
+
+    async def __aexit__(self, exc_type, exc_value, traceback):
+        await self.community.__aexit__(exc_type, exc_value, traceback)
+        await self.powered.__aexit__(exc_type, exc_value, traceback)
+
 
 __all__ = ["SteamConnector"]

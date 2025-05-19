@@ -4,19 +4,18 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
 
 from pydantic import BaseModel, RootModel
 
 
-class PricesPrice(BaseModel):
-    item: Optional[str]
-    phase: Optional[str] = None
-    price: Optional[float]
-    currency: Optional[str]
-    count: Optional[int]
-    url: Optional[str]
+class Price(BaseModel):
+    item: str | None
+    phase: str | None = None
+    price: float | None
+    currency: str | None
+    count: int | None
+    url: str | None
 
 
-class Prices(RootModel[Optional[List[PricesPrice]]]):
-    root: Optional[List[PricesPrice]]
+class Prices(RootModel[list[Price]]):
+    root: list[Price]

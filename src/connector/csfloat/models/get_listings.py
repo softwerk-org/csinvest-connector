@@ -4,84 +4,84 @@
 
 from __future__ import annotations
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import Any
 from pydantic import BaseModel, RootModel
 
 
 class SellerStatistics(BaseModel):
-    median_trade_time: Optional[int]
-    total_failed_trades: Optional[int]
-    total_trades: Optional[int]
-    total_verified_trades: Optional[int]
+    median_trade_time: int | None
+    total_failed_trades: int | None
+    total_trades: int | None
+    total_verified_trades: int | None
 
 
 class Seller(BaseModel):
-    avatar: Optional[str]
-    flags: Optional[int]
-    online: Optional[bool]
-    stall_public: Optional[bool]
-    statistics: Optional[SellerStatistics]
-    steam_id: Optional[str]
-    username: Optional[str]
+    avatar: str | None
+    flags: int | None
+    online: bool | None
+    stall_public: bool | None
+    statistics: SellerStatistics | None
+    steam_id: str | None
+    username: str | None
 
 
 class StickerScm(BaseModel):
-    price: Optional[float]
-    volume: Optional[int]
+    price: float | None
+    volume: int | None
 
 
 class ItemSticker(BaseModel):
-    stickerId: Optional[int]
-    slot: Optional[int]
-    icon_url: Optional[str]
-    name: Optional[str]
-    scm: Optional[StickerScm]
+    stickerId: int | None
+    slot: int | None
+    icon_url: str | None
+    name: str | None
+    scm: StickerScm | None
 
 
 class ItemScm(BaseModel):
-    price: Optional[float]
-    volume: Optional[int]
+    price: float | None
+    volume: int | None
 
 
 class ListingItem(BaseModel):
-    asset_id: Optional[str]
-    def_index: Optional[int]
-    paint_index: Optional[int]
-    paint_seed: Optional[int]
-    float_value: Optional[float]
-    icon_url: Optional[str]
-    d_param: Optional[str]
-    is_stattrak: Optional[bool]
-    is_souvenir: Optional[bool]
-    rarity: Optional[int]
-    quality: Optional[int]
-    market_hash_name: Optional[str]
-    stickers: Optional[List[ItemSticker]]
-    tradable: Optional[int]
-    inspect_link: Optional[str]
-    has_screenshot: Optional[bool]
-    scm: Optional[ItemScm]
-    item_name: Optional[str]
-    wear_name: Optional[str]
-    description: Optional[str]
-    collection: Optional[str]
-    badges: Optional[List[Any]]
+    asset_id: str | None
+    def_index: int | None
+    paint_index: int | None
+    paint_seed: int | None
+    float_value: float | None
+    icon_url: str | None
+    d_param: str | None
+    is_stattrak: bool | None
+    is_souvenir: bool | None
+    rarity: int | None
+    quality: int | None
+    market_hash_name: str | None
+    stickers: list[ItemSticker | None]
+    tradable: int | None
+    inspect_link: str | None
+    has_screenshot: bool | None
+    scm: ItemScm | None
+    item_name: str | None
+    wear_name: str | None
+    description: str | None
+    collection: str | None
+    badges: list[Any | None]
 
 
 class Listing(BaseModel):
-    id: Optional[str]
-    created_at: Optional[datetime]
-    type: Optional[str]
-    price: Optional[float]
-    state: Optional[str]
-    seller: Optional[Seller]
-    item: Optional[ListingItem]
-    is_seller: Optional[bool]
-    min_offer_price: Optional[int]
-    max_offer_discount: Optional[int]
-    is_watchlisted: Optional[bool]
-    watchers: Optional[int]
+    id: str | None
+    created_at: datetime | None
+    type: str | None
+    price: float | None
+    state: str | None
+    seller: Seller | None
+    item: ListingItem | None
+    is_seller: bool | None
+    min_offer_price: int | None
+    max_offer_discount: int | None
+    is_watchlisted: bool | None
+    watchers: int | None
 
 
-class Listings(RootModel[List[Listing]]):
+class Listings(RootModel[list[Listing]]):
     root: list[Listing]

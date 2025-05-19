@@ -4,25 +4,24 @@
 
 from __future__ import annotations
 
-from typing import List, Optional
 
 from pydantic import BaseModel, RootModel
 
 
 class ItemsItem(BaseModel):
-    market_hash_name: Optional[str]
-    currency: Optional[str]
-    suggested_price: Optional[float] = None
-    item_page: Optional[str]
-    market_page: Optional[str]
-    min_price: Optional[float] = None
-    max_price: Optional[float] = None
-    mean_price: Optional[float] = None
-    median_price: Optional[float] = None
-    quantity: Optional[int]
-    created_at: Optional[int]
-    updated_at: Optional[int]
+    market_hash_name: str | None
+    currency: str | None
+    suggested_price: float | None = None
+    item_page: str | None
+    market_page: str | None
+    min_price: float | None = None
+    max_price: float | None = None
+    mean_price: float | None = None
+    median_price: float | None = None
+    quantity: int | None
+    created_at: int | None
+    updated_at: int | None
 
 
-class Items(RootModel[Optional[List[ItemsItem]]]):
-    root: Optional[List[ItemsItem]]
+class Items(RootModel[list[ItemsItem]]):
+    root: list[ItemsItem]
