@@ -9,16 +9,16 @@ from pydantic import BaseModel, Field
 
 
 class PriceListMapItem(BaseModel):
-    name: str | None = None
+    name: str
     exterior: str | None = None
     stat_trak: bool | None = Field(None, alias="statTrak")
-    souvenir: bool | None = None
-    lowest_price: float | None = Field(None, alias="lowestPrice")
-    market_hash_name: str | None = Field(None, alias="marketHashName")
-    quantity: int | None = None
+    souvenir: bool | None = Field(None, alias="souvenir")
+    lowest_price: float = Field(alias="lowestPrice")
+    market_hash_name: str = Field(alias="marketHashName")
+    quantity: int
     url: str | None = None
     doppler_class_name: str | None = Field(None, alias="dopplerClassName")
 
 
 class PriceList(BaseModel):
-    map: list[PriceListMapItem | None]
+    map: list[PriceListMapItem]
