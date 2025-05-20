@@ -9,12 +9,12 @@ from pydantic import BaseModel, RootModel
 
 
 class Price(BaseModel):
-    item: str | None
+    item: str
     phase: str | None = None
-    price: float | None
-    currency: str | None
-    count: int | None
-    url: str | None
+    price: float
+    currency: str
+    count: int
+    url: str
 
 
 class Prices(RootModel[list[Price]]):
