@@ -18,36 +18,36 @@ class MarketlistingsSearchdata(BaseModel):
 
 
 class MarketlistingsResultAssetDescription(BaseModel):
-    appid: int | None
-    classid: str | None
-    instanceid: str | None
-    background_color: str | None
-    icon_url: str | None
-    tradable: int | None
-    name: str | None
-    name_color: str | None
-    type: str | None
-    market_name: str | None
-    market_hash_name: str | None
-    commodity: int | None
+    appid: int
+    classid: str
+    instanceid: str
+    background_color: str
+    icon_url: str
+    tradable: int
+    name: str
+    name_color: str
+    type: str
+    market_name: str
+    market_hash_name: str
+    commodity: int
 
 
 class MarketlistingsResult(BaseModel):
-    name: str | None
-    hash_name: str | None
-    sell_listings: int | None
-    sell_price: int | None
-    sell_price_text: str | None
-    app_icon: str | None
-    app_name: str | None
-    asset_description: MarketlistingsResultAssetDescription | None
+    name: str
+    hash_name: str
+    sell_listings: int
+    sell_price: int
+    sell_price_text: str
+    app_icon: str
+    app_name: str
+    asset_description: MarketlistingsResultAssetDescription
     sale_price_text: str | None
 
 
 class Marketlistings(BaseModel):
-    success: bool | None
-    start: int | None
-    pagesize: int | None
-    total_count: int | None
-    searchdata: MarketlistingsSearchdata | None
-    results: list[MarketlistingsResult | None]
+    success: bool
+    start: int
+    pagesize: int
+    total_count: int
+    searchdata: MarketlistingsSearchdata
+    results: list[MarketlistingsResult]
