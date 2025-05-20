@@ -17,7 +17,7 @@ class SkinportConnector(Connector):
         appid: int = 730,
         currency: str = "USD",
         tradable: int = 0,
-    ) -> list[ItemsItem]:
+    ) -> Items:
         params = {"app_id": appid, "currency": currency, "tradable": tradable}
         text = await self._get(
             "/v1/items",
@@ -26,7 +26,7 @@ class SkinportConnector(Connector):
             timeout=30,
         )
         items = Items.model_validate_json(text)
-        return items.root
+        return items
 
     async def get_sales_history(
         self,
