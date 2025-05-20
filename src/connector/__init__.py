@@ -8,6 +8,8 @@ from .steam import SteamConnector
 from .skinbaron import SkinbaronConnector
 from .csfloat import CSFloatConnector
 from .csmoney import CSMoneyConnector
+from .steam.community import SteamCommunityConnector
+from .steam.powered import SteamPoweredConnector
 
 __all__ = [
     "CSDealsConnector",
@@ -17,6 +19,8 @@ __all__ = [
     "OpenExchangeRatesConnector",
     "SkinportConnector",
     "SteamConnector",
+    "SteamCommunityConnector",
+    "SteamPoweredConnector",
     "SkinbaronConnector",
     "CSFloatConnector",
     "CSMoneyConnector",
