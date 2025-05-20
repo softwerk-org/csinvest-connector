@@ -1,5 +1,5 @@
 from connector.base import Connector
-from .models.get_items import Items, ItemsItem
+from .models.get_items import Items, Item
 from .models.get_sales_history import SalesHistory, SalesItem
 
 
@@ -17,7 +17,7 @@ class SkinportConnector(Connector):
         appid: int = 730,
         currency: str = "USD",
         tradable: int = 0,
-    ) -> Items:
+    ) -> list[Item]:
         params = {"app_id": appid, "currency": currency, "tradable": tradable}
         text = await self._get(
             "/v1/items",
@@ -26,7 +26,7 @@ class SkinportConnector(Connector):
             timeout=30,
         )
         items = Items.model_validate_json(text)
-        return items
+        return items.root
 
     async def get_sales_history(
         self,

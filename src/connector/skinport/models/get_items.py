@@ -4,7 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel, RootModel
 
 
-class ItemsItem(BaseModel):
+class Item(BaseModel):
     market_hash_name: str
     currency: str
     suggested_price: float | None = None
@@ -19,5 +19,5 @@ class ItemsItem(BaseModel):
     updated_at: datetime
 
 
-class Items(RootModel[list[ItemsItem]]):
-    root: list[ItemsItem]
+class Items(RootModel[list[Item]]):
+    root: list[Item]

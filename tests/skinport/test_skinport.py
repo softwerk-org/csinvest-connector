@@ -7,7 +7,7 @@ from connector.skinport.connector import SkinportConnector
 async def test_skinport_integration():
     async with SkinportConnector() as connector:
         model = await connector.get_items()
-    assert isinstance(model.root, list)
+    assert isinstance(model, list)
 
 
 @pytest.mark.asyncio
