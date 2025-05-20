@@ -10,4 +10,4 @@ async def test_get_float_prices_integration():
         pytest.skip("CSFLOAT_API_KEY required for integration tests")
     async with CSFloatConnector(api_key=key) as connector:
         model = await connector.get_listings()
-    assert model[0] is not None
+    assert model.data[0] is not None

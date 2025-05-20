@@ -10,7 +10,7 @@ class CSFloatConnector(Connector):
     Documentation: https://docs.csfloat.com/#introduction
     """
 
-    def __init__(self, api_key: str | None = None, proxy: str | None = None):
+    def __init__(self, api_key: str, proxy: str | None = None):
         super().__init__(base_url="https://csfloat.com/api/v1", proxy=proxy)
         self.api_key = api_key
 
@@ -34,7 +34,7 @@ class CSFloatConnector(Connector):
         market_hash_name: str | None = None,
         type: str | None = None,
         stickers: str | None = None,
-    ) -> list[Listing]:
+    ) -> Listings:
         """Get all active listings with optional filters."""
         params: dict[str, Any] = {
             "page": page,
@@ -77,4 +77,4 @@ class CSFloatConnector(Connector):
             headers={"Authorization": f"{self.api_key}"},
         )
         listings = Listings.model_validate_json(text)
-        return listings.root
+        return listings
