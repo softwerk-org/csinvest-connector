@@ -3,17 +3,18 @@
 #   timestamp: 2025-05-09T20:58:25+00:00
 
 from __future__ import annotations
+from datetime import datetime
 from pydantic import BaseModel
 
 
 class PricesItem(BaseModel):
-    market_hash_name: str | None
-    volume: str | None
-    price: str | None
+    market_hash_name: str
+    volume: str
+    price: str
 
 
 class Prices(BaseModel):
-    success: bool | None
-    time: int | None
-    currency: str | None
-    items: list[PricesItem | None]
+    success: bool
+    time: datetime
+    currency: str
+    items: list[PricesItem]
