@@ -10,21 +10,21 @@ class Sticker(BaseModel):
     price: float
     wear: int
     img: str
-    wikiLink: str
+    wiki_link: str = Field(alias="wikiLink")
 
 
 class MarketPriceItem(BaseModel):
-    fullName: str
+    full_name: str = Field(alias="fullName")
     type: int
     subtype: str
     quality: str
-    isStatTrak: bool
+    is_stattrak: bool = Field(alias="isStatTrak")
     icon: str
-    steamIcon: str
+    steam_icon: str = Field(alias="steamIcon")
     preview: str | None
-    assetId: int
+    asset_id: int = Field(alias="assetId")
     price: float
-    marketCount: int
+    market_count: int = Field(alias="marketCount")
     float: float
     stickers: list[Sticker | None] = Field(default_factory=list)
     paintseed: int | None

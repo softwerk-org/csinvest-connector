@@ -36,6 +36,7 @@ class CSFloatConnector(Connector):
         stickers: str | None = None,
     ) -> Listings:
         """Get all active listings with optional filters."""
+        assert limit <= 50, "Limit must be less than or equal to 50"
         params: dict[str, Any] = {
             "page": page,
             "limit": limit,
