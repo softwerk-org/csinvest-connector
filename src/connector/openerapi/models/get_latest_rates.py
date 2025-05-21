@@ -1,6 +1,7 @@
 from __future__ import annotations
+from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, field_validator
 
 
 class LatestRatesRates(BaseModel):
@@ -172,10 +173,17 @@ class LatestRates(BaseModel):
     provider: str
     documentation: str
     terms_of_use: str
-    time_last_update_unix: int
-    time_last_update_utc: str
-    time_next_update_unix: int
-    time_next_update_utc: str
-    time_eol_unix: int
+    time_last_update_unix: datetime
+    time_last_update_utc: datetime
+    time_next_update_unix: datetime
+    time_next_update_utc: datetime
+    time_eol_unix: datetime
     base_code: str
     rates: LatestRatesRates
+
+    @field_validator("time_last_update_utc", "time_next_update_utc", mode="before")
+    @classmethod
+    def _parse_rfc2822(cls, v):
+        if isinstance(v, str):
+            return datetime.strptime(v, "%a, %d %b %Y %H:%M:%S %z")
+        return v
