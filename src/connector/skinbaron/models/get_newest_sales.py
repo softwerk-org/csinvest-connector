@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
@@ -6,7 +6,7 @@ class NewestSale(BaseModel):
     item_name: str = Field(alias="itemName")
     price: float
     wear: float
-    date_sold: date = Field(alias="dateSold")
+    date_sold: datetime = Field(alias="dateSold")
 
 
 class NewestSales(BaseModel):
