@@ -5,7 +5,7 @@ from connector.dmarket.auth import DMarketAuth
 from connector.errors import AuthParamsError
 
 from .models.get_aggregated_prices import AggregatedPrices
-from .models.get_last_sales import LastSales
+from .models.get_last_sales import LastSales, TxOperationType
 from .models.get_market_items import MarketItems
 
 
@@ -32,9 +32,9 @@ class DMarketConnector(Connector):
     async def get_last_sales(
         self,
         market_hash_name: str,
-        tx_operation_type: Literal["Target", "Offer"],
         limit: int = 500,
         offset: int = 0,
+        tx_operation_type: TxOperationType = TxOperationType.Order,
         filters: list[str] | None = None,
         game_id: str = "a8db",
     ) -> LastSales:
@@ -44,11 +44,12 @@ class DMarketConnector(Connector):
         """Get the item sales history. Up to 12 last months."""
         path = "/trade-aggregator/v1/last-sales"
         params = {
-            "title": market_hash_name,
             "gameId": game_id,
             "limit": limit,
             "offset": offset,
         }
+        if market_hash_name:
+            params["title"] = market_hash_name
         if filters:
             params["filters"] = filters
         if tx_operation_type:

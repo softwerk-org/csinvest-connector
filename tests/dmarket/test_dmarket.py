@@ -13,7 +13,7 @@ async def test_get_last_sales_integration():
             "DMARKET_PUBLIC_KEY and DMARKET_PRIVATE_KEY required for integration tests"
         )
     async with DMarketConnector(public_key=pub, private_key=priv) as connector:
-        model = await connector.get_last_sales("Kilowatt Case", "Offer")
+        model = await connector.get_last_sales(market_hash_name="Kilowatt Case")
     assert hasattr(model, "sales")
 
 
