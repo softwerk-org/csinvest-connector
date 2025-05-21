@@ -30,9 +30,8 @@ class MarketCsgoConnector(Connector):
 
     async def get_list_items_info(self, market_hash_names: list[str]) -> listItemsInfo:
         """Get list items info."""
-        params = {"key": self.api_key, "list_hash_name[]": market_hash_names}
         text = await self._get(
             "/v2/get-list-items-info",
-            params=params,
+            params={"key": self.api_key, "list_hash_name[]": market_hash_names},
         )
         return listItemsInfo.model_validate_json(text)

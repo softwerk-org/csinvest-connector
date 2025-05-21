@@ -1,12 +1,22 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+
+
+class HistoryItem(BaseModel):
+    timestamp: datetime
+    price: float
 
 
 class ItemStats(BaseModel):
     max: float
     min: float
     average: float
-    history: list[tuple[datetime, float]]  # the sales history of that item
+    history: list[HistoryItem]
+
+    @field_validator("history", mode="before")
+    @classmethod
+    def convert_history(cls, v):
+        return [{"timestamp": entry[0], "price": entry[1]} for entry in v]
 
 
 class listItemsInfo(BaseModel):
