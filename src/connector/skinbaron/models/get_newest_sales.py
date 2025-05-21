@@ -3,10 +3,10 @@ from pydantic import BaseModel, Field
 
 
 class NewestSale(BaseModel):
-    item_name: str | None = Field(None, alias="itemName")
-    price: float | None = None
-    wear: float | None = None
-    date_sold: date | None = Field(None, alias="dateSold")
+    item_name: str = Field(alias="itemName")
+    price: float
+    wear: float
+    date_sold: date = Field(alias="dateSold")
 
 
 class NewestSales(BaseModel):
