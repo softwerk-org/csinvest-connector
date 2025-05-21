@@ -1,5 +1,3 @@
-from typing import Literal
-
 from connector.base import Connector
 from connector.dmarket.auth import DMarketAuth
 from connector.errors import AuthParamsError
