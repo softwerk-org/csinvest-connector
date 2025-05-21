@@ -6,7 +6,7 @@ from connector.steam import SteamConnector
 
 
 @pytest.mark.asyncio
-async def test_get_market_listings_integration():
+async def test_get_market_page_integration():
     username = os.getenv("STEAM_USERNAME")
     password = os.getenv("STEAM_PASSWORD")
     api_key = os.getenv("STEAM_WEBAPI_KEY")
@@ -15,7 +15,7 @@ async def test_get_market_listings_integration():
     async with SteamConnector(
         username=username, password=password, api_key=api_key
     ) as connector:
-        model = await connector.community.get_market_listings(start=0, count=10)
+        model = await connector.community.get_market_page(start=0, count=10)
     assert model.success is not None
 
 
@@ -70,3 +70,19 @@ async def test_get_profile_integration():
     ) as connector:
         model = await connector.community.get_profile(steamid=steamid)
         assert model.profile.steam_id64 is not None
+
+
+@pytest.mark.asyncio
+async def test_get_market_listings_integration():
+    username = os.getenv("STEAM_USERNAME")
+    password = os.getenv("STEAM_PASSWORD")
+    api_key = os.getenv("STEAM_WEBAPI_KEY")
+    if not username or not password or not api_key:
+        pytest.skip("Steam credentials required for integration tests")
+    async with SteamConnector(
+        username=username, password=password, api_key=api_key
+    ) as connector:
+        model = await connector.community.get_market_listings(
+            market_hash_name="Kilowatt Case"
+        )
+        assert model.success is not None

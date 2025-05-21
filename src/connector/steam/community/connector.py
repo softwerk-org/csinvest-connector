@@ -1,10 +1,11 @@
 from connector.base import Connector
 from .auth import SteamAuth
-from .models.get_market_listings import Marketlistings
+from .models.get_market_page import MarketPage
 from .models.get_pricehistory import Pricehistory
 from .models.get_inventory import Inventory
 from .models.get_partner_inventory import PartnerInventory
 from .models.get_profile import Profile
+from .models.get_market_listings import MarketListings
 import xmltodict
 
 
@@ -28,7 +29,7 @@ class SteamCommunityConnector(Connector):
             api_key=api_key,
         )
 
-    async def get_market_listings(
+    async def get_market_page(
         self,
         start: int,
         count: int = 100,
@@ -38,8 +39,8 @@ class SteamCommunityConnector(Connector):
         search_descriptions: str = "0",
         sort_dir: str = "asc",
         currency: int = 0,
-    ) -> Marketlistings:
-        """Get market listings."""
+    ) -> MarketPage:
+        """Get market page."""
         text = await self._get(
             "/market/search/render/",
             params={
@@ -53,7 +54,7 @@ class SteamCommunityConnector(Connector):
                 "currency": currency,
             },
         )
-        return Marketlistings.model_validate_json(text)
+        return MarketPage.model_validate_json(text)
 
     async def get_pricehistory(
         self,
@@ -127,16 +128,26 @@ class SteamCommunityConnector(Connector):
         )
         return PartnerInventory.model_validate_json(text)
 
-    async def get_market_page(
+    async def get_market_listings(
         self,
         market_hash_name: str,
         appid: int = 730,
-    ) -> str:
-        """Get market page HTML for an item."""
+        start: int = 0,
+        count: int = 1,
+        currency: int = 1,
+        language: str = "english",
+    ) -> MarketListings:
+        """Get a unique listings for an item."""
         text = await self._get(
-            f"/market/listings/{appid}/{market_hash_name}",
+            f"/market/listings/{appid}/{market_hash_name}/render",
+            params={
+                "start": start,
+                "count": count,
+                "currency": currency,
+                "language": language,
+            },
         )
-        return text
+        return MarketListings.model_validate_json(text)
 
     async def get_profile(self, steamid: str) -> Profile:
         """Get profile information for a user."""
