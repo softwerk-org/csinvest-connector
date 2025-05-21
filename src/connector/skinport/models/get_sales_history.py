@@ -6,15 +6,15 @@ class PeriodStats(BaseModel):
     max: float | None = None
     avg: float | None = None
     median: float | None = None
-    volume: int | None = None
+    volume: int
 
 
 class SalesItem(BaseModel):
-    market_hash_name: str | None = None
+    market_hash_name: str
     version: str | None = None
-    currency: str | None = None
-    item_page: str | None = None
-    market_page: str | None = None
+    currency: str
+    item_page: str
+    market_page: str
     last_24_hours: PeriodStats
     last_7_days: PeriodStats
     last_30_days: PeriodStats
