@@ -6,8 +6,9 @@ from enum import Enum
 
 
 class TxOperationType(Enum):
-    Offer = "Offer"
-    Order = "Order"
+    Offer = "Offer"  # triggered by a seller’s offer
+    Order = "Order"  # triggered by a buyer’s order
+    Target = "Target"  # triggered by a buyer’s target (automated purchase request)
 
 
 class LastSalesSale(BaseModel):

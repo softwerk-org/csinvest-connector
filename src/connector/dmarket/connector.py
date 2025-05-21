@@ -34,7 +34,7 @@ class DMarketConnector(Connector):
         market_hash_name: str,
         limit: int = 500,
         offset: int = 0,
-        tx_operation_type: TxOperationType = TxOperationType.Order,
+        tx_operation_type: TxOperationType | None = None,
         filters: list[str] | None = None,
         game_id: str = "a8db",
     ) -> LastSales:
