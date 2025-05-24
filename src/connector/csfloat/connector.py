@@ -3,6 +3,7 @@ from typing import Any
 from connector.base import Connector
 from connector.csfloat.models.get_listings import Listing, Listings
 from connector.csfloat.models.get_similar_listings import SimilarListings
+from connector.csfloat.models.get_history_graph import HistoryGraph, HistoryGraphEntry
 
 
 class CSFloatConnector(Connector):
@@ -91,3 +92,14 @@ class CSFloatConnector(Connector):
             headers={"Authorization": f"{self.api_key}"},
         )
         return SimilarListings.validate_json(text)
+
+    async def get_history_graph(
+        self,
+        market_hash_name: str,
+    ) -> list[HistoryGraphEntry]:
+        """Get sales price history graph data for a given market hash name."""
+        text = await self._get(
+            f"/history/{market_hash_name}/graph",
+            headers={"Authorization": f"{self.api_key}"},
+        )
+        return HistoryGraph.validate_json(text)
