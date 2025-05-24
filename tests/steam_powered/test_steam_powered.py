@@ -1,3 +1,4 @@
+import httpx
 import pytest
 import os
 
@@ -17,7 +18,13 @@ async def test_get_player_summaries_integration():
         password=password,
         api_key=api_key,
     ) as connector:
-        model = await connector.powered.get_player_summaries(steamid)
+        try:
+            model = await connector.powered.get_player_summaries(steamid)
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 429:
+                pytest.skip("Sorry this endpoint just sucks")
+            raise e
+    
     assert model.response.players is not None
 
 

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 
 class Description(BaseModel):
@@ -43,6 +43,12 @@ class AssetClassInfoItem(BaseModel):
     actions: list[Action]
     market_actions: list[Action]
     tags: list[Tag]
+
+    @field_validator('descriptions', 'actions', 'market_actions', 'tags', mode='before')
+    def _ensure_list(cls, v):
+        if isinstance(v, dict):
+            return list(v.values())
+        return v
 
 
 class AssetClassInfoError(BaseModel):
