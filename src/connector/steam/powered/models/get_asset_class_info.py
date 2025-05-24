@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class Description(BaseModel):
@@ -38,11 +38,11 @@ class AssetClassInfoItem(BaseModel):
     commodity: str
     market_tradable_restriction: str
     market_marketable_restriction: str
-    descriptions: list[Description]
+    descriptions: list[Description] = Field(default_factory=list)
     owner_descriptions: str
-    actions: list[Action]
-    market_actions: list[Action]
-    tags: list[Tag]
+    actions: list[Action] = Field(default_factory=list)
+    market_actions: list[Action] = Field(default_factory=list)
+    tags: list[Tag] = Field(default_factory=list)
 
     @field_validator('descriptions', 'actions', 'market_actions', 'tags', mode='before')
     def _ensure_list(cls, v):
