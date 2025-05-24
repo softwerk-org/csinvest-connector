@@ -1,7 +1,8 @@
 from typing import Any
 
 from connector.base import Connector
-from connector.csfloat.models.get_listings import Listings, Listing
+from connector.csfloat.models.get_listings import Listing, Listings
+from connector.csfloat.models.get_similar_listings import SimilarListings
 
 
 class CSFloatConnector(Connector):
@@ -79,3 +80,14 @@ class CSFloatConnector(Connector):
         )
         listings = Listings.model_validate_json(text)
         return listings
+
+    async def get_similar_listings(
+        self,
+        listing_id: str,
+    ) -> list[Listing]:
+        """Get listings similar to a given listing ID."""
+        text = await self._get(
+            f"/listings/{listing_id}/similar",
+            headers={"Authorization": f"{self.api_key}"},
+        )
+        return SimilarListings.validate_json(text)
