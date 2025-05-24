@@ -1,10 +1,10 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 
 
 class Description(BaseModel):
     type: str
     value: str
-    color: str
+    color: str | None = None
     name: str
 
 
@@ -19,7 +19,7 @@ class Tag(BaseModel):
     name: str
     category: str
     category_name: str
-    color: str
+    color: str | None = None
 
 
 class AssetClassInfoItem(BaseModel):
@@ -51,10 +51,16 @@ class AssetClassInfoItem(BaseModel):
         return v
 
 
-class AssetClassInfoError(BaseModel):
-    error: str
+class AssetClassInfo(BaseModel):
+    result: dict[str, AssetClassInfoItem] | None = None
+    error: str | None = None
     success: bool
 
+    @model_validator(mode="before")
+    def _extract_success_from_result(cls, data):
+        res = data.get("result")
+        if isinstance(res, dict) and "success" in res:
+            data["success"] = res.pop("success")
+        return data
 
-class AssetClassInfo(BaseModel):
-    result: dict[str, AssetClassInfoItem] | AssetClassInfoError
+
