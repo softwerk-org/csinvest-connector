@@ -10,10 +10,10 @@ class SkinbaronConnector(Connector):
     Documentation: https://skinbaron.de/misc/apidoc/
     """
 
-    def __init__(self, api_key: str, proxy: str | None = None):
+    def __init__(self, api_key: str, proxy_url: str | None = None):
         super().__init__(
             base_url="https://api.skinbaron.de",
-            proxy=proxy,
+            proxy_url=proxy_url,
         )
         self.api_key = api_key
 

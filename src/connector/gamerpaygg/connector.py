@@ -9,10 +9,10 @@ class GamerPayGgConnector(Connector):
     Documentation: https://api.gamerpay.gg/docs
     """
 
-    def __init__(self, api_key: str | None = None, proxy: str | None = None):
+    def __init__(self, api_key: str | None = None, proxy_url: str | None = None):
         super().__init__(
             base_url="https://api.gamerpay.gg",
-            proxy=proxy,
+            proxy_url=proxy_url,
         )
         self.api_key = api_key
 

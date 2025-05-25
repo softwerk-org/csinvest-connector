@@ -24,7 +24,7 @@ async def test_get_player_summaries_integration():
             if e.response.status_code == 429:
                 pytest.skip("Sorry this endpoint just sucks")
             raise e
-    
+
     assert model.response.players is not None
 
 

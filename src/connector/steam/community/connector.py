@@ -20,9 +20,9 @@ class SteamCommunityConnector(Connector):
         username: str,
         password: str,
         api_key: str,
-        proxy: str | None = None,
+        proxy_url: str | None = None,
     ):
-        super().__init__(base_url="https://steamcommunity.com", proxy=proxy)
+        super().__init__(base_url="https://steamcommunity.com", proxy_url=proxy_url)
         self.auth = SteamAuth(
             username=username,
             password=password,

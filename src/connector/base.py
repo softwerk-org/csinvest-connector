@@ -12,10 +12,10 @@ class Connector:
     def __init__(
         self,
         base_url: str,
-        proxy: str | None = None,
+        proxy_url: str | None = None,
         logger: logging.Logger | None = None,
     ):
-        self.client = httpx.AsyncClient(base_url=base_url, proxy=proxy)
+        self.client = httpx.AsyncClient(base_url=base_url, proxy=proxy_url)
         self.logger = logger or logging.getLogger(__name__)
 
     async def _request(

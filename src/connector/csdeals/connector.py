@@ -14,14 +14,13 @@ class CSDealsConnector(Connector):
     def __init__(
         self,
         api_key: str | None = None,
-        proxy: str | None = None,
+        proxy_url: str | None = None,
     ):
         super().__init__(
             base_url="https://cs.deals/API",
-            proxy=proxy,
+            proxy_url=proxy_url,
         )
-        if api_key is not None:
-            self.auth = CsDealsAuth(api_key=api_key)
+        self.api_key = api_key
 
     async def get_lowest_prices(self, app_id: int = 730) -> LowestPrices:
         """Get the lowest prices for all items."""

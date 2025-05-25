@@ -8,8 +8,8 @@ class CSMoneyConnector(Connector):
     No official documentation URL is available.
     """
 
-    def __init__(self, proxy: str | None = None):
-        super().__init__(base_url="https://cs.money", proxy=proxy)
+    def __init__(self, proxy_url: str | None = None):
+        super().__init__(base_url="https://cs.money", proxy_url=proxy_url)
 
     async def get_min_prices(self) -> dict[str, MarketPriceItem]:
         """Get minimum prices for all markets (updates every 10 minutes)."""

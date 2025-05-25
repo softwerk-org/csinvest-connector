@@ -2,9 +2,9 @@ import base64
 
 
 class CsDealsAuth:
-    def __init__(self, api_key: str):
-        self.api_key = api_key
-        self.token = base64.b64encode(f"{self.api_key}:".encode("utf-8")).decode()
+    """Creates CsDeals authentication headers."""
 
-    def headers(self) -> dict[str, str]:
-        return {"Authorization": f"Basic {self.token}"}
+    @staticmethod
+    def get_headers(api_key: str) -> dict[str, str]:
+        token = base64.b64encode(f"{api_key}:".encode("utf-8")).decode()
+        return {"Authorization": f"Basic {token}"}

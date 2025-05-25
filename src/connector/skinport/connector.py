@@ -9,8 +9,8 @@ class SkinportConnector(Connector):
     Documentation: https://docs.skinport.com/
     """
 
-    def __init__(self, proxy: str | None = None):
-        super().__init__(base_url="https://api.skinport.com", proxy=proxy)
+    def __init__(self, proxy_url: str | None = None):
+        super().__init__(base_url="https://api.skinport.com", proxy_url=proxy_url)
 
     async def get_items(
         self,

@@ -14,18 +14,16 @@ class DMarketConnector(Connector):
 
     def __init__(
         self,
-        proxy: str | None = None,
+        proxy_url: str | None = None,
         public_key: str | None = None,
         private_key: str | None = None,
     ):
         super().__init__(
             base_url="https://api.dmarket.com",
-            proxy=proxy,
+            proxy_url=proxy_url,
         )
-        if public_key and private_key:
-            self.auth = DMarketAuth(public_key=public_key, private_key=private_key)
-        else:
-            self.auth = None
+        self.public_key = public_key
+        self.private_key = private_key
 
     async def get_last_sales(
         self,
@@ -36,10 +34,10 @@ class DMarketConnector(Connector):
         filters: list[str] | None = None,
         game_id: str = "a8db",
     ) -> LastSales:
-        if not self.auth:
-            raise AuthParamsError("public_key and private_key must be provided")
-
         """Get the item sales history. Up to 12 last months."""
+        assert self.public_key and self.private_key, (
+            "public_key and private_key must be provided"
+        )
         path = "/trade-aggregator/v1/last-sales"
         params = {
             "gameId": game_id,
@@ -53,10 +51,17 @@ class DMarketConnector(Connector):
         if tx_operation_type:
             params["txOperationType"] = tx_operation_type
 
+        headers = DMarketAuth.get_headers(
+            public_key=self.public_key,
+            private_key=self.private_key,
+            method="GET",
+            path=path,
+            params=params,
+        )
         text = await self._get(
             path,
             params=params,
-            headers=await self.auth.headers("GET", path, params),
+            headers=headers,
         )
         return LastSales.model_validate_json(text)
 

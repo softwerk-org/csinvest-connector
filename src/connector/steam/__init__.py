@@ -8,14 +8,14 @@ class SteamConnector:
         username: str,
         password: str,
         api_key: str,
-        proxy: str | None = None,
+        proxy_url: str | None = None,
     ):
         self.powered = SteamPoweredConnector(api_key=api_key)
         self.community = SteamCommunityConnector(
             username=username,
             password=password,
             api_key=api_key,
-            proxy=proxy,
+            proxy_url=proxy_url,
         )
 
     async def __aenter__(self):

@@ -12,8 +12,8 @@ class CSFloatConnector(Connector):
     Documentation: https://docs.csfloat.com/#introduction
     """
 
-    def __init__(self, api_key: str, proxy: str | None = None):
-        super().__init__(base_url="https://csfloat.com/api/v1", proxy=proxy)
+    def __init__(self, api_key: str, proxy_url: str | None = None):
+        super().__init__(base_url="https://csfloat.com/api/v1", proxy_url=proxy_url)
         self.api_key = api_key
 
     async def get_listings(

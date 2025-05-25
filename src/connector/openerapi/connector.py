@@ -8,10 +8,10 @@ class OpenExchangeRatesConnector(Connector):
     Documentation: https://open.er-api.com/documentation
     """
 
-    def __init__(self, proxy: str | None = None):
+    def __init__(self, proxy_url: str | None = None):
         super().__init__(
             base_url="https://open.er-api.com",
-            proxy=proxy,
+            proxy_url=proxy_url,
         )
 
     async def get_latest_rates(self, base_code: str = "USD") -> LatestRates:
