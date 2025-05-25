@@ -3,7 +3,7 @@ from typing import Literal
 from connector.base import Connector
 from connector.marketcsgo.models.get_history import HistoryResponse
 from connector.marketcsgo.models.get_prices import Prices
-from connector.marketcsgo.models.get_list_items_info import listItemsInfo
+from connector.marketcsgo.models.get_list_items_info import ListItemsInfo
 from connector.tools.flaresolverr import Flaresolverr
 
 
@@ -24,9 +24,9 @@ class MarketCsgoConnector(Connector):
             proxy_url=proxy_url,
         )
         self.api_key = api_key
-        self.flaresolverr_url = flaresolverr_url
         self.proxy_url = proxy_url
-        self.flaresolverr = Flaresolverr()
+        if flaresolverr_url:
+            self.flaresolverr = Flaresolverr(flaresolverr_url)
 
     async def get_prices(
         self, currency: Literal["RUB", "EUR", "USD"] = "USD"
@@ -37,7 +37,7 @@ class MarketCsgoConnector(Connector):
         )
         return Prices.model_validate_json(text)
 
-    async def get_list_items_info(self, market_hash_names: list[str]) -> listItemsInfo:
+    async def get_list_items_info(self, market_hash_names: list[str]) -> ListItemsInfo:
         """Get list items info. ( includes a partial sales history )"""
         text = await self._get(
             "/v2/get-list-items-info",
@@ -46,13 +46,13 @@ class MarketCsgoConnector(Connector):
                 "list_hash_name[]": market_hash_names,
             },
         )
-        return listItemsInfo.model_validate_json(text)
+        return ListItemsInfo.model_validate_json(text)
 
     async def get_history(
         self, market_hash_name: str, phase: str | None = None
     ) -> HistoryResponse:
         """Get the full sales history of an item."""
-        assert self.flaresolverr_url is not None, "flaresolverr is required"
+        assert self.flaresolverr, "flaresolverr_url is required"
         query = """
         query history($market_hash_name: String!, $phase: String) {
             history(market_hash_name: $market_hash_name, phase: $phase) {
@@ -62,8 +62,6 @@ class MarketCsgoConnector(Connector):
         """
         cookies, user_agent = self.flaresolverr.solve(
             str(self.client.base_url) + "/graphql",
-            self.flaresolverr_url,
-            self.proxy_url,
         )
         body = {
             "operationName": "history",

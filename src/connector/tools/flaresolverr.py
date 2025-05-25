@@ -8,11 +8,16 @@ cache = Cache(".flaresolverr")
 class Flaresolverr:
     """Handles Cloudflare challenge solving via FlareSolverr, caching cookies until expiry."""
 
-    def __init__(self):
-        pass
+    def __init__(self, flaresolverr_url: str):
+        self.flaresolverr_url = flaresolverr_url
 
-    def solve(self, url, flaresolverr_url, proxy_url: str | None = None):
-        key = (url, flaresolverr_url, proxy_url)
+    def solve(
+        self,
+        url,
+        proxy_url: str | None = None,
+        cache_expire: int = 30 * 60,  # cache expires every 30 minutes
+    ):
+        key = (url, self.flaresolverr_url, proxy_url)
         cached = cache.get(key)
         if cached:
             return cast(tuple[dict[str, str], str], cached)  # returns (cookies, ua)
@@ -26,7 +31,7 @@ class Flaresolverr:
             payload["proxy_url"] = proxy_url
 
         r = httpx.post(
-            flaresolverr_url,
+            self.flaresolverr_url,
             json=payload,
             timeout=payload["maxTimeout"] / 1000,
         )
@@ -36,6 +41,5 @@ class Flaresolverr:
         cookies = {c["name"]: c["value"] for c in cookies_list}
         user_agent = sol.get("userAgent", "")
 
-        # cache expires every 30 minutes
-        cache.set(key, (cookies, user_agent), expire=30 * 60)
+        cache.set(key, (cookies, user_agent), expire=cache_expire)
         return cookies, user_agent

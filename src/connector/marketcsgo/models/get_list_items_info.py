@@ -19,7 +19,7 @@ class ItemStats(BaseModel):
         return [{"timestamp": entry[0], "price": entry[1]} for entry in v]
 
 
-class listItemsInfo(BaseModel):
+class ListItemsInfo(BaseModel):
     success: bool
     currency: str
     data: dict[str, ItemStats]

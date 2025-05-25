@@ -3,8 +3,8 @@ from .models.get_items import Items, Item
 from .models.get_sales_history import SalesHistory, SalesItem
 
 
-class SkinportConnector(Connector):
-    """Connector for the Skinport API.
+class SkinportOfficialConnector(Connector):
+    """Connector for the Skinport Official REST API.
 
     Documentation: https://docs.skinport.com/
     """
@@ -18,7 +18,12 @@ class SkinportConnector(Connector):
         currency: str = "USD",
         tradable: int = 0,
     ) -> list[Item]:
-        params = {"app_id": appid, "currency": currency, "tradable": tradable}
+        """Provides a list of listings on the marketplace."""
+        params = {
+            "app_id": appid,
+            "currency": currency,
+            "tradable": tradable,
+        }
         text = await self._get(
             "/v1/items",
             headers={"Accept-Encoding": "br"},
@@ -28,15 +33,15 @@ class SkinportConnector(Connector):
         items = Items.model_validate_json(text)
         return items.root
 
-    async def get_sales_history(
+    async def get_sales_history_agg(
         self,
         market_hash_names: list[str] | None = None,
         appid: int = 730,
         currency: str = "USD",
     ) -> list[SalesItem]:
         """
-        Provides aggregated Sales.
-        Will return list of sales history for each market_hash_name if no market_hash_names are provided
+        Provides an aggregated Sales History.
+        Will return a list of all items when no market_hash_names are provided.
         """
         params: dict[str, str | int] = {
             "app_id": appid,
