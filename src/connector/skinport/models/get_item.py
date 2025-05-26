@@ -1,3 +1,4 @@
+from datetime import date
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
@@ -135,7 +136,7 @@ class OtherSales(BaseModel):
 
 
 class Datum(BaseModel):
-    date: int
+    date: date
     value: int
     volume: int
 

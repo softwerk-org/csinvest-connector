@@ -21,7 +21,6 @@ class SkinportConnector:
         flaresolverr_url: str | None = None,
     ):
         self.client = httpx.AsyncClient(proxy=proxy_url)
-
         self.flaresolverr = Flaresolverr(flaresolverr_url) if flaresolverr_url else None
 
     async def __aenter__(self):
