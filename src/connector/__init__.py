@@ -3,8 +3,7 @@ from .dmarket import DMarketConnector
 from .gamerpaygg import GamerPayGgConnector
 from .marketcsgo import MarketCsgoConnector
 from .openerapi import OpenExchangeRatesConnector
-from .skinport import SkinportUnofficialConnector
-from .skinport import SkinportOfficialConnector
+from .skinport import SkinportConnector
 from .steam import SteamConnector
 from .skinbaron import SkinbaronConnector
 from .csfloat import CSFloatConnector
@@ -18,8 +17,7 @@ __all__ = [
     "GamerPayGgConnector",
     "MarketCsgoConnector",
     "OpenExchangeRatesConnector",
-    "SkinportUnofficialConnector",
-    "SkinportOfficialConnector",
+    "SkinportConnector",
     "SteamConnector",
     "SteamCommunityConnector",
     "SteamPoweredConnector",

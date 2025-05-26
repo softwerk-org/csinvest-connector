@@ -1,4 +1,5 @@
-from .official.connector import SkinportOfficialConnector
-from .unofficial.connector import SkinportUnofficialConnector
+from .connector import SkinportConnector
 
-__all__ = ["SkinportOfficialConnector", "SkinportUnofficialConnector"]
+__all__ = [
+    "SkinportConnector",
+]
