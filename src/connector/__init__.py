@@ -10,6 +10,7 @@ from .csfloat import CSFloatConnector
 from .csmoney import CSMoneyConnector
 from .steam.community import SteamCommunityConnector
 from .steam.powered import SteamPoweredConnector
+from .whitemarket import WhiteMarketConnector
 
 __all__ = [
     "CSDealsConnector",
@@ -24,4 +25,5 @@ __all__ = [
     "SkinbaronConnector",
     "CSFloatConnector",
     "CSMoneyConnector",
+    "WhiteMarketConnector",
 ]
