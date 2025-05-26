@@ -135,14 +135,14 @@ class OtherSales(BaseModel):
     total: int
 
 
-class Datum(BaseModel):
+class Trend(BaseModel):
     date: date
     value: int
     volume: int
 
 
 class Trends(BaseModel):
-    data: List[Datum]
+    data: List[Trend]
 
 
 class Price(BaseModel):
