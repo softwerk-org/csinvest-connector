@@ -1,4 +1,5 @@
-from pydantic import BaseModel, RootModel
+from typing import List
+from pydantic import BaseModel, TypeAdapter
 
 
 class Price(BaseModel):
@@ -13,5 +14,4 @@ class Price(BaseModel):
     inspect_link: str
 
 
-class Prices(RootModel[list[Price]]):
-    pass
+Prices = TypeAdapter(list[Price])
