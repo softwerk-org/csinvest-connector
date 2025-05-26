@@ -3,7 +3,7 @@ name = "connector"
 version = "0.1.0"
 description = "Connector for external APIs"
 readme = "README.md"
-authors = [{ name = "Tom", email = "tomclesius@gmail.com" }]
+authors = [{ name = "Tom", email = "tom@softwerk.ai" }]
 requires-python = ">=3.13"
 dependencies = [
     "brotli>=1.1.0",

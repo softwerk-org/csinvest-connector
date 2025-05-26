@@ -11,7 +11,7 @@ logging.getLogger("httpx").setLevel(HTTPX_LOG_LEVEL)
 class Connector:
     def __init__(
         self,
-        base_url: str,
+        base_url: str = "",
         proxy_url: str | None = None,
         logger: logging.Logger | None = None,
     ):
