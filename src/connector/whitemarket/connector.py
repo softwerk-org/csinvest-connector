@@ -15,7 +15,7 @@ class WhiteMarketConnector(Connector):
     def __init__(self, proxy_url: str | None = None):
         super().__init__(proxy_url=proxy_url)
 
-    async def get_listings(self, appid: int = 730) -> Prices:
+    async def get_prices(self, appid: int = 730) -> Prices:
         """Get all lowest prices for a given appid."""
         text = await self._get(f"{self.S3_BASE_URL}/export/v1/prices/{appid}.json")
         return Prices.model_validate_json(text)

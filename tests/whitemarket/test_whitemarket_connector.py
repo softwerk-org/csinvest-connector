@@ -9,7 +9,7 @@ from connector.whitemarket.models.get_history import SalesHistoryResponse, Histo
 @pytest.mark.asyncio
 async def test_get_listings_integration():
     async with WhiteMarketConnector() as connector:
-        result = await connector.get_listings()
+        result = await connector.get_prices()
     assert isinstance(result, Prices)
     assert result.root, "Expected non-empty price list"
     first = result.root[0]
