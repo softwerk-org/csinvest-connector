@@ -4,7 +4,7 @@ from pydantic import BaseModel, TypeAdapter
 
 class Price(BaseModel):
     market_hash_name: str
-    price: str
+    price: float  # Price value in USD
     market_product_link: str
     market_product_count: int
     cheapest_asset_id: int
