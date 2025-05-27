@@ -61,7 +61,7 @@ class MarketCsgoConnector(Connector):
         }
         """
         cookies, user_agent = self.flaresolverr.solve(
-            str(self.client.base_url) + "/graphql",
+            str(self.client.base_url) + "graphql",
         )
         body = {
             "operationName": "history",
