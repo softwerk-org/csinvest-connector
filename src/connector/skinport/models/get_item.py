@@ -11,19 +11,19 @@ class Tag(BaseModel):
 
 
 class GVColorTint(BaseModel):
-    W: int
-    X: int
-    Y: int
-    Z: int
+    W: float
+    X: float
+    Y: float
+    Z: float
 
 
 class MaterialProperties(BaseModel):
     g_tColor: str
     g_tNormal: str
-    g_tMetalness: str
+    g_tMetalness: str | None = None
     g_vColorTint: GVColorTint
-    g_tAmbientOcclusion: str
-    g_flPearlescentScale: float
+    g_tAmbientOcclusion: str | None = None
+    g_flPearlescentScale: float | None = None
 
 
 class Material(BaseModel):
@@ -77,11 +77,11 @@ class PublicItem(BaseModel):
     marketName: str
     marketHashName: str
     color: str
-    bgColor: Optional[str] = None
+    bgColor: str | None = None
     image: str
     classid: str
     assetid: str
-    lock: Optional[str] = None
+    lock: str | None = None
     version: str
     versionType: str
     stackAble: bool
@@ -95,18 +95,18 @@ class PublicItem(BaseModel):
     subCategory: str
     subCategory_localized: str
     pattern: int
-    finish: Optional[int] = None
-    customName: Optional[str] = None
-    wear: float
+    finish: int | None = None
+    customName: str | None = None
+    wear: float | None = None
     link: str
     type: str
-    exterior: str
+    exterior: str | None = None
     quality: str
     rarity: str
     rarity_localized: str
     rarityColor: str
-    collection: Optional[str] = None
-    collection_localized: Optional[str] = None
+    collection: str | None = None
+    collection_localized: str | None = None
     stickers: List[Any]
     charms: List[Any]
     canHaveScreenshots: bool
@@ -152,7 +152,7 @@ class Price(BaseModel):
 
 class HistoryItem(BaseModel):
     date: str
-    wear: str
+    wear: str | None = None
     saleId: int
     price: Price
 
@@ -171,8 +171,8 @@ class Offers(BaseModel):
 
 class Version(BaseModel):
     url: str
-    price: Optional[Price] = None
-    discount: Optional[int] = None
+    price: Price | None = None
+    discount: int | None = None
     count: int
     version: str
 
@@ -180,7 +180,7 @@ class Version(BaseModel):
 class RelatedItem(BaseModel):
     url: str
     exterior: str
-    type: Optional[str] = None
+    type: str | None = None
     quality: str
     price: Any
     discount: Any
@@ -205,5 +205,5 @@ class Data(BaseModel):
 class ItemResponse(BaseModel):
     requestId: str
     success: bool
-    message: Optional[str] = None
+    message: str | None = None
     data: Data
