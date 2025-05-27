@@ -6,20 +6,20 @@ from pydantic import BaseModel, RootModel
 
 
 class Tag(BaseModel):
-    name: str
-    name_localized: str
+    name: str | None = None
+    name_localized: str | None = None
 
 
 class GVColorTint(BaseModel):
-    W: float
-    X: float
-    Y: float
-    Z: float
+    W: float | None = None
+    X: float | None = None
+    Y: float | None = None
+    Z: float | None = None
 
 
 class MaterialProperties(BaseModel):
-    g_tColor: str
-    g_tNormal: str
+    g_tColor: str | None = None
+    g_tNormal: str | None = None
     g_tMetalness: str | None = None
     g_vColorTint: GVColorTint
     g_tAmbientOcclusion: str | None = None
@@ -27,27 +27,27 @@ class MaterialProperties(BaseModel):
 
 
 class Material(BaseModel):
-    name: str
-    painted: bool
-    material: MaterialProperties
+    name: str | None = None
+    painted: bool | None = None
+    material: MaterialProperties | None = None
 
 
 class WebGLStatic(BaseModel):
-    name: str
-    itemtype: str
-    meshname: str
-    classname: str
-    materials: List[Material]
-    paintname: str
-    paintseed: int
-    paintwear: float
-    offlineurl: str
-    attachments: List[Any]
-    legacymodel: bool
+    name: str | None = None
+    itemtype: str | None = None
+    meshname: str | None = None
+    classname: str | None = None
+    materials: List[Material] | None = None
+    paintname: str | None = None
+    paintseed: int | None = None
+    paintwear: float | None = None
+    offlineurl: str | None = None
+    attachments: List[Any] | None = None
+    legacymodel: bool | None = None
 
 
 class WebGLTexture(BaseModel):
-    path: str
+    path: str | None = None
 
 
 class WebGLDynamic(RootModel[Dict[str, WebGLTexture]]):
@@ -55,8 +55,8 @@ class WebGLDynamic(RootModel[Dict[str, WebGLTexture]]):
 
 
 class WebGL(BaseModel):
-    static: WebGLStatic
-    dynamic: WebGLDynamic
+    static: WebGLStatic | None = None
+    dynamic: WebGLDynamic | None = None
 
 
 class PublicItem(BaseModel):
