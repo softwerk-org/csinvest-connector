@@ -91,14 +91,14 @@ class PublicItem(BaseModel):
     saleStatus: str
     saleType: str
     category: str
-    category_localized: str
-    subCategory: str
-    subCategory_localized: str
-    pattern: int
+    category_localized: str | None = None
+    subCategory: str | None = None
+    subCategory_localized: str | None = None
+    pattern: int | None = None
     finish: int | None = None
     customName: str | None = None
     wear: float | None = None
-    link: str
+    link: str | None = None
     type: str
     exterior: str | None = None
     quality: str
