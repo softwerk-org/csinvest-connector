@@ -26,7 +26,13 @@ class MarketCsgoConnector(Connector):
         self.api_key = api_key
         self.proxy_url = proxy_url
         if flaresolverr_url:
-            self.flaresolverr = Flaresolverr(flaresolverr_url)
+            self.flaresolverr = Flaresolverr(
+                flaresolverr_url,
+                cache_response=True,
+                cache_ttl_min=10,
+            )
+        else:
+            self.flaresolverr = None
 
     async def get_prices(
         self, currency: Literal["RUB", "EUR", "USD"] = "USD"
@@ -60,9 +66,17 @@ class MarketCsgoConnector(Connector):
             }
         }
         """
-        cookies, user_agent = self.flaresolverr.solve(
+        response = self.flaresolverr.get(
             str(self.client.base_url) + "graphql",
+            session="marketcsgo",
+            session_ttl_min=30,
+            return_only_cookies=True,
+            timeout_s=30,
         )
+        cookies = {
+            cookie["name"]: cookie["value"] for cookie in response.solution.cookies
+        }
+        user_agent = response.solution.userAgent
         body = {
             "operationName": "history",
             "query": query,
@@ -81,5 +95,6 @@ class MarketCsgoConnector(Connector):
             json=body,
             cookies=cookies,
             headers=headers,
+            timeout=30,
         )
         return HistoryResponse.model_validate_json(text)
