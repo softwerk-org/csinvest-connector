@@ -1,3 +1,5 @@
+from typing import cast
+from bs4 import BeautifulSoup
 from connector.base import Connector
 from connector.csmoney.models.get_min_prices import MarketPriceItem, MinPrices
 from connector.tools.flaresolverr import Flaresolverr
@@ -19,11 +21,7 @@ class CSMoneyConnector(Connector):
             proxy_url=proxy_url,
         )
         if flaresolverr_url:
-            self.flaresolverr = Flaresolverr(
-                flaresolverr_url,
-                cache_response=True,
-                cache_ttl_min=10,
-            )
+            self.flaresolverr = Flaresolverr(flaresolverr_url)
         else:
             self.flaresolverr = None
 
@@ -32,17 +30,13 @@ class CSMoneyConnector(Connector):
         assert self.flaresolverr is not None
         response = self.flaresolverr.get(
             "https://cs.money/api/min_price/market/all",
-            return_only_cookies=True,
             timeout_s=60,
         )
-        cookies = {
-            cookie["name"]: cookie["value"] for cookie in response.solution.cookies
-        }
-        user_agent = response.solution.userAgent
-        text = await self._get(
-            "/min_price/market/all",
-            cookies=cookies,
-            headers={"User-Agent": user_agent},
-            timeout=30,
-        )
-        return MinPrices.validate_json(text)
+        soup = BeautifulSoup(cast(str, response.solution.response), "html.parser")
+
+        pre = soup.find("pre")
+        if pre is None:
+            raise ValueError("No <pre> tag found in response")
+
+        json_text = pre.get_text(strip=True)
+        return MinPrices.validate_json(json_text)
