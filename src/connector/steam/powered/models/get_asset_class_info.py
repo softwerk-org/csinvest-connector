@@ -52,7 +52,7 @@ class AssetClassInfoItem(BaseModel):
 
 
 class AssetClassInfo(BaseModel):
-    result: dict[str, AssetClassInfoItem] | None = None
+    result: dict[int, AssetClassInfoItem] | None = None
     error: str | None = None
     success: bool
 
