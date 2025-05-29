@@ -23,7 +23,7 @@ class Tag(BaseModel):
 
 
 class AssetClassInfoItem(BaseModel):
-    classid: str
+    classid: int
     icon_url: str
     icon_url_large: str
     icon_drag_url: str
@@ -44,7 +44,7 @@ class AssetClassInfoItem(BaseModel):
     market_actions: list[Action] = Field(default_factory=list)
     tags: list[Tag] = Field(default_factory=list)
 
-    @field_validator('descriptions', 'actions', 'market_actions', 'tags', mode='before')
+    @field_validator("descriptions", "actions", "market_actions", "tags", mode="before")
     def _ensure_list(cls, v):
         if isinstance(v, dict):
             return list(v.values())
@@ -62,5 +62,3 @@ class AssetClassInfo(BaseModel):
         if isinstance(res, dict) and "success" in res:
             data["success"] = res.pop("success")
         return data
-
-
