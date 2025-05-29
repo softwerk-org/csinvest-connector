@@ -45,6 +45,4 @@ class CSMoneyConnector(Connector):
             headers={"User-Agent": user_agent},
             timeout=30,
         )
-
-        min_prices = MinPrices.model_validate_json(text)
-        return min_prices.root
+        return MinPrices.validate_json(text)
