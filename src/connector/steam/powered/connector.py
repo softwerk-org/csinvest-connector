@@ -32,11 +32,13 @@ class SteamPoweredConnector(Connector):
         return PlayerSummaries.model_validate_json(text)
 
     async def get_asset_class_info(
-        self, classids: list[str] | str, appid: int = 730
+        self, classids: list[str] | tuple[str, ...] | str, appid: int = 730
     ) -> AssetClassInfo:
         """Get asset class info for the given classids."""
 
-        if not isinstance(classids, list):
+        if isinstance(classids, tuple):
+            classids = list(classids)
+        elif isinstance(classids, str):
             classids = [classids]
 
         text = await self._get(
