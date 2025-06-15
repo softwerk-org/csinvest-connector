@@ -18,7 +18,6 @@ class CSFloatConnector(Connector):
 
     async def get_listings(
         self,
-        query: str = "*",
         page: int = 0,
         limit: int = 50,
         sort_by: str = "best_deal",
@@ -45,8 +44,6 @@ class CSFloatConnector(Connector):
             "sort_by": sort_by,
             "category": category,
         }
-        if query:
-            params["query"] = query
         if def_index is not None:
             params["def_index"] = def_index
         if min_float is not None:
