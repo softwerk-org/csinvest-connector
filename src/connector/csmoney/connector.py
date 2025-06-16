@@ -20,9 +20,22 @@ class CSMoneyConnector(Connector):
         """Get minimum prices for all markets (updates every 10 minutes)."""
         ua = UserAgent()
         headers = {
-            "User-Agent": ua.chrome,
-            "Accept": "application/json, text/html, */*",
-            "Accept-Language": "en-US,en;q=0.9",
+            "User-Agent": ua.firefox,
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Encoding": "gzip, deflate, br, zstd",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Connection": "close",
+            "Upgrade-Insecure-Requests": "1",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Sec-GPC": "1",
+            "Priority": "u=0, i",
+            "Pragma": "no-cache",
+            "Cache-Control": "no-cache",
+            "TE": "trailers",
+            "Origin": "https://cs.money",
             "Referer": "https://cs.money/",
         }
 
