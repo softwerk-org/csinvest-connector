@@ -24,9 +24,6 @@ async def test_marketcsgo_integration_list_items_info():
 
 @pytest.mark.asyncio
 async def test_marketcsgo_integration_get_history():
-    flaresolverr = os.getenv("FLARESOLVERR_URL")
-    if not flaresolverr:
-        pytest.skip("FLARESOLVERR_URL required for integration tests")
-    async with MarketCsgoConnector(flaresolverr_url=flaresolverr) as connector:
+    async with MarketCsgoConnector() as connector:
         model = await connector.get_history("AK-47 | Redline (Minimal Wear)")
     assert model is not None

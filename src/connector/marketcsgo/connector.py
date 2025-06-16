@@ -1,10 +1,10 @@
 from typing import Literal
 
+from fake_useragent import UserAgent
 from connector.base import Connector
 from connector.marketcsgo.models.get_history import HistoryResponse
 from connector.marketcsgo.models.get_prices import Prices
 from connector.marketcsgo.models.get_list_items_info import ListItemsInfo
-from connector.tools.flaresolverr import Flaresolverr
 
 
 class MarketCsgoConnector(Connector):
@@ -17,7 +17,6 @@ class MarketCsgoConnector(Connector):
         self,
         api_key: str | None = None,
         proxy_url: str | None = None,
-        flaresolverr_url: str | None = None,
     ):
         super().__init__(
             base_url="https://market.csgo.com/api",
@@ -25,14 +24,6 @@ class MarketCsgoConnector(Connector):
         )
         self.api_key = api_key
         self.proxy_url = proxy_url
-        if flaresolverr_url:
-            self.flaresolverr = Flaresolverr(
-                flaresolverr_url,
-                cache_response=True,
-                cache_ttl_min=10,
-            )
-        else:
-            self.flaresolverr = None
 
     async def get_prices(
         self, currency: Literal["RUB", "EUR", "USD"] = "USD"
@@ -58,7 +49,6 @@ class MarketCsgoConnector(Connector):
         self, market_hash_name: str, phase: str | None = None
     ) -> HistoryResponse:
         """Get the full sales history of an item."""
-        assert self.flaresolverr, "flaresolverr_url is required"
         query = """
         query history($market_hash_name: String!, $phase: String) {
             history(market_hash_name: $market_hash_name, phase: $phase) {
@@ -66,17 +56,8 @@ class MarketCsgoConnector(Connector):
             }
         }
         """
-        response = self.flaresolverr.get(
-            str(self.client.base_url) + "graphql",
-            session="marketcsgo",
-            session_ttl_min=30,
-            return_only_cookies=True,
-            timeout_s=30,
-        )
-        cookies = {
-            cookie["name"]: cookie["value"] for cookie in response.solution.cookies
-        }
-        user_agent = response.solution.userAgent
+
+        ua = UserAgent()
         body = {
             "operationName": "history",
             "query": query,
@@ -86,14 +67,16 @@ class MarketCsgoConnector(Connector):
             },
         }
         headers = {
-            "User-Agent": user_agent,
+            "User-Agent": ua.chrome,
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Content-Type": "application/json",
             "Referer": "https://market.csgo.com/",
             "Origin": "https://market.csgo.com",
         }
         text = await self._post(
             "/graphql",
             json=body,
-            cookies=cookies,
             headers=headers,
             timeout=30,
         )
