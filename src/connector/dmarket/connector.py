@@ -1,8 +1,10 @@
+from typing import Literal
 from connector.base import Connector
 from connector.dmarket.auth import DMarketAuth
 from connector.errors import AuthParamsError
 
 from .models.get_aggregated_prices import AggregatedPrices
+from .models.get_avg_sales_graph import AvgSalesGraph
 from .models.get_last_sales import LastSales, TxOperationType
 from .models.get_market_items import MarketItems
 
@@ -121,3 +123,20 @@ class DMarketConnector(Connector):
             },
         )
         return AggregatedPrices.model_validate_json(text)
+
+    async def get_avg_sales_graph(
+        self,
+        title: str,
+        game_id: str = "a8db",
+        period: Literal["7D", "1M", "6M", "1Y"] = "1Y",
+    ) -> AvgSalesGraph:
+        """Get average sales graph data for a given title."""
+        text = await self._get(
+            "/trade-aggregator/v1/avg-sales-graph",
+            params={
+                "title": title,
+                "gameId": game_id,
+                "period": period,
+            },
+        )
+        return AvgSalesGraph.model_validate_json(text)

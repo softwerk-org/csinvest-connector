@@ -41,3 +41,17 @@ async def test_get_aggregated_prices_integration():
     async with DMarketConnector(public_key=pub, private_key=priv) as connector:
         model = await connector.get_aggregated_prices(["Kilowatt Case"])
     assert model.aggregated_titles is not None
+
+
+@pytest.mark.asyncio
+async def test_get_avg_sales_graph_integration():
+    async with DMarketConnector() as connector:
+        model = await connector.get_avg_sales_graph(
+            title="★ Driver Gloves | Crimson Weave (Minimal Wear)", period="1Y"
+        )
+    assert hasattr(model, "totalSales")
+    assert hasattr(model, "date")
+    assert hasattr(model, "avgPrice")
+    assert len(model.totalSales) > 0
+    assert len(model.date) > 0
+    assert len(model.avgPrice) > 0
