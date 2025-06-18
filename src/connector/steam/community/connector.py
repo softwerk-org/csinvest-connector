@@ -82,10 +82,11 @@ class SteamCommunityConnector(Connector):
         appid: int = 730,
         contextid: int = 2,
         language: str = "english",
-        count: int = 5000,
+        count: int = 2500,
         start_assetid: str | None = None,
     ) -> Inventory:
         """Get inventory of a user identified by steamid."""
+        assert count <= 2500, "Count must be less than or equal to 2500"
         params = {
             "l": language,
             "count": count,
@@ -94,8 +95,11 @@ class SteamCommunityConnector(Connector):
             params["start_assetid"] = start_assetid
 
         text = await self._get(
-            f"/inventory/{steamid}/{appid}/{contextid}",
+            f"inventory/{steamid}/{appid}/{contextid}",
             params=params,
+            headers={
+                "Referer": f"https://steamcommunity.com/profiles/{steamid}",
+            },
             cookies=await self.auth.cookies(),
         )
         return Inventory.model_validate_json(text)

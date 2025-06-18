@@ -13,7 +13,10 @@ class CSFloatConnector(Connector):
     """
 
     def __init__(self, api_key: str, proxy_url: str | None = None):
-        super().__init__(base_url="https://csfloat.com/api/v1", proxy_url=proxy_url)
+        super().__init__(
+            base_url="https://csfloat.com",
+            proxy_url=proxy_url,
+        )
         self.api_key = api_key
 
     async def get_listings(
@@ -72,9 +75,11 @@ class CSFloatConnector(Connector):
             params["stickers"] = stickers
 
         text = await self._get(
-            "/listings",
+            "/api/v1/listings",
             params=params,
-            headers={"Authorization": f"{self.api_key}"},
+            headers={
+                "Authorization": f"{self.api_key}",
+            },
         )
         listings = Listings.model_validate_json(text)
         return listings
@@ -85,8 +90,10 @@ class CSFloatConnector(Connector):
     ) -> list[Listing]:
         """Get listings similar to a given listing ID."""
         text = await self._get(
-            f"/listings/{listing_id}/similar",
-            headers={"Authorization": f"{self.api_key}"},
+            f"/api/v1/listings/{listing_id}/similar",
+            headers={
+                "Authorization": f"{self.api_key}",
+            },
         )
         return SimilarListings.validate_json(text)
 
@@ -96,7 +103,9 @@ class CSFloatConnector(Connector):
     ) -> list[HistoryGraphEntry]:
         """Get sales price history graph data for a given market hash name."""
         text = await self._get(
-            f"/history/{market_hash_name}/graph",
-            headers={"Authorization": f"{self.api_key}"},
+            f"/api/v1/history/{market_hash_name}/graph",
+            headers={
+                "Authorization": f"{self.api_key}",
+            },
         )
         return HistoryGraph.validate_json(text)

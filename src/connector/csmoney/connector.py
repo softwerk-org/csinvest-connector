@@ -1,4 +1,3 @@
-from fake_useragent import UserAgent
 from connector.base import Connector
 from connector.csmoney.models.get_min_prices import MarketPriceItem, MinPrices
 from connector.csmoney.models.get_price_trader_log import PriceTraderLogResponse
@@ -10,6 +9,9 @@ class CSMoneyConnector(Connector):
     No official documentation URL is available.
     """
 
+    WIKI_BASE_URL = "https://wiki.cs.money"
+    MARKET_BASE_URL = "https://cs.money"
+
     def __init__(
         self,
         proxy_url: str | None = None,
@@ -18,9 +20,7 @@ class CSMoneyConnector(Connector):
 
     async def get_min_prices(self) -> dict[str, MarketPriceItem]:
         """Get minimum prices for all markets (updates every 10 minutes)."""
-        ua = UserAgent()
         headers = {
-            "User-Agent": ua.firefox,
             "Accept": "application/json, text/plain, */*",
             "Accept-Encoding": "gzip, deflate, br, zstd",
             "Accept-Language": "en-US,en;q=0.5",
@@ -40,7 +40,7 @@ class CSMoneyConnector(Connector):
         }
 
         text = await self._get(
-            "https://cs.money/api/min_price/market/all",
+            f"{self.MARKET_BASE_URL}/api/min_price/market/all",
             headers=headers,
         )
         return MinPrices.validate_json(text)
@@ -67,9 +67,7 @@ class CSMoneyConnector(Connector):
             },
         }
 
-        ua = UserAgent()
         headers = {
-            "User-Agent": ua.chrome,
             "Accept": "application/json, text/plain, */*",
             "Accept-Language": "en-US,en;q=0.9",
             "Content-Type": "application/json",
@@ -78,7 +76,7 @@ class CSMoneyConnector(Connector):
         }
 
         text = await self._post(
-            "https://wiki.cs.money/api/graphql",
+            f"{self.WIKI_BASE_URL}/api/graphql",
             json=body,
             headers=headers,
         )

@@ -44,11 +44,7 @@ async def test_skinport_get_sales_history_all():
 @pytest.mark.asyncio
 async def test_skinport_get_item_integration():
     """Integration test for the public Skinport get_item endpoint."""
-    flaresolverr = os.getenv("FLARESOLVERR_URL")
-    if not flaresolverr:
-        pytest.skip("FLARESOLVERR_URL required for integration tests")
-
-    async with SkinportConnector(flaresolverr_url=flaresolverr) as connector:
+    async with SkinportConnector() as connector:
         response = await connector.get_item(
             "★ StatTrak™ Butterfly Knife | Tiger Tooth (Factory New)"
         )

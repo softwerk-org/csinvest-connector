@@ -1,6 +1,5 @@
 from typing import Literal
 
-from fake_useragent import UserAgent
 from connector.base import Connector
 from connector.marketcsgo.models.get_history import HistoryResponse
 from connector.marketcsgo.models.get_prices import Prices
@@ -19,7 +18,7 @@ class MarketCsgoConnector(Connector):
         proxy_url: str | None = None,
     ):
         super().__init__(
-            base_url="https://market.csgo.com/api",
+            base_url="https://market.csgo.com",
             proxy_url=proxy_url,
         )
         self.api_key = api_key
@@ -30,14 +29,14 @@ class MarketCsgoConnector(Connector):
     ) -> Prices:
         """Get market prices."""
         text = await self._get(
-            f"/v2/prices/{currency}.json",
+            f"/api/v2/prices/{currency}.json",
         )
         return Prices.model_validate_json(text)
 
     async def get_list_items_info(self, market_hash_names: list[str]) -> ListItemsInfo:
         """Get list items info. ( includes a partial sales history )"""
         text = await self._get(
-            "/v2/get-list-items-info",
+            "/api/v2/get-list-items-info",
             params={
                 "key": self.api_key,
                 "list_hash_name[]": market_hash_names,
@@ -57,7 +56,6 @@ class MarketCsgoConnector(Connector):
         }
         """
 
-        ua = UserAgent()
         body = {
             "operationName": "history",
             "query": query,
@@ -67,7 +65,6 @@ class MarketCsgoConnector(Connector):
             },
         }
         headers = {
-            "User-Agent": ua.chrome,
             "Accept": "application/json, text/plain, */*",
             "Accept-Language": "en-US,en;q=0.9",
             "Content-Type": "application/json",
@@ -75,7 +72,7 @@ class MarketCsgoConnector(Connector):
             "Origin": "https://market.csgo.com",
         }
         text = await self._post(
-            "/graphql",
+            "/api/graphql",
             json=body,
             headers=headers,
             timeout=30,

@@ -1,11 +1,7 @@
-import logging
-import os
-import httpx
 from typing import Any, Self
-
-
-HTTPX_LOG_LEVEL = os.getenv("HTTPX_LOG_LEVEL", "ERROR")
-logging.getLogger("httpx").setLevel(HTTPX_LOG_LEVEL)
+from urllib.parse import urljoin
+import hrequests
+from hrequests.cookies import RequestsCookieJar
 
 
 class Connector:
@@ -13,38 +9,28 @@ class Connector:
         self,
         base_url: str = "",
         proxy_url: str | None = None,
-        logger: logging.Logger | None = None,
     ):
-        self.client = httpx.AsyncClient(base_url=base_url, proxy=proxy_url, http2=True)
-        self.logger = logger or logging.getLogger(__name__)
-
-    async def _request(
-        self,
-        method: str,
-        url: str,
-        *,
-        content: bytes | None = None,
-        data: dict[str, Any] | None = None,
-        json: Any | None = None,
-        params: dict[str, Any] | None = None,
-        cookies: dict[str, Any] | None = None,
-        headers: dict[str, Any] | None = None,
-        timeout: int = 10,
-    ) -> str:
-        response = await self.client.request(
-            method=method,
-            url=url,
-            content=content,
-            data=data,
-            params=params,
-            headers=headers,
-            follow_redirects=True,
-            json=json,
-            timeout=timeout,
-            cookies=cookies,
+        self.base_url = base_url
+        self.session = hrequests.Session(
+            proxy=proxy_url,
         )
-        response.raise_for_status()
-        return response.text
+
+    def _prepare_cookies(self, cookies: dict[str, Any] | None):
+        """Convert a simple ``dict`` of cookies to a ``RequestsCookieJar``.
+
+        hrequests 0.9.x has a bug that raises when a plain ``dict`` is supplied
+        via the ``cookies`` parameter. Wrapping the values in a
+        :class:`requests.cookies.RequestsCookieJar` side-steps the buggy code
+        path. If ``cookies`` is already a non-dict (e.g. a CookieJar), it is
+        returned unchanged.
+        """
+        if cookies is None or not isinstance(cookies, dict):
+            return cookies
+
+        jar = RequestsCookieJar()
+        for name, value in cookies.items():
+            jar.set(name, value)
+        return jar
 
     async def _get(
         self,
@@ -55,20 +41,18 @@ class Connector:
         cookies: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> str:
-        return await self._request(
-            "GET",
-            url,
+        return self.session.get(
+            urljoin(self.base_url, url),
             params=params,
             headers=headers,
-            cookies=cookies,
+            cookies=self._prepare_cookies(cookies),
             timeout=timeout,
-        )
+        ).text
 
     async def _post(
         self,
         url: str,
         *,
-        content: bytes | None = None,
         data: dict[str, Any] | None = None,
         json: Any | None = None,
         params: dict[str, Any] | None = None,
@@ -76,17 +60,15 @@ class Connector:
         cookies: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> str:
-        return await self._request(
-            "POST",
-            url,
-            content=content,
+        return self.session.post(
+            urljoin(self.base_url, url),
             data=data,
             json=json,
             params=params,
             headers=headers,
-            cookies=cookies,
+            cookies=self._prepare_cookies(cookies),
             timeout=timeout,
-        )
+        ).text
 
     async def __aenter__(self) -> Self:
         return self
@@ -97,7 +79,7 @@ class Connector:
         exc_value: Exception | None,
         traceback: Any,
     ) -> None:
-        await self.client.aclose()
+        self.session.close()
 
     async def close(self) -> None:
-        await self.client.aclose()
+        self.session.close()

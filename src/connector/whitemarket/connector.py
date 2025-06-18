@@ -1,4 +1,3 @@
-from typing import List
 from connector.base import Connector
 from connector.whitemarket.models.get_prices import Price, Prices
 from connector.whitemarket.models.get_history import SalesHistoryResponse

@@ -1,5 +1,4 @@
 from connector.base import Connector
-from connector.tools.flaresolverr import Flaresolverr
 from .models.get_items import Items, Item
 from .models.get_sales_history import SalesHistory, SalesItem
 from .models.get_item import ItemResponse
@@ -18,18 +17,8 @@ class SkinportConnector(Connector):
     def __init__(
         self,
         proxy_url: str | None = None,
-        flaresolverr_url: str | None = None,
     ):
         super().__init__(proxy_url=proxy_url)
-
-        if flaresolverr_url:
-            self.flaresolverr = Flaresolverr(
-                flaresolverr_url,
-                cache_response=True,
-                cache_ttl_min=10,
-            )
-        else:
-            self.flaresolverr = None
 
     async def get_items(
         self,
@@ -78,24 +67,12 @@ class SkinportConnector(Connector):
         """
         Retrieve public item details via the unofficial Skinport web API.
         """
-        assert self.flaresolverr is not None
-
-        response = self.flaresolverr.get(
-            f"{self.WEB_BASE_URL}/en/market",
-            session="skinport",
-            session_ttl_min=30,
-            return_only_cookies=True,
-        )
 
         response = await self._get(
             f"{self.WEB_BASE_URL}/api/item",
             params={"appid": appid, "url": slugify(market_hash_name)},
             headers={
-                "User-Agent": response.solution.userAgent,
                 "Referer": f"{self.WEB_BASE_URL}/en/market",
-            },
-            cookies={
-                cookie["name"]: cookie["value"] for cookie in response.solution.cookies
             },
         )
         return ItemResponse.model_validate_json(response)

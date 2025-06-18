@@ -10,7 +10,10 @@ class SteamPoweredConnector(Connector):
     """
 
     def __init__(self, proxy_url: str | None = None, api_key: str | None = None):
-        super().__init__(base_url="https://api.steampowered.com", proxy_url=proxy_url)
+        super().__init__(
+            base_url="https://api.steampowered.com",
+            proxy_url=proxy_url,
+        )
         self.api_key = api_key
 
     async def get_player_summaries(

@@ -1,7 +1,6 @@
 from typing import Any, final
 from pydantic import BaseModel, TypeAdapter, conlist
 from connector.base import Connector
-from connector.csdeals.auth import CsDealsAuth
 from connector.csdeals.models.get_lowest_prices import LowestPrices
 from connector.csdeals.models.get_sales_history import SalesHistory
 from connector.csdeals.models.get_sales_history_multi import SalesHistoryMulti
@@ -17,7 +16,7 @@ class CSDealsConnector(Connector):
         proxy_url: str | None = None,
     ):
         super().__init__(
-            base_url="https://cs.deals/API",
+            base_url="https://cs.deals",
             proxy_url=proxy_url,
         )
         self.api_key = api_key
@@ -25,7 +24,7 @@ class CSDealsConnector(Connector):
     async def get_lowest_prices(self, app_id: int = 730) -> LowestPrices:
         """Get the lowest prices for all items."""
         text = await self._post(
-            "/IPricing/GetLowestPrices/v1",
+            "/API/IPricing/GetLowestPrices/v1",
             json={"appid": app_id},
         )
         return LowestPrices.model_validate_json(text)
@@ -35,7 +34,7 @@ class CSDealsConnector(Connector):
     ) -> SalesHistory:
         """Get the sales history for a given item."""
         text = await self._post(
-            "/IPricing/GetSalesHistory/v1",
+            "/API/IPricing/GetSalesHistory/v1",
             json={
                 "name": name,
                 "appid": appid,
@@ -58,7 +57,7 @@ class CSDealsConnector(Connector):
         validated = self.items.validate_python(items)
 
         text = await self._post(
-            "/IPricing/GetSalesHistoryMulti/v1",
+            "/API/IPricing/GetSalesHistoryMulti/v1",
             json={"items": [item.model_dump(exclude_none=True) for item in validated]},
         )
         return SalesHistoryMulti.model_validate_json(text)
