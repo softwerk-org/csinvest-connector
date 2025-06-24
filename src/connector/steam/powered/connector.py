@@ -1,6 +1,7 @@
 from connector.base import Connector
 from .models.get_player_summaries import PlayerSummaries
 from .models.get_asset_class_info import AssetClassInfo
+from .models.get_number_of_current_players import NumberOfCurrentPlayers
 
 
 class SteamPoweredConnector(Connector):
@@ -54,3 +55,18 @@ class SteamPoweredConnector(Connector):
             },
         )
         return AssetClassInfo.model_validate_json(text)
+
+    async def get_number_of_current_players(
+        self,
+        appid: int = 730,
+    ) -> NumberOfCurrentPlayers:
+        """Get the current number of players for the given *appid*."""
+
+        text = await self._get(
+            "/ISteamUserStats/GetNumberOfCurrentPlayers/v1/",
+            params={
+                "appid": appid,
+                "format": "json",
+            },
+        )
+        return NumberOfCurrentPlayers.model_validate_json(text)
