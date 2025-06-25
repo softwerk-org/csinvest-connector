@@ -1,10 +1,11 @@
+from datetime import datetime
 from pydantic import BaseModel
 
 
 class Friend(BaseModel):
     steamid: str
     relationship: str
-    friend_since: int
+    friend_since: datetime
 
 
 class FriendsList(BaseModel):
