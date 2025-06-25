@@ -2,6 +2,7 @@ from connector.base import Connector
 from .models.get_player_summaries import PlayerSummaries
 from .models.get_asset_class_info import AssetClassInfo
 from .models.get_number_of_current_players import NumberOfCurrentPlayers
+from .models.get_friend_list import FriendList
 
 
 class SteamPoweredConnector(Connector):
@@ -70,3 +71,19 @@ class SteamPoweredConnector(Connector):
             },
         )
         return NumberOfCurrentPlayers.model_validate_json(text)
+
+    async def get_friend_list(
+        self,
+        steamid: str,
+        relationship: str = "friend",
+    ) -> FriendList:
+        text = await self._get(
+            "/ISteamUser/GetFriendList/v0001/",
+            params={
+                "key": self.api_key,
+                "steamid": steamid,
+                "relationship": relationship,
+                "format": "json",
+            },
+        )
+        return FriendList.model_validate_json(text)

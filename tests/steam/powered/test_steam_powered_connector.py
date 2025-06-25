@@ -90,3 +90,22 @@ async def test_get_number_of_current_players_integration():
 
     assert model.response.player_count > 0
     assert model.response.result == 1
+
+
+@pytest.mark.asyncio
+async def test_get_friend_list_integration():
+    username = os.getenv("STEAM_USERNAME")
+    password = os.getenv("STEAM_PASSWORD")
+    api_key = os.getenv("STEAM_WEBAPI_KEY")
+    steamid = os.getenv("STEAM_TEST_ID", "76561198202508143")
+    if not username or not password or not api_key:
+        pytest.skip("Steam credentials required for integration tests")
+
+    async with SteamConnector(
+        username=username,
+        password=password,
+        api_key=api_key,
+    ) as connector:
+        model = await connector.powered.get_friend_list(steamid)
+
+    assert model.friendslist.friends is not None
