@@ -53,8 +53,8 @@ class RGDescription(BaseModel):
     appid: int
     classid: str
     instanceid: str
-    contextid: str
-    assetid: str
+    contextid: str | None = None
+    assetid: str | None = None
     icon_url: str | None
     icon_drag_url: str | None
     name: str | None
@@ -76,9 +76,9 @@ class RGDescription(BaseModel):
 
 class PartnerInventory(BaseModel):
     success: bool
-    rg_inventory: list[InventoryItem] = Field(..., alias="rgInventory")
-    rg_currency: list[Any | None] | None = Field(None, alias="rgCurrency")
-    rg_descriptions: list[RGDescription] = Field(..., alias="rgDescriptions")
+    rg_inventory: dict[str, InventoryItem] = Field(..., alias="rgInventory")
+    rg_currency: Any | None = Field(None, alias="rgCurrency")
+    rg_descriptions: dict[str, RGDescription] = Field(..., alias="rgDescriptions")
     rg_app_info: AppInfo | None = Field(None, alias="rgAppInfo")
     more: bool | None
     more_start: bool | None
