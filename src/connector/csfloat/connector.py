@@ -1,14 +1,11 @@
 from __future__ import annotations
-from typing import Any, TYPE_CHECKING
+from typing import Any
 
 from connector.base import Connector
 from connector.csfloat.models.get_listings import Listing, Listings
 from connector.csfloat.models.get_similar_listings import SimilarListings
 from connector.csfloat.models.get_history_graph import HistoryGraph, HistoryGraphEntry
-from connector.csfloat.models.get_float_value import FloatValueResponse
-
-if TYPE_CHECKING:
-    from connector.csfloat.models.get_float_value import FloatValueResponse
+from connector.csfloat.models.get_iteminfo import ItemInfoResponse
 
 
 class CSFloatConnector(Connector):
@@ -115,13 +112,14 @@ class CSFloatConnector(Connector):
         )
         return HistoryGraph.validate_json(text)
 
-    async def get_float_value(self, inspect_link: str) -> FloatValueResponse:
-        """Get the float value for an item via its Steam inspect link."""
+    async def get_iteminfo(self, inspect_link: str) -> ItemInfoResponse:
+        """Get iteminfo for an item via its Steam inspect link."""
         text = await self._get(
             "https://api.csgofloat.com/",
             params={"url": inspect_link},
             headers={
                 "Authorization": f"{self.api_key}",
+                "Origin": "https://csfloat.com",
             },
         )
-        return FloatValueResponse.model_validate_json(text)
+        return ItemInfoResponse.model_validate_json(text)

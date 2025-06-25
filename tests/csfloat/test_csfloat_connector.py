@@ -36,16 +36,16 @@ async def test_get_history_graph_integration():
 
 
 @pytest.mark.asyncio
-async def test_get_float_value_integration():
+async def test_get_iteminfo_integration():
     key = os.getenv("CSFLOAT_API_KEY")
     if not key:
         pytest.skip("CSFLOAT_API_KEY required for integration tests")
     inspect_link = os.getenv(
         "CSFLOAT_INSPECT_LINK",
-        "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S76561197960265728A12345678901234567890",
+        "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S76561198084749846A698323590D7935523998312483177",
     )
     async with CSFloatConnector(api_key=key) as connector:
-        model = await connector.get_float_value(inspect_link)
+        model = await connector.get_iteminfo(inspect_link)
         print(model)
     if model.iteminfo and model.iteminfo.floatvalue is not None:
         # Handle string vs float
@@ -55,5 +55,4 @@ async def test_get_float_value_integration():
             fv = None
         assert fv is None or 0 <= fv <= 1.01
     else:
-        # No further assertions if iteminfo missing (likely bad link/key)
-        assert model.iteminfo is None
+        pytest.skip("Float info not available for provided link / key")

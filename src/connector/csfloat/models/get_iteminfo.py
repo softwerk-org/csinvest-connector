@@ -12,19 +12,19 @@ class Sticker(BaseModel):
 
 class ItemInfo(BaseModel):
     accountid: str | None = None
-    defindex: str | None = None
-    paintindex: str | None = None
-    rarity: str | None = None
-    quality: str | None = None
-    paintseed: str | None = None
-    paintwear: float | str | None = None
-    floatvalue: float | str | None = None
-    origin: str | None = None
+    defindex: int | None = None
+    paintindex: int | None = None
+    rarity: int | None = None
+    quality: int | None = None
+    paintseed: int | None = None
+    paintwear: float | None = None
+    floatvalue: float | None = None
+    origin: int | None = None
     itemid: str | None = None
     stickers: list[Sticker] | None = None
 
 
-class FloatValueResponse(BaseModel):
+class ItemInfoResponse(BaseModel):
     time: int | None = None
     url: str | None = None
     iteminfo: ItemInfo | None = None
