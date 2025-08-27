@@ -84,9 +84,10 @@ class RGDescription(BaseModel):
 
 class PartnerInventory(BaseModel):
     success: bool
-    rg_inventory: dict[str, InventoryItem] = Field(..., alias="rgInventory")
+    error: str | None = None
+    rg_inventory: dict[str, InventoryItem] = Field(default_factory=dict, alias="rgInventory")
     rg_currency: Any | None = Field(None, alias="rgCurrency")
-    rg_descriptions: dict[str, RGDescription] = Field(..., alias="rgDescriptions")
+    rg_descriptions: dict[str, RGDescription] = Field(default_factory=dict, alias="rgDescriptions")
     rg_app_info: AppInfo | None = Field(None, alias="rgAppInfo")
-    more: bool | None
-    more_start: bool | None
+    more: bool | None = None
+    more_start: bool | None = None
