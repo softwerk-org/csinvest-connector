@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class InventoryItem(BaseModel):
@@ -81,6 +81,15 @@ class RGDescription(BaseModel):
             return list(v.values())
         return v
 
+    @model_validator(mode="before")
+    def _defaults_for_missing(cls, data):
+        if isinstance(data, dict):
+            data.setdefault("descriptions", [])
+            data.setdefault("actions", [])
+            data.setdefault("market_actions", [])
+            data.setdefault("tags", [])
+        return data
+
 
 class PartnerInventory(BaseModel):
     success: bool
@@ -90,4 +99,4 @@ class PartnerInventory(BaseModel):
     rg_descriptions: dict[str, RGDescription] = Field(default_factory=dict, alias="rgDescriptions")
     rg_app_info: AppInfo | None = Field(None, alias="rgAppInfo")
     more: bool | None = None
-    more_start: bool | None = None
+    more_start: str | bool | None = None

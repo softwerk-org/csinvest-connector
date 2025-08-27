@@ -101,3 +101,17 @@ async def test_get_partner_inventory_integration():
     ) as connector:
         model = await connector.community.get_partner_inventory(steamid=steamid)
         assert model.success is not None
+
+@pytest.mark.asyncio
+async def test_get_partner_inventory_integration_many_items():
+    username = os.getenv("STEAM_USERNAME")
+    password = os.getenv("STEAM_PASSWORD")
+    api_key = os.getenv("STEAM_WEBAPI_KEY")
+    steamid = os.getenv("STEAM_TEST_ID", "76561198209388244")
+    if not username or not password or not api_key:
+        pytest.skip("Steam credentials required for integration tests")
+    async with SteamConnector(
+        username=username, password=password, api_key=api_key
+    ) as connector:
+        model = await connector.community.get_partner_inventory(steamid=steamid)
+        assert model.success is not None
