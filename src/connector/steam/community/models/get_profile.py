@@ -24,9 +24,9 @@ class ProfileProfile(BaseModel):
     member_since: str | None = Field(None, alias="memberSince")
     steam_rating: None = Field(None, alias="steamRating")
     hours_played2_wk: str | None = Field(None, alias="hoursPlayed2Wk")
-    headline: None
+    headline: str | None
     location: str | None
-    realname: None
+    realname: str | None
     summary: str | None
 
 
