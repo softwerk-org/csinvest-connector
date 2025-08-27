@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class InventoryItem(BaseModel):
@@ -68,10 +68,18 @@ class RGDescription(BaseModel):
     commodity: int | None
     market_tradable_restriction: str | None
     market_marketable_restriction: str | None
-    descriptions: list[Description]
-    actions: list[Action]
-    market_actions: list[MarketAction]
-    tags: list[Tag]
+    descriptions: list[Description] = Field(default_factory=list)
+    actions: list[Action] = Field(default_factory=list)
+    market_actions: list[MarketAction] = Field(default_factory=list)
+    tags: list[Tag] = Field(default_factory=list)
+
+    @field_validator("descriptions", "actions", "market_actions", "tags", mode="before")
+    def _ensure_list(cls, v):
+        if v is None:
+            return []
+        if isinstance(v, dict):
+            return list(v.values())
+        return v
 
 
 class PartnerInventory(BaseModel):

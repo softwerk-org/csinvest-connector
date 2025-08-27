@@ -1,4 +1,5 @@
 from connector.base import Connector
+from connector.steam.community.enums import Currency
 from .auth import SteamAuth
 from .models.get_market_page import MarketPage
 from .models.get_pricehistory import Pricehistory
@@ -38,7 +39,7 @@ class SteamCommunityConnector(Connector):
         norender: str = "1",
         search_descriptions: str = "0",
         sort_dir: str = "asc",
-        currency: int = 0,
+        currency: int = Currency.USD,
     ) -> MarketPage:
         """Get market page."""
         text = await self._get(
@@ -60,7 +61,7 @@ class SteamCommunityConnector(Connector):
         self,
         market_hash_name: str,
         country: str = "DE",
-        currency: int = 0,
+        currency: int = Currency.USD,
         appid: int = 730,
     ) -> Pricehistory:
         """Get price history for an item."""
@@ -138,7 +139,7 @@ class SteamCommunityConnector(Connector):
         appid: int = 730,
         start: int = 0,
         count: int = 1,
-        currency: int = 1,
+        currency: int = Currency.USD,
         language: str = "english",
     ) -> MarketListings:
         """Get a unique listings for an item."""

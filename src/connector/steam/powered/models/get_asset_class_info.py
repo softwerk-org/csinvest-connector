@@ -46,6 +46,8 @@ class AssetClassInfoItem(BaseModel):
 
     @field_validator("descriptions", "actions", "market_actions", "tags", mode="before")
     def _ensure_list(cls, v):
+        if v is None:
+            return []
         if isinstance(v, dict):
             return list(v.values())
         return v
