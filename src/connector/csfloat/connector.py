@@ -3,6 +3,7 @@ from typing import Any
 
 from connector.base import Connector
 from connector.csfloat.models.get_listings import Listing, Listings
+from connector.csfloat.models.get_pricelist import PriceListResponse
 from connector.csfloat.models.get_similar_listings import SimilarListings
 from connector.csfloat.models.get_history_graph import HistoryGraph, HistoryGraphEntry
 from connector.csfloat.models.get_iteminfo import ItemInfoResponse
@@ -14,7 +15,7 @@ class CSFloatConnector(Connector):
     Documentation: https://docs.csfloat.com/#introduction
     """
 
-    def __init__(self, api_key: str, proxy_url: str | None = None):
+    def __init__(self, api_key: str | None = None, proxy_url: str | None = None):
         super().__init__(
             base_url="https://csfloat.com",
             proxy_url=proxy_url,
@@ -123,3 +124,7 @@ class CSFloatConnector(Connector):
             },
         )
         return ItemInfoResponse.model_validate_json(text)
+
+    async def get_pricelist(self):
+        text = await self._get("https://csfloat.com/api/v1/listings/price-list")
+        return PriceListResponse.validate_json(text)

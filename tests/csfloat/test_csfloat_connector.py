@@ -56,3 +56,10 @@ async def test_get_iteminfo_integration():
         assert fv is None or 0 <= fv <= 1.01
     else:
         pytest.skip("Float info not available for provided link / key")
+
+
+@pytest.mark.asyncio
+async def test_get_pricelist_integration():
+    async with CSFloatConnector() as connector:
+        model = await connector.get_pricelist()
+    assert isinstance(model, list)
