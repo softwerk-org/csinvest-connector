@@ -1,5 +1,6 @@
 from connector.base import Connector
 from connector.steam.community.enums import Currency
+from connector.steam.community.models.get_priceoverview import PriceOverview
 from .auth import SteamAuth
 from .models.get_market_page import MarketPage
 from .models.get_pricehistory import Pricehistory
@@ -162,3 +163,19 @@ class SteamCommunityConnector(Connector):
         )
 
         return Profile.model_validate(xmltodict.parse(text))
+
+    async def get_priceoverview(
+        self,
+        market_hash_name: str,
+        appid: int = 730,
+        currency: Currency = Currency.USD,
+    ):
+        text = await self._get(
+            f"/market/priceoverview/",
+            params={
+                "appid": appid,
+                "market_hash_name": market_hash_name,
+                "currency": currency,
+            },
+        )
+        return PriceOverview.model_validate_json(text)
