@@ -1,3 +1,4 @@
+from pydantic import ValidationError
 import pytest
 import os
 from httpx import HTTPStatusError
@@ -153,3 +154,39 @@ async def test_get_priceoverview_integration_invalid():
             market_hash_name="Invalid Item"
         )
         assert model.success
+
+
+@pytest.mark.asyncio
+async def test_get_itemordershistogram_integration():
+    username = os.getenv("STEAM_USERNAME")
+    password = os.getenv("STEAM_PASSWORD")
+    api_key = os.getenv("STEAM_WEBAPI_KEY")
+    if not username or not password or not api_key:
+        pytest.skip("Steam credentials required for integration tests")
+    async with SteamConnector(
+        username=username,
+        password=password,
+        api_key=api_key,
+    ) as connector:
+        model = await connector.community.get_itemordershistogram(
+            item_nameid="67060949"
+        )
+        assert model.success
+
+
+@pytest.mark.asyncio
+async def test_get_itemordershistogram_integration_invalid():
+    username = os.getenv("STEAM_USERNAME")
+    password = os.getenv("STEAM_PASSWORD")
+    api_key = os.getenv("STEAM_WEBAPI_KEY")
+    if not username or not password or not api_key:
+        pytest.skip("Steam credentials required for integration tests")
+    with pytest.raises(ValidationError):
+        async with SteamConnector(
+            username=username,
+            password=password,
+            api_key=api_key,
+        ) as connector:
+            model = await connector.community.get_itemordershistogram(
+                item_nameid="invalid"
+            )

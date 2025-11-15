@@ -1,5 +1,6 @@
 from connector.base import Connector
 from connector.steam.community.enums import Currency
+from connector.steam.community.models.get_itemordershistogram import ItemOrdersHistogram
 from connector.steam.community.models.get_priceoverview import PriceOverview
 from .auth import SteamAuth
 from .models.get_market_page import MarketPage
@@ -171,7 +172,7 @@ class SteamCommunityConnector(Connector):
         currency: Currency = Currency.USD,
     ):
         text = await self._get(
-            f"/market/priceoverview/",
+            "/market/priceoverview/",
             params={
                 "appid": appid,
                 "market_hash_name": market_hash_name,
@@ -179,3 +180,21 @@ class SteamCommunityConnector(Connector):
             },
         )
         return PriceOverview.model_validate_json(text)
+
+    async def get_itemordershistogram(
+        self,
+        item_nameid: str,
+        country: str = "DE",
+        language: str = "english",
+        currency: Currency = Currency.USD,
+    ):
+        text = await self._get(
+            "/market/itemordershistogram",
+            params={
+                "item_nameid": item_nameid,
+                "country": country,
+                "language": language,
+                "currency": currency,
+            },
+        )
+        return ItemOrdersHistogram.model_validate_json(text)
