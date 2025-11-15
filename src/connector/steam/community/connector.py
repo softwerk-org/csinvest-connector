@@ -25,7 +25,11 @@ class SteamCommunityConnector(Connector):
         api_key: str,
         proxy_url: str | None = None,
     ):
-        super().__init__(base_url="https://steamcommunity.com", proxy_url=proxy_url)
+        super().__init__(
+            base_url="https://steamcommunity.com",
+            proxy_url=proxy_url,
+            session_kwargs=dict(headers={"Connection": "close"}),
+        )
         self.auth = SteamAuth(
             username=username,
             password=password,
@@ -162,7 +166,6 @@ class SteamCommunityConnector(Connector):
             f"/profiles/{steamid}/",
             params={"xml": 1},
         )
-
         return Profile.model_validate(xmltodict.parse(text))
 
     async def get_priceoverview(

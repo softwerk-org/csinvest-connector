@@ -9,11 +9,10 @@ class Connector:
         self,
         base_url: str = "",
         proxy_url: str | None = None,
+        session_kwargs: dict = {},
     ):
         self.base_url = base_url
-        self.session = hrequests.Session(
-            proxy=proxy_url,
-        )
+        self.session = hrequests.Session(proxy=proxy_url, **session_kwargs)
 
     def _prepare_cookies(self, cookies: dict[str, Any] | None):
         """Convert a simple ``dict`` of cookies to a ``RequestsCookieJar``.
