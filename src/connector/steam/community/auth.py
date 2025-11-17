@@ -45,7 +45,7 @@ class SteamAuth:
         self.ttl = ttl
         self.cache = cache
 
-    async def cookies(self) -> dict[str, str]:
+    async def get_cookies(self) -> dict[str, str]:
         """Return cached cookies or perform a fresh login and cache them."""
         key = f"steam:{self.username}"
         if (cached := self.cache.get(key)) is not None:

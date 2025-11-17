@@ -60,6 +60,7 @@ class SteamCommunityConnector(Connector):
                 "sort_dir": sort_dir,
                 "currency": currency,
             },
+            cookies=await self.auth.get_cookies(),
         )
         return MarketPage.model_validate_json(text)
 
@@ -79,7 +80,7 @@ class SteamCommunityConnector(Connector):
                 "appid": appid,
                 "market_hash_name": market_hash_name,
             },
-            cookies=await self.auth.cookies(),
+            cookies=await self.auth.get_cookies(),
         )
         return Pricehistory.model_validate_json(text)
 
@@ -107,7 +108,7 @@ class SteamCommunityConnector(Connector):
             headers={
                 "Referer": f"https://steamcommunity.com/profiles/{steamid}",
             },
-            cookies=await self.auth.cookies(),
+            cookies=await self.auth.get_cookies(),
         )
         return Inventory.model_validate_json(text)
 
@@ -127,15 +128,15 @@ class SteamCommunityConnector(Connector):
             "partner": steamid,
             "appid": appid,
             "contextid": contextid,
-            "sessionid": (await self.auth.cookies()).get("sessionid"),
+            "sessionid": (await self.auth.get_cookies()).get("sessionid"),
         }
         text = await self._get(
             "/tradeoffer/new/partnerinventory/",
             params=params,
-            cookies=await self.auth.cookies(),
             headers={
                 "Referer": f"https://steamcommunity.com/tradeoffer/new/?partner={steamid}",
             },
+            cookies=await self.auth.get_cookies(),
         )
         return PartnerInventory.model_validate_json(text)
 
@@ -157,6 +158,7 @@ class SteamCommunityConnector(Connector):
                 "currency": currency,
                 "language": language,
             },
+            cookies=await self.auth.get_cookies(),
         )
         return MarketListings.model_validate_json(text)
 
@@ -165,6 +167,7 @@ class SteamCommunityConnector(Connector):
         text = await self._get(
             f"/profiles/{steamid}/",
             params={"xml": 1},
+            cookies=await self.auth.get_cookies(),
         )
         return Profile.model_validate(xmltodict.parse(text))
 
@@ -181,6 +184,7 @@ class SteamCommunityConnector(Connector):
                 "market_hash_name": market_hash_name,
                 "currency": currency,
             },
+            cookies=await self.auth.get_cookies(),
         )
         return PriceOverview.model_validate_json(text)
 
@@ -199,5 +203,6 @@ class SteamCommunityConnector(Connector):
                 "language": language,
                 "currency": currency,
             },
+            cookies=await self.auth.get_cookies(),
         )
         return ItemOrdersHistogram.model_validate_json(text)
