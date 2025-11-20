@@ -7,35 +7,35 @@ from pydantic import BaseModel
 
 class Category(BaseModel):
     category: str
-    id: int
+    id: Optional[int] = None
     internal_name: str
     localized_name: str
 
 
 class Exterior(BaseModel):
     category: str
-    id: int
+    id: Optional[int] = None
     internal_name: str
     localized_name: str
 
 
 class Quality(BaseModel):
     category: str
-    id: int
+    id: Optional[int] = None
     internal_name: str
     localized_name: str
 
 
 class Rarity(BaseModel):
     category: str
-    id: int
+    id: Optional[int] = None
     internal_name: str
     localized_name: str
 
 
 class Type(BaseModel):
     category: str
-    id: int
+    id: Optional[int] = None
     internal_name: str
     localized_name: str
 
@@ -48,11 +48,11 @@ class Weapon(BaseModel):
 
 
 class Tags(BaseModel):
-    category: Category
+    category: Optional[Category] = None
     exterior: Optional[Exterior] = None
-    quality: Quality
-    rarity: Rarity
-    type: Type
+    quality: Optional[Quality] = None
+    rarity: Optional[Rarity] = None
+    type: Optional[Type] = None
     weapon: Optional[Weapon] = None
 
 
