@@ -11,8 +11,12 @@ from .csmoney import CSMoneyConnector
 from .steam.community import SteamCommunityConnector
 from .steam.powered import SteamPoweredConnector
 from .whitemarket import WhiteMarketConnector
+from .buffmarket import BuffMarketConnector
+from .skins import SkinsConnector
 
 __all__ = [
+    "SkinsConnector",
+    "BuffMarketConnector",
     "CSDealsConnector",
     "DMarketConnector",
     "GamerPayGgConnector",
