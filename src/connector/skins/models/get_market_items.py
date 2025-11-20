@@ -7,12 +7,12 @@ from pydantic import BaseModel, Field
 
 class Metadata(BaseModel):
     type: Optional[str] = None
-    color: str
+    color: Optional[str] = None
     effect: Optional[str] = None
     finish: Optional[Optional[int]] = None
-    rarity: str
+    rarity: Optional[str] = None
     pattern: Optional[Optional[int]] = None
-    category: str
+    category: Optional[str] = None
     tournament: Optional[str] = None
     description: Optional[str] = None
     weapon: Optional[str] = None
