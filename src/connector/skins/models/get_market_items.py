@@ -2,39 +2,39 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Metadata(BaseModel):
+    type: Optional[str] = None
     color: str
+    effect: Optional[str] = None
     finish: Optional[Optional[int]] = None
     rarity: str
-    weapon: Optional[str] = None
     pattern: Optional[Optional[int]] = None
     category: str
-    exterior: Optional[str] = None
-    maxFloat: Optional[float] = None
-    minFloat: Optional[float] = None
-    exteriors: Optional[List[str]] = None
-    description: str
-    phase: Optional[str] = None
-    isStatTrak: Optional[bool] = None
-    type: Optional[str] = None
-    effect: Optional[str] = None
     tournament: Optional[str] = None
-    isSouvenir: Optional[bool] = None
+    description: Optional[str] = None
+    weapon: Optional[str] = None
+    exterior: Optional[str] = None
+    max_float: Optional[float] = Field(None, alias="maxFloat")
+    min_float: Optional[float] = Field(None, alias="minFloat")
+    exteriors: Optional[List[str]] = None
+    is_souvenir: Optional[bool] = Field(None, alias="isSouvenir")
+    is_stat_trak: Optional[bool] = Field(None, alias="isStatTrak")
+    phase: Optional[str] = None
 
 
-class Datum(BaseModel):
+class Data(BaseModel):
     slug: str
     name: str
-    marketHashName: str
+    market_hash_name: str = Field(..., alias="marketHashName")
     game: str
-    lowestPrice: float
-    marketPrice: float
+    lowest_price: float = Field(..., alias="lowestPrice")
+    market_price: float = Field(..., alias="marketPrice")
     currency: str
-    iconUrl: str
-    offerCount: int
+    icon_url: str = Field(..., alias="iconUrl")
+    offer_count: int = Field(..., alias="offerCount")
     metadata: Metadata
 
 
@@ -42,11 +42,11 @@ class Pagination(BaseModel):
     page: int
     limit: int
     count: int
-    totalPages: int
-    totalOffers: int
+    total_pages: int = Field(..., alias="totalPages")
+    total_offers: int = Field(..., alias="totalOffers")
 
 
-class MarketItems(BaseModel):
+class Model(BaseModel):
     success: bool
-    data: List[Datum]
+    data: List[Data]
     pagination: Pagination
