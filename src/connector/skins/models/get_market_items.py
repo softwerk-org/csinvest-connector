@@ -46,7 +46,7 @@ class Pagination(BaseModel):
     total_offers: int = Field(..., alias="totalOffers")
 
 
-class Model(BaseModel):
+class MarketItems(BaseModel):
     success: bool
     data: List[Data]
     pagination: Pagination
