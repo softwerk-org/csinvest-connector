@@ -1,3 +1,4 @@
+import json
 from connector.base import Connector
 from connector.csmoney.models.get_min_prices import MarketPriceItem, MinPrices
 from connector.csmoney.models.get_price_trader_log import PriceTraderLogResponse
@@ -18,7 +19,7 @@ class CSMoneyConnector(Connector):
     ):
         super().__init__(proxy_url=proxy_url)
 
-    async def get_min_prices(self) -> dict[str, MarketPriceItem]:
+    async def get_min_prices(self) -> dict[str, dict]:
         """Get minimum prices for all markets (updates every 10 minutes)."""
         headers = {
             "Accept": "application/json, text/plain, */*",
@@ -43,7 +44,7 @@ class CSMoneyConnector(Connector):
             f"{self.MARKET_BASE_URL}/api/min_price/market/all",
             headers=headers,
         )
-        return MinPrices.validate_json(text)
+        return json.loads(text)
 
     async def get_price_trader_log(self, name_ids: list[int]) -> PriceTraderLogResponse:
         """Get price trader log data for given name IDs."""

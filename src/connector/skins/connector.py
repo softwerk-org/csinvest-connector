@@ -1,3 +1,4 @@
+import json
 from connector.base import Connector
 from connector.skins.models.get_market_items import MarketItems
 
@@ -18,7 +19,7 @@ class SkinsConnector(Connector):
         limit: int,
         sort_by: str = "price",
         sort_order: str = "desc",
-    ):
+    ) -> dict:
         response = await self._get(
             "/public/market/items",
             params={
@@ -28,4 +29,4 @@ class SkinsConnector(Connector):
                 "limit": limit,
             },
         )
-        return MarketItems.model_validate_json(response)
+        return json.loads(response)
